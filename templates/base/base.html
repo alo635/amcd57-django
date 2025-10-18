@@ -14,9 +14,62 @@
   </head>
   <body>
     <!-- Navigation (à créer plus tard) -->
-    <nav>
-      <div class="container">
-        <!-- Menu de navigation -->
+    <nav style="background: #1e40af; padding: 15px 0; margin-bottom: 20px">
+      <div
+        class="container"
+        style="max-width: 1200px; margin: 0 auto; padding: 0 20px"
+      >
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <a
+            href="{% url 'core:home' %}"
+            style="
+              color: white;
+              font-size: 1.5rem;
+              font-weight: bold;
+              text-decoration: none;
+            "
+          >
+            🛩️ AMCD57
+          </a>
+          <div style="display: flex; gap: 20px">
+            <a
+              href="{% url 'core:home' %}"
+              style="
+                color: white;
+                text-decoration: none;
+                padding: 8px 16px;
+                border-radius: 4px;
+              "
+              >Accueil</a
+            >
+            <a
+              href="{% url 'blog:article_list' %}"
+              style="
+                color: white;
+                text-decoration: none;
+                padding: 8px 16px;
+                border-radius: 4px;
+              "
+              >Blog</a
+            >
+            <a
+              href="{% url 'admin:index' %}"
+              style="
+                color: white;
+                text-decoration: none;
+                padding: 8px 16px;
+                border-radius: 4px;
+              "
+              >Admin</a
+            >
+          </div>
+        </div>
       </div>
     </nav>
 

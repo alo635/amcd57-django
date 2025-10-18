@@ -1,0 +1,178 @@
+{% extends 'base/base.html' %} {% block title %}#{{ tag.nom }} - Blog - {{
+block.super }}{% endblock %} {% block content %}
+<div
+  class="container"
+  style="max-width: 1200px; margin: 0 auto; padding: 40px 20px"
+>
+  <!-- En-tête tag -->
+  <header style="text-align: center; margin-bottom: 50px">
+    <h1 style="font-size: 2.5rem; color: #1e40af; margin-bottom: 10px">
+      🏷️ #{{ tag.nom }}
+    </h1>
+    <p style="color: #94a3b8">
+      {{ tag.nombre_articles }} article{{ tag.nombre_articles|pluralize }} avec
+      ce tag
+    </p>
+  </header>
+
+  <!-- Retour -->
+  <div style="margin-bottom: 30px">
+    <a
+      href="{% url 'blog:article_list' %}"
+      style="
+        display: inline-block;
+        padding: 10px 20px;
+        background: #f1f5f9;
+        border-radius: 6px;
+        text-decoration: none;
+        color: #334155;
+      "
+    >
+      ← Retour au blog
+    </a>
+  </div>
+
+  <!-- Liste d'articles -->
+  {% if articles %}
+  <div
+    style="
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 30px;
+    "
+  >
+    {% for article in articles %}
+    <article
+      style="
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      "
+    >
+      {% if article.image %}
+      <img
+        src="{{ article.image.url }}"
+        alt="{{ article.titre }}"
+        style="width: 100%; height: 200px; object-fit: cover"
+      />
+      {% else %}
+      <div
+        style="
+          width: 100%;
+          height: 200px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <span style="font-size: 4rem">📰</span>
+      </div>
+      {% endif %}
+
+      <div style="padding: 20px">
+        <a
+          href="{% url 'blog:categorie_detail' article.categorie.slug %}"
+          style="
+            display: inline-block;
+            padding: 4px 12px;
+            background: #dbeafe;
+            color: #1e40af;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            margin-bottom: 10px;
+          "
+        >
+          {{ article.categorie.nom }}
+        </a>
+
+        <h2 style="font-size: 1.4rem; margin-bottom: 10px">
+          <a
+            href="{% url 'blog:article_detail' article.slug %}"
+            style="color: #1e293b; text-decoration: none"
+          >
+            {{ article.titre }}
+          </a>
+        </h2>
+
+        <p style="color: #64748b; line-height: 1.6; margin-bottom: 15px">
+          {{ article.extrait|truncatewords:20 }}
+        </p>
+
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #94a3b8;
+          "
+        >
+          <span>📅 {{ article.date_publication|date:"d/m/Y" }}</span>
+          <span>💬 {{ article.nombre_commentaires }}</span>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  {% if page_obj.has_other_pages %}
+  <div style="margin-top: 40px; text-align: center">
+    <div style="display: inline-flex; gap: 10px">
+      {% if page_obj.has_previous %}
+      <a
+        href="?page={{ page_obj.previous_page_number }}"
+        style="
+          padding: 10px 15px;
+          background: #f1f5f9;
+          border-radius: 6px;
+          text-decoration: none;
+          color: #334155;
+        "
+        >← Précédent</a
+      >
+      {% endif %}
+
+      <span
+        style="
+          padding: 10px 20px;
+          background: #2563eb;
+          color: white;
+          border-radius: 6px;
+        "
+      >
+        Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+      </span>
+
+      {% if page_obj.has_next %}
+      <a
+        href="?page={{ page_obj.next_page_number }}"
+        style="
+          padding: 10px 15px;
+          background: #f1f5f9;
+          border-radius: 6px;
+          text-decoration: none;
+          color: #334155;
+        "
+        >Suivant →</a
+      >
+      {% endif %}
+    </div>
+  </div>
+  {% endif %} {% else %}
+  <div
+    style="
+      text-align: center;
+      padding: 60px 20px;
+      background: #f1f5f9;
+      border-radius: 12px;
+    "
+  >
+    <p style="font-size: 1.2rem; color: #64748b">Aucun article avec ce tag.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

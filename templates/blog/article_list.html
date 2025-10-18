@@ -1,0 +1,362 @@
+{% extends 'base/base.html' %} {% block title %}Blog - {{ block.super
+}}{%endblock %} {% block content %}
+<div
+  class="container"
+  style="max-width: 1200px; margin: 0 auto; padding: 40px 20px"
+>
+  <!-- En-tête -->
+  <header style="text-align: center; margin-bottom: 50px">
+    <h1 style="font-size: 2.5rem; color: #1e40af; margin-bottom: 10px">
+      📰 Blog AMCD57
+    </h1>
+    <p style="color: #64748b; font-size: 1.1rem">
+      Actualités, techniques et vie du club
+    </p>
+  </header>
+
+  <!-- Barre de recherche -->
+  <div style="margin-bottom: 40px">
+    <form
+      method="get"
+      action="{% url 'blog:article_search' %}"
+      style="display: flex; gap: 10px; max-width: 600px; margin: 0 auto"
+    >
+      <input
+        type="text"
+        name="q"
+        placeholder="Rechercher un article..."
+        value="{{ query|default:'' }}"
+        style="
+          flex: 1;
+          padding: 12px 20px;
+          border: 2px solid #e2e8f0;
+          border-radius: 8px;
+          font-size: 1rem;
+        "
+      />
+      <button
+        type="submit"
+        style="
+          padding: 12px 30px;
+          background: #2563eb;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: bold;
+        "
+      >
+        Rechercher
+      </button>
+    </form>
+  </div>
+
+  <!-- Menu catégories -->
+  <div style="margin-bottom: 40px; text-align: center">
+    <a
+      href="{% url 'blog:article_list' %}"
+      style="
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px;
+        background: #f1f5f9;
+        border-radius: 6px;
+        text-decoration: none;
+        color: #334155;
+      "
+    >
+      Tous les articles
+    </a>
+    {% for categorie in categories %}
+    <a
+      href="{% url 'blog:categorie_detail' categorie.slug %}"
+      style="
+        display: inline-block;
+        padding: 10px 20px;
+        margin: 5px;
+        background: #f1f5f9;
+        border-radius: 6px;
+        text-decoration: none;
+        color: #334155;
+      "
+    >
+      {{ categorie.nom }} ({{ categorie.nombre_articles }})
+    </a>
+    {% endfor %}
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 300px; gap: 40px">
+    <!-- Colonne principale : Articles -->
+    <div>
+      {% if articles %}
+      <!-- Grille d'articles -->
+      <div
+        style="
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          gap: 30px;
+        "
+      >
+        {% for article in articles %}
+        <article
+          style="
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+          "
+        >
+          <!-- Image -->
+          {% if article.image %}
+          <img
+            src="{{ article.image.url }}"
+            alt="{{ article.titre }}"
+            style="width: 100%; height: 200px; object-fit: cover"
+          />
+          {% else %}
+          <div
+            style="
+              width: 100%;
+              height: 200px;
+              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <span style="font-size: 4rem">📰</span>
+          </div>
+          {% endif %}
+
+          <!-- Contenu -->
+          <div style="padding: 20px">
+            <!-- Catégorie -->
+            <a
+              href="{% url 'blog:categorie_detail' article.categorie.slug %}"
+              style="
+                display: inline-block;
+                padding: 4px 12px;
+                background: #dbeafe;
+                color: #1e40af;
+                border-radius: 4px;
+                font-size: 0.85rem;
+                text-decoration: none;
+                margin-bottom: 10px;
+              "
+            >
+              {{ article.categorie.nom }}
+            </a>
+
+            <!-- Titre -->
+            <h2 style="font-size: 1.4rem; margin-bottom: 10px">
+              <a
+                href="{% url 'blog:article_detail' article.slug %}"
+                style="color: #1e293b; text-decoration: none"
+              >
+                {{ article.titre }}
+              </a>
+            </h2>
+
+            <!-- Extrait -->
+            <p style="color: #64748b; line-height: 1.6; margin-bottom: 15px">
+              {{ article.extrait|truncatewords:20 }}
+            </p>
+
+            <!-- Métadonnées -->
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 0.9rem;
+                color: #94a3b8;
+              "
+            >
+              <span
+                >👤 {{
+                article.auteur.get_full_name|default:article.auteur.username
+                }}</span
+              >
+              <span>📅 {{ article.date_publication|date:"d/m/Y" }}</span>
+            </div>
+
+            <!-- Stats -->
+            <div
+              style="
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px solid #e2e8f0;
+                display: flex;
+                gap: 15px;
+                font-size: 0.85rem;
+                color: #64748b;
+              "
+            >
+              <span>👁️ {{ article.vues }} vue{{ article.vues|pluralize }}</span>
+              <span
+                >💬 {{ article.nombre_commentaires }} commentaire{{
+                article.nombre_commentaires|pluralize }}</span
+              >
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination -->
+      {% if page_obj.has_other_pages %}
+      <div style="margin-top: 40px; text-align: center">
+        <div style="display: inline-flex; gap: 10px">
+          {% if page_obj.has_previous %}
+          <a
+            href="?page=1"
+            style="
+              padding: 10px 15px;
+              background: #f1f5f9;
+              border-radius: 6px;
+              text-decoration: none;
+              color: #334155;
+            "
+            >Première</a
+          >
+          <a
+            href="?page={{ page_obj.previous_page_number }}"
+            style="
+              padding: 10px 15px;
+              background: #f1f5f9;
+              border-radius: 6px;
+              text-decoration: none;
+              color: #334155;
+            "
+            >Précédent</a
+          >
+          {% endif %}
+
+          <span
+            style="
+              padding: 10px 20px;
+              background: #2563eb;
+              color: white;
+              border-radius: 6px;
+            "
+          >
+            Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+          </span>
+
+          {% if page_obj.has_next %}
+          <a
+            href="?page={{ page_obj.next_page_number }}"
+            style="
+              padding: 10px 15px;
+              background: #f1f5f9;
+              border-radius: 6px;
+              text-decoration: none;
+              color: #334155;
+            "
+            >Suivant</a
+          >
+          <a
+            href="?page={{ page_obj.paginator.num_pages }}"
+            style="
+              padding: 10px 15px;
+              background: #f1f5f9;
+              border-radius: 6px;
+              text-decoration: none;
+              color: #334155;
+            "
+            >Dernière</a
+          >
+          {% endif %}
+        </div>
+      </div>
+      {% endif %} {% else %}
+      <div
+        style="
+          text-align: center;
+          padding: 60px 20px;
+          background: #f1f5f9;
+          border-radius: 12px;
+        "
+      >
+        <p style="font-size: 1.2rem; color: #64748b">
+          Aucun article n'a encore été publié.
+        </p>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Sidebar -->
+    <aside>
+      <!-- Articles récents -->
+      <div
+        style="
+          background: white;
+          padding: 25px;
+          border-radius: 12px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          margin-bottom: 30px;
+        "
+      >
+        <h3 style="font-size: 1.3rem; margin-bottom: 20px; color: #1e40af">
+          📌 Articles récents
+        </h3>
+        <div style="display: flex; flex-direction: column; gap: 15px">
+          {% for article in articles_recents %}
+          <a
+            href="{% url 'blog:article_detail' article.slug %}"
+            style="
+              text-decoration: none;
+              color: #334155;
+              padding-bottom: 15px;
+              border-bottom: 1px solid #e2e8f0;
+            "
+          >
+            <div style="font-weight: 600; margin-bottom: 5px">
+              {{ article.titre|truncatewords:8 }}
+            </div>
+            <div style="font-size: 0.85rem; color: #94a3b8">
+              {{ article.date_publication|date:"d/m/Y" }}
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Tags -->
+      {% if tags %}
+      <div
+        style="
+          background: white;
+          padding: 25px;
+          border-radius: 12px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        "
+      >
+        <h3 style="font-size: 1.3rem; margin-bottom: 20px; color: #1e40af">
+          🏷️ Tags populaires
+        </h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px">
+          {% for tag in tags %}
+          <a
+            href="{% url 'blog:tag_detail' tag.slug %}"
+            style="
+              display: inline-block;
+              padding: 6px 14px;
+              background: #f1f5f9;
+              border-radius: 20px;
+              text-decoration: none;
+              color: #475569;
+              font-size: 0.9rem;
+            "
+          >
+            #{{ tag.nom }}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </aside>
+  </div>
+</div>
+{% endblock %}
