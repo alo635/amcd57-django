@@ -1,4 +1,45 @@
-# 🛩️ AMCD57 - Site Web du Club d'Aéromodélisme
+## 🔑 Fonctionnalités clés implémentées
+
+### Blog
+
+- Système de brouillon/publication
+- Auto-génération des slugs
+- Images à la une organisées par date
+- Compteur de vues
+- Système de commentaires avec modération
+- Support réponses aux commentaires
+- SEO (meta descriptions)
+- Filtres par catégorie, tag, statut, date
+
+### Events
+
+- Types d'événements personnalisables avec couleurs
+- Gestion de lieux avec coordonnées GPS
+- Inscriptions avec places limitées
+- Dates limites d'inscription
+- Statuts multiples (Planifié, Confirmé, Annulé, Terminé)
+- Suivi de présence après événement
+- Gestion des accompagnants
+- Calcul automatique des places restantes
+- Vérification si événement complet
+- Événements publics ou membres uniquement
+
+### Members
+
+- Extension complète du modèle User Django
+- Types de membres avec droits différenciés
+- Fonctions bureau avec email de contact
+- Profil intégré dans l'admin User
+- Informations personnelles et adresse
+- Expérience et spécialités aéromodélisme
+- Licence UFOLEP avec date de validité
+- Assurance RC
+- Gestion cotisations avec dates
+- Calcul automatique âge et ancienneté
+- Réseaux sociaux (YouTube, Facebook, Instagram)
+- Préférences (newsletter, notifications)
+- Actions en masse (renouvellement cotisations)
+- Notes administratives privées# 🛩️ AMCD57 - Site Web du Club d'Aéromodélisme
 
 Site web moderne du club d'aéromodélisme AMCD57 de Jarny (Grand Est, France).
 
@@ -75,8 +116,12 @@ Categorie (Club, Technique, Convention, Divers)
     ↓ (1:N)
 Article ←→ Tag (N:N)
     ↓ (1:N)
+    ↓ User (auteur)
+    ↓
 Commentaire
 ```
+
+**Fonctionnalités** : Brouillon/Publié, Images, SEO, Compteur de vues, Modération commentaires
 
 ### Application Events
 
@@ -84,18 +129,38 @@ Commentaire
 TypeEvenement (Réunion, Sortie, Vol)
     ↓ (1:N)
 Evenement ←─ Lieu (N:1)
+    ↓ (1:N)        ↑ (GPS, capacité)
+    ↓ User (organisateur)
+    ↓
+Inscription ←─ User (participant)
+```
+
+**Fonctionnalités** : Places limitées, Dates limites, Statuts multiples, Présences, Accompagnants
+
+### Application Members
+
+```
+TypeMembre (Bureau, Actif)
     ↓ (1:N)
-Inscription ←─ User (N:1)
+ProfilMembre (1:1) ←→ User (Django)
+    ↓ (N:1)
+FonctionBureau (Président, Trésorier, etc.)
 ```
 
-### Application Members (À venir)
+**Fonctionnalités** : Licence UFOLEP, Assurance RC, Cotisations, Droits/Permissions, Fonction bureau active, Calculs automatiques (âge, ancienneté)
+
+### Application Weblinks (À venir)
 
 ```
-User (Django)
-    ↓ (1:1)
-ProfilMembre
-    ↓ (N:N)
-FonctionBureau
+CategorieLien
+    ↓ (1:N)
+Lien (sites web organisés)
+```
+
+### Application Core (À venir)
+
+```
+ContactMessage (formulaires de contact)
 ```
 
 ## 🚀 Installation & Développement
@@ -288,7 +353,7 @@ git push origin main
 
 - [x] **Blog** : Article, Categorie, Tag, Commentaire
 - [x] **Events** : Evenement, Lieu, TypeEvenement, Inscription
-- [ ] **Members** : ProfilMembre, FonctionBureau, TypeMembre
+- [x] **Members** : ProfilMembre, FonctionBureau, TypeMembre
 - [ ] **Weblinks** : Lien, CategorieLien
 - [ ] **Core** : ContactMessage
 
@@ -357,22 +422,26 @@ git push origin main
 - ✅ Propriétés (@property)
 - ✅ Méthodes personnalisées
 - ✅ Validation (clean())
-- ✅ Signaux (save override)
+- ✅ Signaux (post_save - désactivé pour Members)
 - ✅ Indexes pour performance
-- ✅ Meta options (ordering, verbose_name)
+- ✅ Meta options (ordering, verbose_name, unique_together)
+- ✅ Validators (RegexValidator pour téléphones)
+- ✅ Calculs automatiques (âge, ancienneté, places restantes)
 
 ### Admin Django
 
 - ✅ ModelAdmin personnalisé
-- ✅ Inline admin (TabularInline)
+- ✅ Inline admin (TabularInline, StackedInline)
 - ✅ Filtres (list_filter)
 - ✅ Recherche (search_fields)
-- ✅ Actions personnalisées
-- ✅ Fieldsets
+- ✅ Actions personnalisées (actions en masse)
+- ✅ Fieldsets (organisation des champs)
 - ✅ Readonly fields
-- ✅ Prepopulated fields
+- ✅ Prepopulated fields (slugs)
 - ✅ Date hierarchy
-- ✅ Custom display methods
+- ✅ Custom display methods avec format_html
+- ✅ List editable (modification rapide)
+- ✅ Extension de UserAdmin
 
 ## 👥 Contribution
 
@@ -392,3 +461,5 @@ Email : contact@amcd57.fr (à venir)
 **🛩️ AMCD57 - La passion de l'aéromodélisme depuis [année de création]**
 
 _Projet en cours de développement - Dernière mise à jour : Octobre 2025_
+
+**📈 Progression globale : 11 modèles créés sur 13 prévus (85%)**
