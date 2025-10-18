@@ -116,7 +116,7 @@ class ProfilMembreInline(admin.StackedInline):
         }),
         ('Licences et assurances', {
             'fields': (
-                'numero_licence_ffam',
+                'numero_licence_ufolep',
                 'date_validite_licence',
                 'assurance_valide'
             )
@@ -255,7 +255,7 @@ class ProfilMembreAdmin(admin.ModelAdmin):
         }),
         ('Licences et assurances', {
             'fields': (
-                'numero_licence_ffam',
+                'numero_licence_ufolep',
                 'date_validite_licence',
                 'assurance_valide'
             )

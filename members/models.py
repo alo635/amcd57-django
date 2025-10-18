@@ -277,11 +277,11 @@ class ProfilMembre(models.Model):
     )
     
     # Licences et assurances
-    numero_licence_ffam = models.CharField(
+    numero_licence_ufolep = models.CharField(
         max_length=50,
         blank=True,
-        verbose_name="Numéro de licence FFAM",
-        help_text="Fédération Française d'Aéromodélisme"
+        verbose_name="Numéro de licence UFOLEP",
+        help_text="Union Française des Œuvres Laïques d'Éducation Physique"
     )
     
     date_validite_licence = models.DateField(
