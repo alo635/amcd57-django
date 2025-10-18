@@ -472,32 +472,32 @@ class ProfilMembre(models.Model):
 # SIGNAL : Création automatique du profil
 # ============================================
 
-@receiver(post_save, sender=User)
-def creer_profil_membre(sender, instance, created, **kwargs):
-    """
-    Signal Django : Crée automatiquement un ProfilMembre
-    quand un User est créé
-    """
-    if created:
-        # Récupère ou crée le type "Actif" par défaut
-        type_actif, _ = TypeMembre.objects.get_or_create(
-            nom='Actif',
-            defaults={
-                'description': 'Membre actif du club',
-                'ordre': 2
-            }
-        )
-        
-        ProfilMembre.objects.create(
-            user=instance,
-            type_membre=type_actif
-        )
-
-
-@receiver(post_save, sender=User)
-def sauvegarder_profil_membre(sender, instance, **kwargs):
-    """
-    Signal Django : Sauvegarde le profil quand le User est sauvegardé
-    """
-    if hasattr(instance, 'profil'):
-        instance.profil.save()
+#@receiver(post_save, sender=User)
+#def creer_profil_membre(sender, instance, created, **kwargs):
+#    """
+#    Signal Django : Crée automatiquement un ProfilMembre
+#    quand un User est créé
+#    """
+#    if created:
+#        # Récupère ou crée le type "Actif" par défaut
+#        type_actif, _ = TypeMembre.objects.get_or_create(
+#            nom='Actif',
+#            defaults={
+#                'description': 'Membre actif du club',
+#                'ordre': 2
+#            }
+#        )
+#        
+#        ProfilMembre.objects.create(
+#            user=instance,
+#            type_membre=type_actif
+#        )
+#
+#
+#@receiver(post_save, sender=User)
+#def sauvegarder_profil_membre(sender, instance, **kwargs):
+#    """
+#    Signal Django : Sauvegarde le profil quand le User est sauvegardé
+#    """
+#    if hasattr(instance, 'profil'):
+#        instance.profil.save()

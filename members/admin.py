@@ -100,6 +100,11 @@ class ProfilMembreInline(admin.StackedInline):
     can_delete = False
     verbose_name_plural = 'Profil Membre'
     
+    # Génère automatiquement 1 formulaire vide pour créer le profil
+    min_num = 1
+    max_num = 1
+    extra = 0
+    
     fieldsets = (
         ('Type et fonction', {
             'fields': ('type_membre', 'fonction_bureau', 'fonction_active')
@@ -137,6 +142,23 @@ class ProfilMembreInline(admin.StackedInline):
             'classes': ('collapse',)
         }),
     )
+    
+    def get_formset(self, request, obj=None, **kwargs):
+        """
+        Personnalise le formset pour définir des valeurs par défaut
+        """
+        formset = super().get_formset(request, obj, **kwargs)
+        
+        # Définit le type par défaut seulement pour les nouveaux profils
+        if obj is None:  # Nouveau User
+            # Récupère le type "Actif" par défaut
+            try:
+                type_actif = TypeMembre.objects.get(nom='Actif')
+                formset.form.base_fields['type_membre'].initial = type_actif
+            except TypeMembre.DoesNotExist:
+                pass
+        
+        return formset
 
 
 # ============================================
@@ -158,6 +180,41 @@ class UserAdmin(BaseUserAdmin):
     ]
     
     list_filter = BaseUserAdmin.list_filter + ('profil__type_membre', 'profil__cotisation_a_jour')
+    
+    def save_model(self, request, obj, form, change):
+        """
+        Sauvegarde le User
+        Le signal créera automatiquement le profil si c'est une création
+        """
+        super().save_model(request, obj, form, change)
+    
+    def save_formset(self, request, form, formset, change):
+        """
+        Sauvegarde le formset (inline ProfilMembre)
+        """
+        instances = formset.save(commit=False)
+        for instance in instances:
+            # Si le profil existe déjà via le signal, on le met à jour
+            if isinstance(instance, ProfilMembre):
+                try:
+                    # Essaie de récupérer le profil existant
+                    existing = ProfilMembre.objects.get(user=instance.user)
+                    # Met à jour les champs du profil existant
+                    for field in instance._meta.fields:
+                        if field.name != 'id' and field.name != 'user':
+                            setattr(existing, field.name, getattr(instance, field.name))
+                    existing.save()
+                except ProfilMembre.DoesNotExist:
+                    # Le profil n'existe pas, on le crée
+                    instance.save()
+            else:
+                instance.save()
+        
+        formset.save_m2m()
+        
+        # Supprime les objets marqués pour suppression
+        for obj in formset.deleted_objects:
+            obj.delete()
     
     def type_membre_display(self, obj):
         """Affiche le type de membre"""
