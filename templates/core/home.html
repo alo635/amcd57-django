@@ -1,0 +1,107 @@
+{% extends 'base/base.html' %} {% block title %}{{ title }} - {{ club_name
+}}{%endblock %} {% block content %}
+<div class="container">
+  <header style="text-align: center; padding: 50px 0">
+    <h1 style="font-size: 3rem; color: #2563eb">🛩️ {{ club_name }}</h1>
+    <p style="font-size: 1.5rem; color: #64748b; margin-top: 10px">
+      {{ slogan }}
+    </p>
+  </header>
+
+  <section
+    style="
+      background: #f1f5f9;
+      padding: 40px;
+      border-radius: 8px;
+      margin: 40px 0;
+    "
+  >
+    <h2 style="color: #1e40af; margin-bottom: 20px">
+      ✅ Django est configuré !
+    </h2>
+    <p style="font-size: 1.1rem; line-height: 1.8">
+      Félicitations ! Ton projet Django AMCD57 est opérationnel.<br />
+      Tu es prêt à construire un site moderne et performant pour ton club
+      d'aéromodélisme.
+    </p>
+
+    <div
+      style="
+        margin-top: 30px;
+        padding: 20px;
+        background: white;
+        border-left: 4px solid #2563eb;
+      "
+    >
+      <h3 style="color: #1e40af; margin-bottom: 15px">Prochaines étapes :</h3>
+      <ul style="list-style: none; padding: 0">
+        <li style="padding: 8px 0">
+          📝 Créer les modèles de données (Article, Événement, Membre...)
+        </li>
+        <li style="padding: 8px 0">🎨 Intégrer Tailwind CSS pour le design</li>
+        <li style="padding: 8px 0">
+          📄 Développer les pages et fonctionnalités
+        </li>
+        <li style="padding: 8px 0">📦 Migrer le contenu WordPress</li>
+      </ul>
+    </div>
+  </section>
+
+  <section
+    style="
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 40px 0;
+    "
+  >
+    <div
+      style="
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <h3 style="color: #2563eb; margin-bottom: 15px">📰 Blog</h3>
+      <p>Articles techniques et actualités du club</p>
+    </div>
+
+    <div
+      style="
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <h3 style="color: #2563eb; margin-bottom: 15px">📅 Événements</h3>
+      <p>Réunions, compétitions et sorties</p>
+    </div>
+
+    <div
+      style="
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <h3 style="color: #2563eb; margin-bottom: 15px">👥 Membres</h3>
+      <p>Espace personnel et communauté</p>
+    </div>
+
+    <div
+      style="
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <h3 style="color: #2563eb; margin-bottom: 15px">🌦️ Météo</h3>
+      <p>Conditions de vol en temps réel</p>
+    </div>
+  </section>
+</div>
+{% endblock %}
