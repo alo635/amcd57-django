@@ -39,7 +39,33 @@
 - Réseaux sociaux (YouTube, Facebook, Instagram)
 - Préférences (newsletter, notifications)
 - Actions en masse (renouvellement cotisations)
-- Notes administratives privées# 🛩️ AMCD57 - Site Web du Club d'Aéromodélisme
+- Notes administratives privées
+
+### Weblinks
+
+- Catégories personnalisables avec icônes
+- Liens organisés par catégorie
+- Compteur de clics par lien
+- Tags pour recherche et filtrage
+- Liens "mis en avant" (featured)
+- Extraction automatique du domaine
+- Logo/capture d'écran du site
+- Ouverture nouvel onglet configurable
+- Statistiques de clics
+- Notes administratives
+
+### Core - Contact
+
+- Formulaire de contact avec sujets prédéfinis
+- Workflow complet (Nouveau → En cours → Traité → Archivé)
+- Suivi lu/non lu
+- Suivi répondu avec date
+- Calcul âge du message
+- Tracking IP
+- Notes de réponse internes
+- Recherche et filtres avancés
+- Actions en masse (traiter, archiver)
+- Badges colorés par statut et sujet# 🛩️ AMCD57 - Site Web du Club d'Aéromodélisme
 
 Site web moderne du club d'aéromodélisme AMCD57 de Jarny (Grand Est, France).
 
@@ -109,7 +135,7 @@ Migration complète d'un site WordPress vers une stack Django moderne pour obten
 
 ## 🗂️ Structure de la Base de Données
 
-### Application Blog
+### Application Blog (4 modèles) ✅
 
 ```
 Categorie (Club, Technique, Convention, Divers)
@@ -118,50 +144,73 @@ Article ←→ Tag (N:N)
     ↓ (1:N)
     ↓ User (auteur)
     ↓
-Commentaire
+Commentaire (avec réponses)
 ```
 
-**Fonctionnalités** : Brouillon/Publié, Images, SEO, Compteur de vues, Modération commentaires
+**Fonctionnalités** : Brouillon/Publié, Images, SEO, Compteur de vues, Modération commentaires, Auto-génération slugs
 
-### Application Events
+### Application Events (4 modèles) ✅
 
 ```
-TypeEvenement (Réunion, Sortie, Vol)
+TypeEvenement (Réunion, Sortie, Vol) - avec couleurs
     ↓ (1:N)
 Evenement ←─ Lieu (N:1)
     ↓ (1:N)        ↑ (GPS, capacité)
     ↓ User (organisateur)
     ↓
 Inscription ←─ User (participant)
+    ↓ (accompagnants, présence)
 ```
 
-**Fonctionnalités** : Places limitées, Dates limites, Statuts multiples, Présences, Accompagnants
+**Fonctionnalités** : Places limitées, Dates limites, Statuts multiples, Présences, Accompagnants, Calcul places restantes
 
-### Application Members
+### Application Members (3 modèles) ✅
 
 ```
-TypeMembre (Bureau, Actif)
+TypeMembre (Bureau, Actif) - avec droits
     ↓ (1:N)
 ProfilMembre (1:1) ←→ User (Django)
     ↓ (N:1)
 FonctionBureau (Président, Trésorier, etc.)
+    ↑ (fonction_active boolean)
 ```
 
-**Fonctionnalités** : Licence UFOLEP, Assurance RC, Cotisations, Droits/Permissions, Fonction bureau active, Calculs automatiques (âge, ancienneté)
+**Fonctionnalités** : Licence UFOLEP, Assurance RC, Cotisations, Droits/Permissions, Fonction bureau active, Calculs automatiques (âge, ancienneté), Réseaux sociaux
 
-### Application Weblinks (À venir)
+### Application Weblinks (2 modèles) ✅
 
 ```
-CategorieLien
+CategorieLien (Officiels, Clubs, Techniques, Boutiques)
     ↓ (1:N)
-Lien (sites web organisés)
+Lien (URL, logo, tags, compteur clics)
+    ↑ (featured, actif)
 ```
 
-### Application Core (À venir)
+**Fonctionnalités** : Compteur de clics, Tags, Featured links, Extraction domaine, Ouverture nouvel onglet
+
+### Application Core (1 modèle) ✅
 
 ```
-ContactMessage (formulaires de contact)
+ContactMessage (formulaire de contact)
+    ↓ Sujet (Info, Adhésion, Événement, etc.)
+    ↓ Statut (Nouveau, En cours, Traité, Archivé)
+    ↓ Lu/Répondu tracking
 ```
+
+**Fonctionnalités** : Choix sujets multiples, Statuts workflow, Suivi lu/répondu, Calcul âge message, IP tracking, Notes internes
+
+---
+
+### 📊 Statistiques de la base de données
+
+**Total : 13 modèles créés**
+
+- Relations ForeignKey (1-N) : 10
+- Relations ManyToManyField (N-N) : 2
+- Relations OneToOneField (1-1) : 1
+- Champs avec Choices : 8
+- Propriétés calculées (@property) : 25+
+- Indexes pour performance : 15+
 
 ## 🚀 Installation & Développement
 
@@ -357,17 +406,24 @@ git push origin main
 - [ ] **Weblinks** : Lien, CategorieLien
 - [ ] **Core** : ContactMessage
 
-### Templates et Vues
+### Templates et Vues (0% - En attente)
 
-- [x] Page d'accueil de base
-- [ ] Liste des articles
+- [ ] Liste des articles (Blog)
 - [ ] Détail d'un article
+- [ ] Articles par catégorie
+- [ ] Articles par tag
 - [ ] Système de commentaires (frontend)
 - [ ] Calendrier des événements
+- [ ] Liste des événements
 - [ ] Détail d'un événement
 - [ ] Formulaire d'inscription événement
-- [ ] Profil membre
+- [ ] Trombinoscope membres
+- [ ] Profil membre public
+- [ ] Page bureau du club
+- [ ] Annuaire de liens par catégories
+- [ ] Formulaire de contact
 - [ ] Dashboard membre
+- [ ] Pages statiques (À propos, etc.)
 
 ### Design et Frontend
 
@@ -462,4 +518,5 @@ Email : contact@amcd57.fr (à venir)
 
 _Projet en cours de développement - Dernière mise à jour : Octobre 2025_
 
-**📈 Progression globale : 11 modèles créés sur 13 prévus (85%)**
+**🎉 Étape majeure franchie : 13/13 modèles créés (100%) !**  
+**🚀 Prochaine étape : Création des vues et templates pour afficher le contenu**
