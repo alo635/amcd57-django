@@ -1,0 +1,361 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}{{ evenement.titre }} - AMCD57{% endblock %}
+
+{% block content %}
+<!-- Hero Section avec image de fond -->
+<div class="relative h-96 bg-gradient-to-r from-blue-600 to-blue-800 overflow-hidden">
+    {% if evenement.image %}
+    <img src="{{ evenement.image.url }}" 
+         alt="{{ evenement.titre }}"
+         class="absolute inset-0 w-full h-full object-cover opacity-40">
+    {% endif %}
+    
+    <!-- Overlay gradient -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+    
+    <!-- Contenu du hero -->
+    <div class="container mx-auto px-4 h-full flex items-end pb-12 relative z-10">
+        <div class="text-white max-w-4xl">
+            <!-- Breadcrumb -->
+            <nav class="mb-4 text-sm">
+                <a href="{% url 'core:home' %}" class="hover:text-blue-200 transition">Accueil</a>
+                <span class="mx-2">/</span>
+                <a href="{% url 'events:evenement_list' %}" class="hover:text-blue-200 transition">Événements</a>
+                <span class="mx-2">/</span>
+                <span class="text-blue-200">{{ evenement.titre }}</span>
+            </nav>
+            
+            <!-- Badge type -->
+            <div class="mb-4">
+                <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold backdrop-blur-md bg-white/20 border border-white/30">
+                    <span class="text-xl">{{ evenement.type_evenement.icone }}</span>
+                    {{ evenement.type_evenement.nom }}
+                </span>
+            </div>
+            
+            <!-- Titre -->
+            <h1 class="text-5xl font-bold mb-4 drop-shadow-lg">
+                {{ evenement.titre }}
+            </h1>
+            
+            <!-- Meta infos -->
+            <div class="flex flex-wrap gap-6 text-lg">
+                <!-- Date -->
+                <div class="flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <span class="font-semibold">
+                        {{ evenement.date_debut|date:"l d F Y" }}
+                        {% if evenement.heure_debut %}
+                            à {{ evenement.heure_debut|time:"H:i" }}
+                        {% endif %}
+                    </span>
+                </div>
+                
+                <!-- Lieu -->
+                {% if evenement.lieu %}
+                <div class="flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <span>{{ evenement.lieu.nom }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contenu principal -->
+<div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Colonne principale (2/3) -->
+        <div class="lg:col-span-2 space-y-8">
+            
+            <!-- Description courte -->
+            {% if evenement.description_courte %}
+            <div class="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-r-lg">
+                <p class="text-lg text-gray-800 leading-relaxed">
+                    {{ evenement.description_courte }}
+                </p>
+            </div>
+            {% endif %}
+            
+            <!-- Description complète -->
+            {% if evenement.description %}
+            <div class="bg-white rounded-xl shadow-md border border-gray-200 p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                    <div class="w-1 h-8 bg-blue-600 rounded-full"></div>
+                    Description
+                </h2>
+                <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                    {{ evenement.description|linebreaks }}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Programme (si défini) -->
+            {% if evenement.programme %}
+            <div class="bg-white rounded-xl shadow-md border border-gray-200 p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                    <div class="w-1 h-8 bg-blue-600 rounded-full"></div>
+                    Programme
+                </h2>
+                <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                    {{ evenement.programme|linebreaks }}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Lieu détaillé -->
+            {% if evenement.lieu %}
+            <div class="bg-white rounded-xl shadow-md border border-gray-200 p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                    <div class="w-1 h-8 bg-blue-600 rounded-full"></div>
+                    Lieu
+                </h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-bold text-lg text-gray-900">{{ evenement.lieu.nom }}</h3>
+                        {% if evenement.lieu.adresse %}
+                        <p class="text-gray-600 mt-1">{{ evenement.lieu.adresse }}</p>
+                        {% endif %}
+                        {% if evenement.lieu.ville %}
+                        <p class="text-gray-600">
+                            {% if evenement.lieu.code_postal %}{{ evenement.lieu.code_postal }}{% endif %}
+                            {{ evenement.lieu.ville }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Description du lieu -->
+                    {% if evenement.lieu.description %}
+                    <p class="text-gray-700">{{ evenement.lieu.description }}</p>
+                    {% endif %}
+                    
+                    <!-- Bouton itinéraire -->
+                    {% if evenement.lieu.adresse and evenement.lieu.ville %}
+                    <a href="https://www.google.com/maps/search/?api=1&query={{ evenement.lieu.adresse|urlencode }},{{ evenement.lieu.ville|urlencode }}" 
+                       target="_blank"
+                       class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+                        </svg>
+                        Obtenir l'itinéraire
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Liste des participants (si affichage autorisé) -->
+            {% if evenement.afficher_liste_participants and inscrits %}
+            <div class="bg-white rounded-xl shadow-md border border-gray-200 p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                    <div class="w-1 h-8 bg-blue-600 rounded-full"></div>
+                    Participants
+                    <span class="text-lg font-normal text-gray-500">({{ inscrits|length }})</span>
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {% for inscription in inscrits %}
+                    <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <!-- Avatar -->
+                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                            {{ inscription.participant.first_name|first|default:inscription.participant.username|first|upper }}
+                        </div>
+                        
+                        <!-- Info participant -->
+                        <div class="flex-1">
+                            <p class="font-semibold text-gray-900">
+                                {% if inscription.participant.first_name %}
+                                    {{ inscription.participant.first_name }} {{ inscription.participant.last_name }}
+                                {% else %}
+                                    {{ inscription.participant.username }}
+                                {% endif %}
+                            </p>
+                            {% if inscription.nombre_accompagnants > 0 %}
+                            <p class="text-sm text-gray-600">
+                                + {{ inscription.nombre_accompagnants }} accompagnant{{ inscription.nombre_accompagnants|pluralize }}
+                            </p>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Date d'inscription -->
+                        <span class="text-xs text-gray-500">
+                            {{ inscription.date_inscription|date:"d/m" }}
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+        </div>
+        
+        <!-- Sidebar (1/3) -->
+        <div class="lg:col-span-1">
+            <div class="sticky top-24 space-y-6">
+                
+                <!-- Carte d'information -->
+                <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6">Informations</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Statut -->
+                        <div class="flex items-center justify-between pb-4 border-b border-gray-200">
+                            <span class="text-gray-600 font-medium">Statut</span>
+                            <span class="px-3 py-1 rounded-full text-sm font-semibold
+                                {% if evenement.statut == 'confirme' %}bg-green-100 text-green-800
+                                {% elif evenement.statut == 'planifie' %}bg-blue-100 text-blue-800
+                                {% elif evenement.statut == 'annule' %}bg-red-100 text-red-800
+                                {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                {{ evenement.get_statut_display }}
+                            </span>
+                        </div>
+                        
+                        <!-- Date début -->
+                        <div class="flex items-start justify-between pb-4 border-b border-gray-200">
+                            <span class="text-gray-600 font-medium">Date</span>
+                            <div class="text-right">
+                                <p class="font-semibold text-gray-900">{{ evenement.date_debut|date:"d/m/Y" }}</p>
+                                {% if evenement.heure_debut %}
+                                <p class="text-sm text-gray-600">{{ evenement.heure_debut|time:"H:i" }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Date fin (si différente) -->
+                        {% if evenement.date_fin and evenement.date_fin != evenement.date_debut %}
+                        <div class="flex items-start justify-between pb-4 border-b border-gray-200">
+                            <span class="text-gray-600 font-medium">Fin</span>
+                            <div class="text-right">
+                                <p class="font-semibold text-gray-900">{{ evenement.date_fin|date:"d/m/Y" }}</p>
+                                {% if evenement.heure_fin %}
+                                <p class="text-sm text-gray-600">{{ evenement.heure_fin|time:"H:i" }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Places disponibles -->
+                        {% if evenement.places_max %}
+                        <div class="flex items-center justify-between pb-4 border-b border-gray-200">
+                            <span class="text-gray-600 font-medium">Places</span>
+                            <div class="text-right">
+                                <p class="font-semibold text-gray-900">
+                                    {{ evenement.nombre_inscrits }} / {{ evenement.places_max }}
+                                </p>
+                                <!-- Barre de progression -->
+                                <div class="w-32 h-2 bg-gray-200 rounded-full mt-2 overflow-hidden">
+                                    <div class="h-full bg-blue-600 rounded-full transition-all" 
+                                         style="width: {% widthratio evenement.nombre_inscrits evenement.places_max 100 %}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Organisateur -->
+                        {% if evenement.organisateur %}
+                        <div class="flex items-start justify-between pb-4 border-b border-gray-200">
+                            <span class="text-gray-600 font-medium">Organisateur</span>
+                            <p class="font-semibold text-gray-900 text-right">
+                                {{ evenement.organisateur.first_name }} {{ evenement.organisateur.last_name|default:evenement.organisateur.username }}
+                            </p>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Prix (si défini) -->
+                        {% if evenement.prix %}
+                        <div class="flex items-center justify-between pb-4 border-b border-gray-200">
+                            <span class="text-gray-600 font-medium">Prix</span>
+                            <p class="font-bold text-gray-900 text-lg">{{ evenement.prix }} €</p>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Nombre de vues -->
+                        <div class="flex items-center justify-between text-sm text-gray-500">
+                            <span>Vues</span>
+                            <span>{{ evenement.nombre_vues }}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Boutons d'action -->
+                <div class="space-y-3">
+                    {% if user.is_authenticated %}
+                        {% if est_inscrit %}
+                            <!-- Déjà inscrit -->
+                            <div class="bg-green-50 border-2 border-green-500 rounded-xl p-6 text-center">
+                                <svg class="w-12 h-12 text-green-600 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <p class="font-bold text-green-800 mb-4">Vous êtes inscrit !</p>
+                                <a href="{% url 'events:evenement_desinscription' evenement.slug %}" 
+                                   onclick="return confirm('Êtes-vous sûr de vouloir vous désinscrire ?')"
+                                   class="inline-block w-full px-6 py-3 bg-white border-2 border-red-500 text-red-600 rounded-lg hover:bg-red-50 transition font-semibold">
+                                    Se désinscrire
+                                </a>
+                            </div>
+                        {% else %}
+                            {% if evenement.inscriptions_ouvertes %}
+                                <!-- Bouton d'inscription -->
+                                <a href="{% url 'events:evenement_inscription' evenement.slug %}" 
+                                   class="block w-full px-6 py-4 bg-blue-600 text-white text-center rounded-xl hover:bg-blue-700 transition font-bold text-lg shadow-lg hover:shadow-xl">
+                                    S'inscrire à l'événement
+                                </a>
+                            {% else %}
+                                <div class="bg-gray-100 border border-gray-300 rounded-xl p-4 text-center">
+                                    <p class="text-gray-600 font-medium">Inscriptions fermées</p>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        <!-- Non connecté -->
+                        <a href="{% url 'account_login' %}?next={{ request.path }}" 
+                           class="block w-full px-6 py-4 bg-blue-600 text-white text-center rounded-xl hover:bg-blue-700 transition font-bold text-lg shadow-lg">
+                            Connexion pour s'inscrire
+                        </a>
+                    {% endif %}
+                    
+                    <!-- Bouton retour -->
+                    <a href="{% url 'events:evenement_list' %}" 
+                       class="block w-full px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 text-center rounded-xl hover:border-blue-500 hover:text-blue-600 transition font-semibold">
+                        ← Retour aux événements
+                    </a>
+                    
+                    <!-- Partage (optionnel) -->
+                    <div class="bg-gray-50 rounded-xl p-4">
+                        <p class="text-sm font-semibold text-gray-700 mb-3">Partager</p>
+                        <div class="flex gap-2">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" 
+                               target="_blank"
+                               class="flex-1 px-4 py-2 bg-blue-600 text-white text-center rounded-lg hover:bg-blue-700 transition text-sm font-medium">
+                                Facebook
+                            </a>
+                            <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ evenement.titre|urlencode }}" 
+                               target="_blank"
+                               class="flex-1 px-4 py-2 bg-sky-500 text-white text-center rounded-lg hover:bg-sky-600 transition text-sm font-medium">
+                                Twitter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+{% endblock %}

@@ -1,99 +1,78 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}AMCD57 - Club d'Aéromodélisme{% endblock %}</title>
-
+    
     {% load static %}
-
-    <!-- CSS personnalisé (Tailwind viendra ici plus tard) -->
-    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
-
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuration Tailwind personnalisée -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'amcd-blue': '#1e40af',
+                    }
+                }
+            }
+        }
+    </script>
+    
     {% block extra_css %}{% endblock %}
-  </head>
-  <body>
-    <!-- Navigation (à créer plus tard) -->
-    <nav style="background: #1e40af; padding: 15px 0; margin-bottom: 20px">
-      <div
-        class="container"
-        style="max-width: 1200px; margin: 0 auto; padding: 0 20px"
-      >
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          "
-        >
-          <a
-            href="{% url 'core:home' %}"
-            style="
-              color: white;
-              font-size: 1.5rem;
-              font-weight: bold;
-              text-decoration: none;
-            "
-          >
-            🛩️ AMCD57
-          </a>
-          <div style="display: flex; gap: 20px">
-            <a
-              href="{% url 'core:home' %}"
-              style="
-                color: white;
-                text-decoration: none;
-                padding: 8px 16px;
-                border-radius: 4px;
-              "
-              >Accueil</a
-            >
-            <a
-              href="{% url 'blog:article_list' %}"
-              style="
-                color: white;
-                text-decoration: none;
-                padding: 8px 16px;
-                border-radius: 4px;
-              "
-              >Blog</a
-            >
-            <a
-              href="{% url 'admin:index' %}"
-              style="
-                color: white;
-                text-decoration: none;
-                padding: 8px 16px;
-                border-radius: 4px;
-              "
-              >Admin</a
-            >
-          </div>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    
+    <!-- Navigation -->
+    <header class="bg-blue-700 text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <nav class="flex items-center justify-between">
+                <a href="{% url 'core:home' %}" class="text-2xl font-bold flex items-center gap-2 hover:text-blue-100 transition">
+                    🛩️ <span>AMCD57</span>
+                </a>
+                
+                <ul class="flex space-x-6">
+                    <li><a href="{% url 'core:home' %}" class="hover:text-blue-200 transition font-medium">Accueil</a></li>
+                    <li><a href="{% url 'blog:article_list' %}" class="hover:text-blue-200 transition font-medium">Blog</a></li>
+                    <li><a href="{% url 'events:evenement_list' %}" class="hover:text-blue-200 transition font-medium">Événements</a></li>
+                    <li><a href="{% url 'admin:index' %}" class="hover:text-blue-200 transition font-medium">Admin</a></li>
+                </ul>
+            </nav>
         </div>
-      </div>
-    </nav>
+    </header>
 
     <!-- Messages Flash Django -->
     {% if messages %}
-    <div class="messages">
-      {% for message in messages %}
-      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-      {% endfor %}
+    <div class="container mx-auto px-4 mt-4">
+        {% for message in messages %}
+        <div class="px-4 py-3 rounded-lg mb-2 {% if message.tags == 'error' %}bg-red-100 border border-red-400 text-red-800{% elif message.tags == 'success' %}bg-green-100 border border-green-400 text-green-800{% elif message.tags == 'warning' %}bg-yellow-100 border border-yellow-400 text-yellow-800{% else %}bg-blue-100 border border-blue-400 text-blue-800{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
     </div>
     {% endif %}
 
     <!-- Contenu principal de chaque page -->
-    <main>{% block content %} {% endblock %}</main>
+    <main class="flex-grow">
+        {% block content %}
+        {% endblock %}
+    </main>
 
     <!-- Footer -->
-    <footer>
-      <div class="container">
-        <p>&copy; 2025 AMCD57 - Tous droits réservés</p>
-      </div>
+    <footer class="bg-gray-800 text-white mt-auto py-8">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <p class="text-gray-300">&copy; 2025 AMCD57 - Club d'Aéromodélisme de Jarny</p>
+                <p class="text-gray-400 text-sm mt-2">Tous droits réservés</p>
+            </div>
+        </div>
     </footer>
 
     <!-- JavaScript -->
-    <script src="{% static 'js/main.js' %}"></script>
     {% block extra_js %}{% endblock %}
-  </body>
+</body>
 </html>

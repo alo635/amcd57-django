@@ -25,7 +25,7 @@ urlpatterns = [
     path('', include('core.urls')),
         # URLs des autres applications (à ajouter progressivement)
     path('blog/', include('blog.urls')),
-    # path('evenements/', include('events.urls')),
+    path('evenements/', include('events.urls')),
     # path('membres/', include('members.urls')),
     # path('liens/', include('weblinks.urls')),
     
