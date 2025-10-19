@@ -1,0 +1,134 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Mentions légales - AMCD57{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-gray-700 to-gray-900 text-white py-16">
+    <div class="container mx-auto px-4">
+        <h1 class="text-5xl font-bold mb-4">Mentions légales</h1>
+        <p class="text-xl text-gray-300">
+            Informations légales et réglementaires
+        </p>
+    </div>
+</div>
+
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+        
+        <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-8 prose prose-lg max-w-none">
+            
+            <!-- Éditeur du site -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Éditeur du site</h2>
+                <p class="text-gray-700">
+                    <strong>Nom de l'association :</strong> AMCD57 - Aéro-Modèle-Club Département 57<br>
+                    <strong>Forme juridique :</strong> Association loi 1901<br>
+                    <strong>Siège social :</strong> Jarny, 54800, France<br>
+                    <strong>Email :</strong> <a href="mailto:contact@amcd57.fr" class="text-blue-600 hover:text-blue-700">contact@amcd57.fr</a><br>
+                    <strong>Directeur de publication :</strong> [Nom du Président]
+                </p>
+            </section>
+            
+            <!-- Hébergement -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Hébergement</h2>
+                <p class="text-gray-700">
+                    <strong>Hébergeur :</strong> [Nom de l'hébergeur]<br>
+                    <strong>Adresse :</strong> [Adresse de l'hébergeur]<br>
+                    <strong>Téléphone :</strong> [Téléphone de l'hébergeur]
+                </p>
+            </section>
+            
+            <!-- Propriété intellectuelle -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Propriété intellectuelle</h2>
+                <p class="text-gray-700">
+                    L'ensemble du contenu de ce site (textes, images, vidéos, logos) est la propriété 
+                    de l'AMCD57 ou de ses partenaires. Toute reproduction, distribution, modification, 
+                    adaptation, retransmission ou publication, même partielle, de ces différents éléments 
+                    est strictement interdite sans l'accord écrit préalable de l'AMCD57.
+                </p>
+                <p class="text-gray-700 mt-4">
+                    La violation de ces dispositions impératives soumet le contrevenant et toutes personnes 
+                    responsables aux sanctions pénales et civiles prévues par la loi.
+                </p>
+            </section>
+            
+            <!-- Données personnelles -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Protection des données personnelles</h2>
+                <p class="text-gray-700">
+                    Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi 
+                    Informatique et Libertés, vous disposez d'un droit d'accès, de rectification, de 
+                    suppression et d'opposition aux données personnelles vous concernant.
+                </p>
+                <p class="text-gray-700 mt-4">
+                    Pour exercer ces droits, vous pouvez nous contacter à l'adresse : 
+                    <a href="mailto:contact@amcd57.fr" class="text-blue-600 hover:text-blue-700">contact@amcd57.fr</a>
+                </p>
+                <p class="text-gray-700 mt-4">
+                    Pour plus d'informations, consultez notre 
+                    <a href="{% url 'core:politique_confidentialite' %}" class="text-blue-600 hover:text-blue-700">
+                        politique de confidentialité
+                    </a>.
+                </p>
+            </section>
+            
+            <!-- Cookies -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Cookies</h2>
+                <p class="text-gray-700">
+                    Ce site utilise des cookies techniques nécessaires à son bon fonctionnement. 
+                    Ces cookies ne collectent aucune information personnelle et ne sont pas utilisés 
+                    à des fins publicitaires.
+                </p>
+            </section>
+            
+            <!-- Responsabilité -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Limitation de responsabilité</h2>
+                <p class="text-gray-700">
+                    L'AMCD57 s'efforce d'assurer l'exactitude et la mise à jour des informations diffusées 
+                    sur ce site. Toutefois, l'AMCD57 ne peut garantir l'exactitude, la précision ou 
+                    l'exhaustivité des informations mises à disposition sur ce site.
+                </p>
+                <p class="text-gray-700 mt-4">
+                    L'AMCD57 ne pourra être tenue responsable des dommages directs ou indirects résultant 
+                    de l'accès au site ou de l'utilisation du site, y compris l'inaccessibilité, les pertes 
+                    de données, détériorations, destructions ou virus qui pourraient affecter l'équipement 
+                    informatique de l'utilisateur.
+                </p>
+            </section>
+            
+            <!-- Liens externes -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Liens hypertextes</h2>
+                <p class="text-gray-700">
+                    Ce site peut contenir des liens vers d'autres sites internet. L'AMCD57 ne saurait 
+                    être tenue responsable du contenu de ces sites externes.
+                </p>
+            </section>
+            
+            <!-- Droit applicable -->
+            <section>
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Droit applicable</h2>
+                <p class="text-gray-700">
+                    Les présentes mentions légales sont soumises au droit français. En cas de litige, 
+                    les tribunaux français seront seuls compétents.
+                </p>
+            </section>
+            
+            <div class="mt-8 p-4 bg-gray-100 rounded-lg">
+                <p class="text-sm text-gray-600">
+                    <strong>Dernière mise à jour :</strong> Octobre 2025
+                </p>
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
+
+{% endblock %}

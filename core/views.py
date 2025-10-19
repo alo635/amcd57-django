@@ -152,3 +152,34 @@ def contact(request):
     }
     
     return render(request, 'core/contact.html', context)
+
+def about(request):
+    """
+    Page À propos / Qui sommes-nous
+    URL : /a-propos/
+    """
+    return render(request, 'core/about.html')
+
+
+def mentions_legales(request):
+    """
+    Page Mentions légales
+    URL : /mentions-legales/
+    """
+    return render(request, 'core/mentions_legales.html')
+
+
+def politique_confidentialite(request):
+    """
+    Page Politique de confidentialité
+    URL : /politique-confidentialite/
+    """
+    return render(request, 'core/politique_confidentialite.html')
+
+
+def cgu(request):
+    """
+    Page Conditions Générales d'Utilisation
+    URL : /cgu/
+    """
+    return render(request, 'core/cgu.html')

@@ -150,7 +150,7 @@
                     <h3 class="text-white text-lg font-bold mb-4">Le Club</h3>
                     <ul class="space-y-2">
                         <li>
-                            <a href="#" class="text-gray-400 hover:text-white transition flex items-center gap-2">
+                            <a href="{% url 'core:about' %}" class="text-gray-400 hover:text-white transition flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                 </svg>
@@ -182,7 +182,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="text-gray-400 hover:text-white transition flex items-center gap-2">
+                            <a href="{% url 'core:mentions_legales' %}" class="text-gray-400 hover:text-white transition flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                 </svg>
@@ -190,8 +190,8 @@
                             </a>
                         </li>
                     </ul>
-                </div>
-                
+                </div>        
+                        
                 <!-- Colonne 4 : Newsletter et réseaux sociaux -->
                 <div>
                     <h3 class="text-white text-lg font-bold mb-4">Restez connecté</h3>
@@ -252,9 +252,9 @@
                         &copy; 2025 AMCD57 - Club d'Aéromodélisme de Jarny. Tous droits réservés.
                     </p>
                     <div class="flex gap-6">
-                        <a href="#" class="hover:text-white transition">Mentions légales</a>
-                        <a href="#" class="hover:text-white transition">Politique de confidentialité</a>
-                        <a href="#" class="hover:text-white transition">CGU</a>
+                        <a href="{% url 'core:mentions_legales' %}" class="hover:text-white transition">Mentions légales</a>
+                        <a href="{% url 'core:politique_confidentialite' %}" class="hover:text-white transition">Politique de confidentialité</a>
+                        <a href="{% url 'core:cgu' %}" class="hover:text-white transition">CGU</a>
                     </div>
                 </div>
             </div>
