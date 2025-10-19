@@ -2,7 +2,7 @@
 Vues pour l'application Core AMCD57
 """
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.http import JsonResponse
 from blog.models import Article
@@ -10,6 +10,8 @@ from events.models import Evenement
 from members.models import ProfilMembre
 from django.core.cache import cache
 from .services.weather import WeatherService
+from django.contrib import messages
+from .models import ContactMessage
 
 
 def home(request):
@@ -90,3 +92,63 @@ def weather_widget(request):
         'current': current_weather,
         'forecast': forecast
     })
+
+def contact(request):
+    """
+    Page de contact avec formulaire
+    URL : /contact/
+    """
+    if request.method == 'POST':
+        # Récupération des données du formulaire
+        nom = request.POST.get('nom', '').strip()
+        email = request.POST.get('email', '').strip()
+        sujet = request.POST.get('sujet', '')
+        message_text = request.POST.get('message', '').strip()
+        
+        # Validation simple
+        if not nom or not email or not message_text:
+            messages.error(request, "Tous les champs obligatoires doivent être remplis.")
+            return redirect('core:contact')
+        
+        # Récupération de l'IP (optionnel)
+        ip_address = request.META.get('REMOTE_ADDR', '')
+        
+        # Création du message de contact
+        try:
+            contact_message = ContactMessage.objects.create(
+                nom=nom,
+                email=email,
+                sujet=sujet,
+                message=message_text,
+                ip_address=ip_address,
+                statut='nouveau',
+                lu=False
+            )
+            
+            # TODO: Envoyer un email de notification au club
+            # send_mail(
+            #     subject=f"[AMCD57] Nouveau message de contact - {sujet}",
+            #     message=f"De: {nom} ({email})\n\n{message_text}",
+            #     from_email=settings.DEFAULT_FROM_EMAIL,
+            #     recipient_list=['contact@amcd57.fr'],
+            # )
+            
+            messages.success(
+                request,
+                "✅ Votre message a été envoyé avec succès ! Nous vous répondrons dans les plus brefs délais."
+            )
+            return redirect('core:home')
+            
+        except Exception as e:
+            messages.error(
+                request,
+                "❌ Une erreur est survenue lors de l'envoi de votre message. Veuillez réessayer."
+            )
+            return redirect('core:contact')
+    
+    # GET - Affichage du formulaire
+    context = {
+        'sujets': ContactMessage.SUJET_CHOICES,
+    }
+    
+    return render(request, 'core/contact.html', context)
