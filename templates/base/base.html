@@ -39,7 +39,15 @@
                     <li><a href="{% url 'core:home' %}" class="hover:text-blue-200 transition font-medium">Accueil</a></li>
                     <li><a href="{% url 'blog:article_list' %}" class="hover:text-blue-200 transition font-medium">Blog</a></li>
                     <li><a href="{% url 'events:evenement_list' %}" class="hover:text-blue-200 transition font-medium">Événements</a></li>
+    
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'events:mes_inscriptions' %}" class="hover:text-blue-200 transition font-medium">Mes inscriptions</a></li>
+    
+                    <!-- Lien Admin visible uniquement pour les membres du bureau -->
+                    {% if user.profil|default:False and user.profil.est_membre_bureau %}
                     <li><a href="{% url 'admin:index' %}" class="hover:text-blue-200 transition font-medium">Admin</a></li>
+                    {% endif %}
+                    {% endif %}
                 </ul>
             </nav>
         </div>
