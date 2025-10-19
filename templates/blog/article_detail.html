@@ -5,98 +5,180 @@
 {% block content %}
 <div class="container" style="max-width: 1000px; margin: 0 auto; padding: 40px 20px;">
     
-    <nav style="margin-bottom: 30px;">
-        <a href="{% url 'core:home' %}">Accueil</a> → 
-        <a href="{% url 'blog:article_list' %}">Blog</a> → 
-        {{ article.titre|truncatewords:5 }}
+    <nav style="margin-bottom: 30px; font-size: 0.9rem; color: #64748b;">
+        <a href="{% url 'core:home' %}" style="color: #64748b; text-decoration: none;">Accueil</a>
+        <span style="margin: 0 10px;">→</span>
+        <a href="{% url 'blog:article_list' %}" style="color: #64748b; text-decoration: none;">Blog</a>
+        <span style="margin: 0 10px;">→</span>
+        <a href="{% url 'blog:categorie_detail' article.categorie.slug %}" style="color: #64748b; text-decoration: none;">{{ article.categorie.nom }}</a>
+        <span style="margin: 0 10px;">→</span>
+        <span style="color: #1e293b;">{{ article.titre|truncatewords:5 }}</span>
     </nav>
 
-    <article style="background: white; padding: 50px; border-radius: 12px;">
+    <article style="background: white; padding: 50px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
         
         <div style="margin-bottom: 20px;">
-            <a href="{% url 'blog:categorie_detail' article.categorie.slug %}">
+            <a href="{% url 'blog:categorie_detail' article.categorie.slug %}" style="display: inline-block; padding: 8px 16px; background: #dbeafe; color: #1e40af; border-radius: 6px; text-decoration: none; font-weight: 600;">
                 📁 {{ article.categorie.nom }}
             </a>
         </div>
 
-        <h1 style="font-size: 2.5rem; margin-bottom: 20px;">{{ article.titre }}</h1>
+        <h1 style="font-size: 2.5rem; color: #1e293b; margin-bottom: 20px; line-height: 1.2;">
+            {{ article.titre }}
+        </h1>
 
-        <div style="margin-bottom: 30px; color: #64748b;">
-            <p>
-                👤 {% if article.auteur.first_name %}{{ article.auteur.first_name }} {{ article.auteur.last_name }}{% else %}{{ article.auteur.username }}{% endif %}
-                | 📅 {{ article.date_publication|date:"d/m/Y" }}
-                | 👁️ {{ article.vues }}
-                | 💬 {{ article.nombre_commentaires }}
-            </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 20px; padding: 20px 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; margin-bottom: 30px; color: #64748b;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span>👤</span>
+                <span><strong>{% if article.auteur.first_name %}{{ article.auteur.first_name }} {{ article.auteur.last_name }}{% else %}{{ article.auteur.username }}{% endif %}</strong></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span>📅</span>
+                <span>{{ article.date_publication|date:"d F Y" }}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span>👁️</span>
+                <span>{{ article.vues }} vue{% if article.vues > 1 %}s{% endif %}</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span>💬</span>
+                <span>{{ article.nombre_commentaires }} commentaire{% if article.nombre_commentaires > 1 %}s{% endif %}</span>
+            </div>
         </div>
 
         {% if article.image %}
         <div style="margin-bottom: 30px;">
-            <img src="{{ article.image.url }}" alt="{{ article.titre }}" style="width: 100%; border-radius: 8px;">
+            <img src="{{ article.image.url }}" alt="{{ article.titre }}" style="width: 100%; max-height: 500px; object-fit: cover; border-radius: 8px;">
         </div>
         {% endif %}
 
-        <div style="font-size: 1.1rem; line-height: 1.8;">
+        <div style="font-size: 1.1rem; line-height: 1.8; color: #334155;">
             {{ article.contenu|linebreaks }}
         </div>
 
         {% if article.tags.all %}
-        <div style="margin-top: 40px;">
-            <h3>Tags :</h3>
-            {% for tag in article.tags.all %}
-                <a href="{% url 'blog:tag_detail' tag.slug %}">#{{ tag.nom }}</a>
-            {% endfor %}
+        <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid #e2e8f0;">
+            <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: #64748b;">🏷️ Tags :</h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                {% for tag in article.tags.all %}
+                <a href="{% url 'blog:tag_detail' tag.slug %}" style="display: inline-block; padding: 8px 16px; background: #f1f5f9; border-radius: 20px; text-decoration: none; color: #475569;">
+                    #{{ tag.nom }}
+                </a>
+                {% endfor %}
+            </div>
         </div>
         {% endif %}
 
     </article>
 
+    {% if articles_similaires %}
     <section style="margin-top: 60px;">
-        <h2>💬 Commentaires ({{ article.nombre_commentaires }})</h2>
+        <h2 style="font-size: 1.8rem; margin-bottom: 30px; color: #1e40af;">📚 Articles similaires</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+            {% for article_similaire in articles_similaires %}
+            <article style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                {% if article_similaire.image %}
+                <img src="{{ article_similaire.image.url }}" alt="{{ article_similaire.titre }}" style="width: 100%; height: 150px; object-fit: cover;">
+                {% else %}
+                <div style="width: 100%; height: 150px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                {% endif %}
+                <div style="padding: 20px;">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 10px;">
+                        <a href="{% url 'blog:article_detail' article_similaire.slug %}" style="color: #1e293b; text-decoration: none;">
+                            {{ article_similaire.titre|truncatewords:10 }}
+                        </a>
+                    </h3>
+                    <p style="color: #64748b; font-size: 0.9rem;">{{ article_similaire.date_publication|date:"d/m/Y" }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <section style="margin-top: 60px;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 30px; color: #1e40af;">
+            💬 Commentaires ({{ article.nombre_commentaires }})
+        </h2>
 
         {% if messages %}
-            {% for message in messages %}
-            <div style="padding: 15px; margin: 10px 0; background: #d4edda;">
-                {{ message }}
-            </div>
-            {% endfor %}
+        {% for message in messages %}
+        <div style="padding: 15px; margin-bottom: 20px; border-radius: 8px; background: {% if message.tags == 'success' %}#d4edda{% elif message.tags == 'error' %}#f8d7da{% else %}#d1ecf1{% endif %}; color: {% if message.tags == 'success' %}#155724{% elif message.tags == 'error' %}#721c24{% else %}#0c5460{% endif %};">
+            {{ message }}
+        </div>
+        {% endfor %}
         {% endif %}
 
-        <div style="background: #f8fafc; padding: 30px; margin: 20px 0;">
-            <h3>Laisser un commentaire</h3>
-            <form method="post">
+        <div style="background: #f8fafc; padding: 30px; border-radius: 12px; margin-bottom: 40px;">
+            <h3 style="font-size: 1.3rem; margin-bottom: 20px; color: #1e293b;">✍️ Laisser un commentaire</h3>
+            <form method="post" style="display: flex; flex-direction: column; gap: 15px;">
                 {% csrf_token %}
                 
                 {% if not user.is_authenticated %}
-                <div>
-                    <input type="text" name="nom" placeholder="Votre nom" required style="width: 48%; padding: 10px; margin: 5px;">
-                    <input type="email" name="email" placeholder="Votre email" required style="width: 48%; padding: 10px; margin: 5px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <input type="text" name="nom" placeholder="Votre nom *" required style="padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px;">
+                    <input type="email" name="email" placeholder="Votre email *" required style="padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px;">
                 </div>
+                {% else %}
+                <p style="color: #64748b;">Connecté en tant que <strong>{% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username }}{% endif %}</strong></p>
                 {% endif %}
                 
-                <div>
-                    <textarea name="contenu" rows="5" placeholder="Votre commentaire" required style="width: 100%; padding: 10px; margin: 5px;"></textarea>
-                </div>
+                <textarea name="contenu" rows="5" placeholder="Votre commentaire *" required style="padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; resize: vertical;"></textarea>
                 
-                <button type="submit" style="padding: 12px 30px; background: #2563eb; color: white; border: none; border-radius: 8px;">
-                    Envoyer
+                <button type="submit" style="padding: 12px 30px; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+                    Envoyer le commentaire
                 </button>
+                
+                <p style="color: #94a3b8; font-size: 0.9rem;">Votre commentaire sera publié après modération.</p>
             </form>
         </div>
 
         {% if commentaires %}
+        <div style="display: flex; flex-direction: column; gap: 20px;">
             {% for commentaire in commentaires %}
-            <div style="background: white; padding: 25px; margin: 20px 0; border-radius: 12px;">
-                <div style="margin-bottom: 15px;">
-                    <strong>{{ commentaire.auteur_nom }}</strong>
-                    <span style="color: #94a3b8;">- {{ commentaire.date_creation|date:"d/m/Y H:i" }}</span>
+            <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                    <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.3rem;">
+                        {{ commentaire.auteur_nom|slice:":1"|upper }}
+                    </div>
+                    <div>
+                        <div style="font-weight: bold; color: #1e293b;">{{ commentaire.auteur_nom }}</div>
+                        <div style="font-size: 0.9rem; color: #94a3b8;">{{ commentaire.date_creation|date:"d F Y à H:i" }}</div>
+                    </div>
                 </div>
-                <div>{{ commentaire.contenu|linebreaks }}</div>
+                
+                <div style="color: #334155; line-height: 1.6;">
+                    {{ commentaire.contenu|linebreaks }}
+                </div>
+
+                {% with reponses=commentaire.reponses.all %}
+                {% if reponses %}
+                <div style="margin-top: 20px; margin-left: 40px; padding-left: 20px; border-left: 3px solid #e2e8f0;">
+                    {% for reponse in reponses %}
+                    {% if reponse.approuve %}
+                    <div style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                            <div style="width: 35px; height: 35px; border-radius: 50%; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                                {{ reponse.auteur_nom|slice:":1"|upper }}
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.95rem; color: #1e293b;">{{ reponse.auteur_nom }}</div>
+                                <div style="font-size: 0.85rem; color: #94a3b8;">{{ reponse.date_creation|date:"d/m/Y H:i" }}</div>
+                            </div>
+                        </div>
+                        <div style="color: #334155; font-size: 0.95rem;">{{ reponse.contenu|linebreaks }}</div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
             </div>
             {% endfor %}
+        </div>
         {% else %}
-        <div style="text-align: center; padding: 40px;">
-            <p>Soyez le premier à commenter !</p>
+        <div style="text-align: center; padding: 40px; background: #f8fafc; border-radius: 12px;">
+            <p style="color: #64748b; font-size: 1.1rem;">Soyez le premier à commenter cet article !</p>
         </div>
         {% endif %}
     </section>

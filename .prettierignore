@@ -1,9 +1,13 @@
-# Ignorer les templates Django
-templates/
-*.html
+# Templates Django - NE PAS FORMATER
+templates/**/*.html
+**/templates/**
 
-# Ignorer les migrations
-*/migrations/
+# Migrations
+**/migrations/**
 
-# Ignorer les fichiers statiques collectés
+# Fichiers collectés
 staticfiles/
+media/
+
+# Node modules (si besoin plus tard)
+node_modules/
