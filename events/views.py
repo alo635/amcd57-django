@@ -88,6 +88,8 @@ def evenement_calendrier(request):
     Affiche le calendrier des événements
     URL : /evenements/calendrier/
     """
+    from calendar import monthrange, Calendar
+    
     # Récupère le mois/année depuis les paramètres GET ou utilise le mois actuel
     now = timezone.now()
     
@@ -99,7 +101,6 @@ def evenement_calendrier(request):
         mois = now.month
     
     # Calculer le premier et dernier jour du mois
-    from calendar import monthrange
     premier_jour = datetime(annee, mois, 1, tzinfo=timezone.get_current_timezone())
     dernier_jour_num = monthrange(annee, mois)[1]
     dernier_jour = datetime(annee, mois, dernier_jour_num, 23, 59, 59, tzinfo=timezone.get_current_timezone())
@@ -110,6 +111,29 @@ def evenement_calendrier(request):
         Q(date_fin__gte=premier_jour, date_fin__lte=dernier_jour) |
         Q(date_debut__lte=premier_jour, date_fin__gte=dernier_jour)
     ).exclude(statut='annule').order_by('date_debut')
+    
+    # Génération de la grille du calendrier
+    cal = Calendar(firstweekday=0)  # Lundi = 0
+    calendrier_jours = []
+    
+    for semaine in cal.monthdayscalendar(annee, mois):
+        semaine_jours = []
+        for jour_num in semaine:
+            if jour_num == 0:
+                # Jour d'un autre mois (vide)
+                semaine_jours.append({
+                    'numero': '',
+                    'du_mois': False,
+                    'est_aujourdhui': False
+                })
+            else:
+                jour_date = datetime(annee, mois, jour_num, tzinfo=timezone.get_current_timezone()).date()
+                semaine_jours.append({
+                    'numero': jour_num,
+                    'du_mois': True,
+                    'est_aujourdhui': jour_date == now.date()
+                })
+        calendrier_jours.append(semaine_jours)
     
     # Mois précédent et suivant pour navigation
     if mois == 1:
@@ -135,10 +159,10 @@ def evenement_calendrier(request):
         'annee_precedente': annee_precedente,
         'mois_suivant': mois_suivant,
         'annee_suivante': annee_suivante,
+        'calendrier_jours': calendrier_jours,
     }
     
     return render(request, 'events/evenement_calendrier.html', context)
-
 
 # ============================================
 # DÉTAIL D'UN ÉVÉNEMENT

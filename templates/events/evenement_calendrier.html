@@ -1,0 +1,205 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load event_filters %}
+
+{% block title %}Calendrier des événements - AMCD57{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12">
+    <div class="container mx-auto px-4">
+        <h1 class="text-4xl font-bold mb-4">📅 Calendrier des événements</h1>
+        <p class="text-xl text-blue-100">
+            Vue mensuelle de tous nos événements
+        </p>
+    </div>
+</div>
+
+<div class="container mx-auto px-4 py-8">
+    
+    <!-- Navigation : Liste / Calendrier / Passés -->
+    <div class="mb-8 flex flex-wrap gap-3">
+        <a href="{% url 'events:evenement_list' %}" 
+           class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-white border-2 border-gray-200 text-gray-700 hover:border-blue-500 hover:text-blue-600 transition font-medium">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+            </svg>
+            Liste
+        </a>
+        <a href="{% url 'events:evenement_calendrier' %}" 
+           class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition shadow-md font-medium">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            Calendrier
+        </a>
+        <a href="{% url 'events:evenement_passes' %}" 
+           class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-white border-2 border-gray-200 text-gray-700 hover:border-blue-500 hover:text-blue-600 transition font-medium">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+            </svg>
+            Archives
+        </a>
+    </div>
+
+    <!-- Calendrier -->
+    <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+        
+        <!-- En-tête du calendrier avec navigation -->
+        <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
+            <div class="flex items-center justify-between">
+                
+                <!-- Bouton mois précédent -->
+                <a href="?annee={{ annee_precedente }}&mois={{ mois_precedent }}" 
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition backdrop-blur-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    <span class="font-medium">Précédent</span>
+                </a>
+                
+                <!-- Mois et année actuels -->
+                <h2 class="text-3xl font-bold capitalize">
+                    {{ mois_nom }} {{ annee }}
+                </h2>
+                
+                <!-- Bouton mois suivant -->
+                <a href="?annee={{ annee_suivante }}&mois={{ mois_suivant }}" 
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition backdrop-blur-sm">
+                    <span class="font-medium">Suivant</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Corps du calendrier -->
+        <div class="p-6">
+            
+            <!-- Jours de la semaine (en-têtes) -->
+            <div class="grid grid-cols-7 gap-2 mb-4">
+                {% for jour in "Lun,Mar,Mer,Jeu,Ven,Sam,Dim"|split:"," %}
+                <div class="text-center font-bold text-gray-700 py-2">
+                    {{ jour }}
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Grille du calendrier -->
+            <div class="grid grid-cols-7 gap-2">
+                {% load event_filters %}
+                
+                {% for semaine in calendrier_jours %}
+                    {% for jour in semaine %}
+                    <div class="border border-gray-200 rounded-lg min-h-32 p-2 
+                                {% if jour.est_aujourdhui %}bg-blue-50 border-blue-500 border-2{% endif %}
+                                {% if not jour.du_mois %}bg-gray-50 opacity-50{% endif %}">
+                        
+                        <!-- Numéro du jour -->
+                        <div class="text-right mb-2">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold
+                                        {% if jour.est_aujourdhui %}bg-blue-600 text-white{% else %}text-gray-700{% endif %}">
+                                {{ jour.numero }}
+                            </span>
+                        </div>
+                        
+                        <!-- Événements du jour -->
+                        {% for evenement in evenements %}
+                            {% if evenement.date_debut.day == jour.numero and evenement.date_debut.month == mois %}
+                            <a href="{% url 'events:evenement_detail' evenement.slug %}" 
+                               class="block mb-1 p-1.5 rounded text-xs font-medium hover:shadow-md transition truncate"
+                               style="background-color: {{ evenement.type_evenement.couleur }}22; color: {{ evenement.type_evenement.couleur }}; border-left: 3px solid {{ evenement.type_evenement.couleur }};"
+                               title="{{ evenement.titre }}">
+                                <span class="text-xs">{{ evenement.type_evenement.icone }}</span>
+                                <span class="ml-1">{{ evenement.titre|truncatechars:20 }}</span>
+                            </a>
+                            {% endif %}
+                        {% endfor %}
+                        
+                    </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Liste des événements du mois (en dessous du calendrier) -->
+    {% if evenements %}
+    <div class="mt-8 bg-white rounded-xl shadow-md border border-gray-200 p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+            <div class="w-1 h-8 bg-blue-600 rounded-full"></div>
+            Événements de {{ mois_nom }} {{ annee }}
+            <span class="text-lg font-normal text-gray-500">({{ evenements|length }})</span>
+        </h2>
+        
+        <div class="space-y-4">
+            {% for evenement in evenements %}
+            <a href="{% url 'events:evenement_detail' evenement.slug %}" 
+               class="flex items-center gap-4 p-4 bg-gray-50 hover:bg-gray-100 rounded-lg border border-gray-200 hover:border-blue-500 transition group">
+                
+                <!-- Date badge -->
+                <div class="flex-shrink-0 w-16 h-16 bg-white border-2 border-gray-300 rounded-lg flex flex-col items-center justify-center group-hover:border-blue-500 transition">
+                    <span class="text-xs text-gray-500 uppercase">{{ evenement.date_debut|date:"M" }}</span>
+                    <span class="text-2xl font-bold text-gray-900">{{ evenement.date_debut|date:"d" }}</span>
+                </div>
+                
+                <!-- Icône du type -->
+                <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-2xl"
+                     style="background-color: {{ evenement.type_evenement.couleur }}22;">
+                    {{ evenement.type_evenement.icone }}
+                </div>
+                
+                <!-- Infos événement -->
+                <div class="flex-1 min-w-0">
+                    <h3 class="font-bold text-gray-900 group-hover:text-blue-600 transition truncate">
+                        {{ evenement.titre }}
+                    </h3>
+                    <div class="flex items-center gap-4 text-sm text-gray-600 mt-1">
+                        {% if evenement.heure_debut %}
+                        <span class="flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            {{ evenement.heure_debut|time:"H:i" }}
+                        </span>
+                        {% endif %}
+                        
+                        {% if evenement.lieu %}
+                        <span class="flex items-center gap-1 truncate">
+                            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            </svg>
+                            {{ evenement.lieu.nom }}
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Badge type -->
+                <div class="flex-shrink-0">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold"
+                          style="background-color: {{ evenement.type_evenement.couleur }}22; color: {{ evenement.type_evenement.couleur }};">
+                        {{ evenement.type_evenement.nom }}
+                    </span>
+                </div>
+                
+                <!-- Flèche -->
+                <svg class="w-6 h-6 text-gray-400 group-hover:text-blue-600 group-hover:translate-x-1 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-8 text-center">
+        <svg class="w-16 h-16 text-blue-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        <p class="text-blue-800 text-lg font-semibold">Aucun événement ce mois-ci</p>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

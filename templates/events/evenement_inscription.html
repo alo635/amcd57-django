@@ -1,0 +1,259 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Inscription - {{ evenement.titre }} - AMCD57{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12">
+    <div class="container mx-auto px-4">
+        <!-- Breadcrumb -->
+        <nav class="mb-4 text-sm">
+            <a href="{% url 'core:home' %}" class="hover:text-blue-200 transition">Accueil</a>
+            <span class="mx-2">/</span>
+            <a href="{% url 'events:evenement_list' %}" class="hover:text-blue-200 transition">Événements</a>
+            <span class="mx-2">/</span>
+            <a href="{% url 'events:evenement_detail' evenement.slug %}" class="hover:text-blue-200 transition">{{ evenement.titre }}</a>
+            <span class="mx-2">/</span>
+            <span class="text-blue-200">Inscription</span>
+        </nav>
+        
+        <h1 class="text-4xl font-bold mb-4">✍️ Inscription à l'événement</h1>
+        <p class="text-xl text-blue-100">
+            Confirmez votre participation
+        </p>
+    </div>
+</div>
+
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Formulaire d'inscription (2/3) -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
+                    
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">Formulaire d'inscription</h2>
+                        <p class="text-gray-600">
+                            Remplissez les informations ci-dessous pour confirmer votre participation
+                        </p>
+                    </div>
+                    
+                    <!-- Formulaire -->
+                    <form method="post" class="space-y-6">
+                        {% csrf_token %}
+                        
+                        <!-- Participant (lecture seule) -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Participant
+                            </label>
+                            <div class="flex items-center gap-3 p-4 bg-blue-50 border-2 border-blue-200 rounded-lg">
+                                <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                    {{ user.first_name|first|default:user.username|first|upper }}
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-900">
+                                        {% if user.first_name %}
+                                            {{ user.first_name }} {{ user.last_name }}
+                                        {% else %}
+                                            {{ user.username }}
+                                        {% endif %}
+                                    </p>
+                                    <p class="text-sm text-gray-600">{{ user.email }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Nombre d'accompagnants -->
+                        <div>
+                            <label for="nombre_accompagnants" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Nombre d'accompagnants
+                                <span class="text-gray-500 font-normal">(optionnel)</span>
+                            </label>
+                            <select name="nombre_accompagnants" 
+                                    id="nombre_accompagnants"
+                                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition">
+                                <option value="0">Aucun accompagnant</option>
+                                <option value="1">1 accompagnant</option>
+                                <option value="2">2 accompagnants</option>
+                                <option value="3">3 accompagnants</option>
+                                <option value="4">4 accompagnants</option>
+                                <option value="5">5 accompagnants</option>
+                            </select>
+                            <p class="mt-2 text-sm text-gray-500">
+                                💡 Si vous venez avec d'autres personnes (famille, amis)
+                            </p>
+                        </div>
+                        
+                        <!-- Commentaire -->
+                        <div>
+                            <label for="commentaire" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Commentaire ou question
+                                <span class="text-gray-500 font-normal">(optionnel)</span>
+                            </label>
+                            <textarea name="commentaire" 
+                                      id="commentaire"
+                                      rows="4"
+                                      placeholder="Des informations particulières à nous transmettre ?"
+                                      class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition resize-none"></textarea>
+                            <p class="mt-2 text-sm text-gray-500">
+                                💬 Questions, besoins spécifiques, régime alimentaire, etc.
+                            </p>
+                        </div>
+                        
+                        <!-- Conditions -->
+                        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4">
+                            <div class="flex items-start gap-3">
+                                <svg class="w-6 h-6 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                </svg>
+                                <div class="text-sm text-yellow-800">
+                                    <p class="font-semibold mb-1">Informations importantes :</p>
+                                    <ul class="list-disc list-inside space-y-1">
+                                        <li>Vous recevrez une confirmation par email</li>
+                                        <li>Vous pourrez vous désinscrire depuis votre espace membre</li>
+                                        {% if evenement.prix %}
+                                        <li>Le règlement de {{ evenement.prix }} € se fera sur place</li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Boutons -->
+                        <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                            <button type="submit" 
+                                    class="flex-1 px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-bold text-lg shadow-lg hover:shadow-xl">
+                                ✅ Confirmer mon inscription
+                            </button>
+                            <a href="{% url 'events:evenement_detail' evenement.slug %}" 
+                               class="flex-1 px-8 py-4 bg-white border-2 border-gray-300 text-gray-700 text-center rounded-lg hover:border-red-500 hover:text-red-600 transition font-semibold">
+                                Annuler
+                            </a>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+            
+            <!-- Sidebar récapitulatif (1/3) -->
+            <div class="lg:col-span-1">
+                <div class="sticky top-24 space-y-6">
+                    
+                    <!-- Carte événement -->
+                    <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+                        <!-- Image -->
+                        {% if evenement.image %}
+                        <img src="{{ evenement.image.url }}" 
+                             alt="{{ evenement.titre }}"
+                             class="w-full h-48 object-cover">
+                        {% else %}
+                        <div class="w-full h-48 bg-gradient-to-br flex items-center justify-center"
+                             style="background: linear-gradient(135deg, {{ evenement.type_evenement.couleur }}33 0%, {{ evenement.type_evenement.couleur }}66 100%);">
+                            <span class="text-6xl" style="color: {{ evenement.type_evenement.couleur }};">{{ evenement.type_evenement.icone }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="p-6">
+                            <!-- Badge type -->
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold mb-4"
+                                  style="background-color: {{ evenement.type_evenement.couleur }}22; color: {{ evenement.type_evenement.couleur }};">
+                                <span class="text-sm">{{ evenement.type_evenement.icone }}</span>
+                                {{ evenement.type_evenement.nom }}
+                            </span>
+                            
+                            <h3 class="text-xl font-bold text-gray-900 mb-4">
+                                {{ evenement.titre }}
+                            </h3>
+                            
+                            <!-- Infos clés -->
+                            <div class="space-y-3 text-sm">
+                                <!-- Date -->
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <svg class="w-5 h-5 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                    <div>
+                                        <p class="font-semibold">{{ evenement.date_debut|date:"d/m/Y" }}</p>
+                                        {% if evenement.heure_debut %}
+                                        <p class="text-gray-600">{{ evenement.heure_debut|time:"H:i" }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Lieu -->
+                                {% if evenement.lieu %}
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <svg class="w-5 h-5 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                    </svg>
+                                    <p class="font-medium">{{ evenement.lieu.nom }}</p>
+                                </div>
+                                {% endif %}
+                                
+                                <!-- Prix -->
+                                {% if evenement.prix %}
+                                <div class="flex items-center gap-2 text-gray-700">
+                                    <svg class="w-5 h-5 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <p class="font-bold text-lg">{{ evenement.prix }} €</p>
+                                </div>
+                                {% endif %}
+                                
+                                <!-- Places -->
+                                {% if evenement.places_max %}
+                                <div class="pt-3 border-t border-gray-200">
+                                    <div class="flex items-center justify-between text-xs text-gray-600 mb-2">
+                                        <span>Places disponibles</span>
+                                        <span class="font-semibold">{{ evenement.nombre_inscrits }} / {{ evenement.places_max }}</span>
+                                    </div>
+                                    <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="h-full bg-blue-600 rounded-full transition-all" 
+                                             style="width: {% widthratio evenement.nombre_inscrits evenement.places_max 100 %}%"></div>
+                                    </div>
+                                    
+                                    {% if evenement.places_restantes <= 5 and evenement.places_restantes > 0 %}
+                                    <p class="mt-2 text-xs text-orange-600 font-semibold">
+                                        ⚠️ Plus que {{ evenement.places_restantes }} place{{ evenement.places_restantes|pluralize }} !
+                                    </p>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Aide -->
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
+                        <h4 class="font-bold text-blue-900 mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Besoin d'aide ?
+                        </h4>
+                        <p class="text-sm text-blue-800 mb-3">
+                            Des questions sur cet événement ?
+                        </p>
+                        {% if evenement.organisateur %}
+                        <p class="text-sm text-blue-900">
+                            <span class="font-semibold">Organisateur :</span><br>
+                            {{ evenement.organisateur.first_name }} {{ evenement.organisateur.last_name }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,222 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Événements passés - AMCD57{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-gray-600 to-gray-800 text-white py-12">
+    <div class="container mx-auto px-4">
+        <h1 class="text-4xl font-bold mb-4">📁 Archives des événements</h1>
+        <p class="text-xl text-gray-200">
+            Revivez nos événements passés et retrouvez les moments forts du club
+        </p>
+    </div>
+</div>
+
+<div class="container mx-auto px-4 py-8">
+    
+    <!-- Navigation : Liste / Calendrier / Passés -->
+    <div class="mb-8 flex flex-wrap gap-3">
+        <a href="{% url 'events:evenement_list' %}" 
+           class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-white border-2 border-gray-200 text-gray-700 hover:border-blue-500 hover:text-blue-600 transition font-medium">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+            </svg>
+            Liste
+        </a>
+        <a href="{% url 'events:evenement_calendrier' %}" 
+           class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-white border-2 border-gray-200 text-gray-700 hover:border-blue-500 hover:text-blue-600 transition font-medium">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            Calendrier
+        </a>
+        <a href="{% url 'events:evenement_passes' %}" 
+           class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gray-700 text-white hover:bg-gray-800 transition shadow-md font-medium">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+            </svg>
+            Archives
+        </a>
+    </div>
+
+    <!-- Statistiques des archives -->
+    {% if evenements %}
+    <div class="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 text-center">
+            <div class="text-4xl font-bold text-gray-700 mb-2">{{ evenements|length }}</div>
+            <div class="text-gray-600">Événement{{ evenements|length|pluralize }} archivé{{ evenements|length|pluralize }}</div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 text-center">
+            <div class="text-4xl font-bold text-blue-600 mb-2">
+                {% widthratio evenements|length 1 12 %}+
+            </div>
+            <div class="text-gray-600">Mois d'activité</div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 text-center">
+            <div class="text-4xl font-bold text-green-600 mb-2">
+                {% for e in evenements %}{% if e.nombre_inscrits %}{{ e.nombre_inscrits }}{% endif %}{% endfor %}+
+            </div>
+            <div class="text-gray-600">Participations</div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Liste des événements passés -->
+    <section>
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <div class="w-1 h-8 bg-gray-600 rounded-full"></div>
+                <h2 class="text-3xl font-bold text-gray-900">Événements passés</h2>
+            </div>
+            
+            {% if evenements %}
+            <span class="text-gray-500 font-medium">Limité aux 20 derniers</span>
+            {% endif %}
+        </div>
+        
+        {% if evenements %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for evenement in evenements %}
+            <a href="{% url 'events:evenement_detail' evenement.slug %}" 
+               class="group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-200 opacity-90 hover:opacity-100">
+                
+                <!-- Image en noir et blanc -->
+                {% if evenement.image %}
+                <div class="h-48 overflow-hidden bg-gray-100">
+                    <img src="{{ evenement.image.url }}" 
+                         alt="{{ evenement.titre }}"
+                         class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                </div>
+                {% else %}
+                <div class="h-48 bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center">
+                    <span class="text-5xl text-gray-500">{{ evenement.type_evenement.icone }}</span>
+                </div>
+                {% endif %}
+                
+                <!-- Badge "Terminé" -->
+                <div class="absolute top-4 right-4">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold backdrop-blur-md bg-gray-800/80 text-white shadow-lg">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        Terminé
+                    </span>
+                </div>
+                
+                <!-- Contenu -->
+                <div class="p-5">
+                    <!-- Badge type (désaturé) -->
+                    <div class="mb-3">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600">
+                            <span class="text-sm grayscale">{{ evenement.type_evenement.icone }}</span>
+                            {{ evenement.type_evenement.nom }}
+                        </span>
+                    </div>
+                    
+                    <!-- Titre -->
+                    <h3 class="text-lg font-bold text-gray-900 mb-3 group-hover:text-gray-700 transition line-clamp-2">
+                        {{ evenement.titre }}
+                    </h3>
+                    
+                    <!-- Date -->
+                    <div class="flex items-center gap-2 text-gray-600 text-sm mb-2">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span>
+                            {{ evenement.date_debut|date:"d/m/Y" }}
+                            {% if evenement.heure_debut %}
+                                · {{ evenement.heure_debut|time:"H:i" }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    
+                    <!-- Lieu -->
+                    {% if evenement.lieu %}
+                    <div class="flex items-center gap-2 text-gray-600 text-sm mb-4">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <span class="line-clamp-1">{{ evenement.lieu.nom }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Description courte -->
+                    {% if evenement.description_courte %}
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                        {{ evenement.description_courte }}
+                    </p>
+                    {% endif %}
+                    
+                    <!-- Footer de la carte -->
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <!-- Participants -->
+                        {% if evenement.nombre_inscrits > 0 %}
+                        <div class="flex items-center gap-1.5 text-xs text-gray-500">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                            </svg>
+                            <span class="font-medium">{{ evenement.nombre_inscrits }} participant{{ evenement.nombre_inscrits|pluralize }}</span>
+                        </div>
+                        {% else %}
+                        <div></div>
+                        {% endif %}
+                        
+                        <!-- Nombre de vues -->
+                        <div class="flex items-center gap-1.5 text-xs text-gray-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                            <span>{{ evenement.nombre_vues }}</span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination ou message -->
+        <div class="mt-8 text-center">
+            <p class="text-gray-500 text-sm">
+                Liste limitée aux 20 derniers événements passés
+            </p>
+        </div>
+        
+        {% else %}
+        <!-- État vide -->
+        <div class="bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-dashed border-gray-300 rounded-2xl p-12 text-center">
+            <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Aucun événement passé</h3>
+            <p class="text-gray-600 mb-6">
+                Les événements terminés apparaîtront ici
+            </p>
+            <a href="{% url 'events:evenement_list' %}" 
+               class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Voir les événements à venir
+            </a>
+        </div>
+        {% endif %}
+    </section>
+
+</div>
+{% endblock %}
