@@ -1,95 +1,160 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
-{% block title %}{{ categorie.nom }} - Blog - {{ block.super }}{% endblock %}
+{% block title %}{{ categorie.nom }} - Blog - AMCD57{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
-    
-    <header style="text-align: center; margin-bottom: 50px;">
-        <h1 style="font-size: 2.5rem; color: #1e40af; margin-bottom: 10px;">
-            📁 {{ categorie.nom }}
-        </h1>
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-indigo-600 to-purple-800 text-white py-16">
+    <div class="container mx-auto px-4 text-center">
+        <div class="mb-4">
+            <span class="inline-block px-4 py-2 bg-white/20 backdrop-blur-md rounded-full text-sm font-bold">
+                Catégorie
+            </span>
+        </div>
+        <h1 class="text-5xl font-bold mb-4">📁 {{ categorie.nom }}</h1>
         {% if categorie.description %}
-        <p style="color: #64748b; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+        <p class="text-xl text-indigo-100 max-w-2xl mx-auto mb-4">
             {{ categorie.description }}
         </p>
         {% endif %}
-        <p style="color: #94a3b8; margin-top: 10px;">
-            {{ categorie.nombre_articles }} article{% if categorie.nombre_articles > 1 %}s{% endif %}
+        <p class="text-lg text-indigo-200">
+            {{ categorie.nombre_articles }} article{{ categorie.nombre_articles|pluralize }}
         </p>
-    </header>
+    </div>
+</div>
 
-    <div style="margin-bottom: 40px; text-align: center;">
-        <a href="{% url 'blog:article_list' %}" style="display: inline-block; padding: 10px 20px; margin: 5px; background: #f1f5f9; border-radius: 6px; text-decoration: none; color: #334155;">
-            Tous les articles
-        </a>
-        {% for cat in categories %}
-        <a href="{% url 'blog:categorie_detail' cat.slug %}" 
-           style="display: inline-block; padding: 10px 20px; margin: 5px; background: {% if cat == categorie %}#2563eb{% else %}#f1f5f9{% endif %}; border-radius: 6px; text-decoration: none; color: {% if cat == categorie %}white{% else %}#334155{% endif %}; font-weight: {% if cat == categorie %}bold{% else %}normal{% endif %};">
-            {{ cat.nom }} ({{ cat.nombre_articles }})
-        </a>
-        {% endfor %}
+<div class="container mx-auto px-4 py-8">
+    
+    <!-- Navigation catégories -->
+    <div class="mb-10 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Toutes les catégories</h2>
+        <div class="flex flex-wrap gap-3">
+            <a href="{% url 'blog:article_list' %}" 
+               class="px-5 py-2.5 rounded-lg font-medium transition bg-gray-100 text-gray-700 hover:bg-gray-200">
+                Tous les articles
+            </a>
+            {% for cat in categories %}
+            <a href="{% url 'blog:categorie_detail' cat.slug %}" 
+               class="px-5 py-2.5 rounded-lg font-medium transition {% if cat == categorie %}bg-indigo-600 text-white shadow-md{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}">
+                {{ cat.nom }} ({{ cat.nombre_articles }})
+            </a>
+            {% endfor %}
+        </div>
     </div>
 
+    <!-- Articles de la catégorie -->
     {% if articles %}
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px;">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for article in articles %}
-        <article style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <a href="{% url 'blog:article_detail' article.slug %}" 
+           class="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100">
+            
+            <!-- Image -->
             {% if article.image %}
-            <img src="{{ article.image.url }}" alt="{{ article.titre }}" style="width: 100%; height: 200px; object-fit: cover;">
+            <div class="h-48 overflow-hidden bg-gray-100">
+                <img src="{{ article.image.url }}" 
+                     alt="{{ article.titre }}"
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+            </div>
             {% else %}
-            <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
-                <span style="font-size: 4rem;">📰</span>
+            <div class="h-48 bg-gradient-to-br from-indigo-400 to-purple-600 flex items-center justify-center">
+                <span class="text-6xl">📰</span>
             </div>
             {% endif %}
             
-            <div style="padding: 20px;">
-                <h2 style="font-size: 1.4rem; margin-bottom: 10px;">
-                    <a href="{% url 'blog:article_detail' article.slug %}" style="color: #1e293b; text-decoration: none;">
-                        {{ article.titre }}
-                    </a>
+            <!-- Contenu -->
+            <div class="p-5">
+                <!-- Titre -->
+                <h2 class="text-lg font-bold text-gray-900 mb-3 group-hover:text-indigo-600 transition line-clamp-2">
+                    {{ article.titre }}
                 </h2>
                 
-                <p style="color: #64748b; line-height: 1.6; margin-bottom: 15px;">
+                <!-- Extrait -->
+                <p class="text-gray-600 text-sm mb-4 line-clamp-2">
                     {{ article.extrait|truncatewords:20 }}
                 </p>
                 
-                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: #94a3b8;">
-                    <span>👤 {% if article.auteur.first_name %}{{ article.auteur.first_name }} {{ article.auteur.last_name }}{% else %}{{ article.auteur.username }}{% endif %}</span>
-                    <span>📅 {{ article.date_publication|date:"d/m/Y" }}</span>
+                <!-- Métadonnées -->
+                <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+                    <span class="flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                        {% if article.auteur.first_name %}
+                            {{ article.auteur.first_name }} {{ article.auteur.last_name }}
+                        {% else %}
+                            {{ article.auteur.username }}
+                        {% endif %}
+                    </span>
+                    <span>{{ article.date_publication|date:"d/m/Y" }}</span>
                 </div>
                 
-                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e8f0; display: flex; gap: 15px; font-size: 0.85rem; color: #64748b;">
-                    <span>👁️ {{ article.vues }}</span>
-                    <span>💬 {{ article.nombre_commentaires }}</span>
+                <!-- Stats -->
+                <div class="flex items-center gap-4 text-xs text-gray-500 pt-3 border-t border-gray-100">
+                    <span class="flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        </svg>
+                        {{ article.vues }}
+                    </span>
+                    <span class="flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+                        </svg>
+                        {{ article.nombre_commentaires }}
+                    </span>
                 </div>
             </div>
-        </article>
+        </a>
         {% endfor %}
     </div>
 
+    <!-- Pagination -->
     {% if page_obj.has_other_pages %}
-    <div style="margin-top: 40px; text-align: center;">
-        <div style="display: inline-flex; gap: 10px;">
+    <div class="mt-10 flex justify-center">
+        <div class="flex gap-2">
             {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}" style="padding: 10px 15px; background: #f1f5f9; border-radius: 6px; text-decoration: none; color: #334155;">← Précédent</a>
+            <a href="?page={{ page_obj.previous_page_number }}" 
+               class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition text-gray-700 font-medium">
+                ← Précédent
+            </a>
             {% endif %}
             
-            <span style="padding: 10px 20px; background: #2563eb; color: white; border-radius: 6px;">
+            <span class="px-6 py-2 bg-indigo-600 text-white rounded-lg font-semibold">
                 Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
             </span>
             
             {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" style="padding: 10px 15px; background: #f1f5f9; border-radius: 6px; text-decoration: none; color: #334155;">Suivant →</a>
+            <a href="?page={{ page_obj.next_page_number }}" 
+               class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition text-gray-700 font-medium">
+                Suivant →
+            </a>
             {% endif %}
         </div>
     </div>
     {% endif %}
 
     {% else %}
-    <div style="text-align: center; padding: 60px 20px; background: #f1f5f9; border-radius: 12px;">
-        <p style="font-size: 1.2rem; color: #64748b;">Aucun article dans cette catégorie pour le moment.</p>
-        <a href="{% url 'blog:article_list' %}" style="display: inline-block; margin-top: 20px; padding: 12px 30px; background: #2563eb; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">
+    <!-- État vide -->
+    <div class="bg-gradient-to-br from-gray-50 to-indigo-50 border-2 border-dashed border-gray-300 rounded-2xl p-16 text-center">
+        <div class="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+            </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Aucun article dans cette catégorie</h3>
+        <p class="text-gray-600 mb-6 text-lg">
+            Les articles apparaîtront ici prochainement
+        </p>
+        <a href="{% url 'blog:article_list' %}" 
+           class="inline-flex items-center gap-2 px-8 py-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-bold shadow-lg">
             Voir tous les articles
         </a>
     </div>
