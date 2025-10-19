@@ -1,236 +1,112 @@
-{% extends 'base/base.html' %} {% block title %}Recherche{% if query %} : {{
-query }}{% endif %} - Blog - {{ block.super }}{% endblock %} {% block content %}
-<div
-  class="container"
-  style="max-width: 1200px; margin: 0 auto; padding: 40px 20px"
->
-  <!-- En-tête recherche -->
-  <header style="text-align: center; margin-bottom: 50px">
-    <h1 style="font-size: 2.5rem; color: #1e40af; margin-bottom: 20px">
-      🔍 Recherche dans le blog
-    </h1>
-  </header>
+{% extends 'base/base.html' %}
 
-  <!-- Barre de recherche -->
-  <div style="margin-bottom: 40px">
-    <form
-      method="get"
-      style="display: flex; gap: 10px; max-width: 700px; margin: 0 auto"
-    >
-      <input
-        type="text"
-        name="q"
-        placeholder="Rechercher un article..."
-        value="{{ query|default:'' }}"
-        autofocus
-        style="
-          flex: 1;
-          padding: 15px 20px;
-          border: 2px solid #e2e8f0;
-          border-radius: 8px;
-          font-size: 1.1rem;
-        "
-      />
-      <button
-        type="submit"
-        style="
-          padding: 15px 40px;
-          background: #2563eb;
-          color: white;
-          border: none;
-          border-radius: 8px;
-          cursor: pointer;
-          font-weight: bold;
-          font-size: 1.1rem;
-        "
-      >
-        Rechercher
-      </button>
-    </form>
-  </div>
+{% block title %}Recherche{% if query %} : {{ query }}{% endif %} - Blog - {{ block.super }}{% endblock %}
 
-  {% if query %}
-  <!-- Résultats -->
-  <div style="margin-bottom: 30px; text-align: center">
-    <p style="font-size: 1.1rem; color: #64748b">
-      {% if nombre_resultats %}
-      <strong>{{ nombre_resultats }}</strong> résultat{{
-      nombre_resultats|pluralize }} pour "<strong>{{ query }}</strong>" {% else
-      %} Aucun résultat pour "<strong>{{ query }}</strong>" {% endif %}
-    </p>
-  </div>
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px;">
+    
+    <header style="text-align: center; margin-bottom: 50px;">
+        <h1 style="font-size: 2.5rem; color: #1e40af; margin-bottom: 20px;">🔍 Recherche dans le blog</h1>
+    </header>
 
-  {% if articles %}
-  <!-- Liste d'articles -->
-  <div
-    style="
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 30px;
-    "
-  >
-    {% for article in articles %}
-    <article
-      style="
-        background: white;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      "
-    >
-      {% if article.image %}
-      <img
-        src="{{ article.image.url }}"
-        alt="{{ article.titre }}"
-        style="width: 100%; height: 200px; object-fit: cover"
-      />
-      {% else %}
-      <div
-        style="
-          width: 100%;
-          height: 200px;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        "
-      >
-        <span style="font-size: 4rem">📰</span>
-      </div>
-      {% endif %}
-
-      <div style="padding: 20px">
-        <a
-          href="{% url 'blog:categorie_detail' article.categorie.slug %}"
-          style="
-            display: inline-block;
-            padding: 4px 12px;
-            background: #dbeafe;
-            color: #1e40af;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            text-decoration: none;
-            margin-bottom: 10px;
-          "
-        >
-          {{ article.categorie.nom }}
-        </a>
-        <h2 style="font-size: 1.4rem; margin-bottom: 10px">
-          <a
-            href="{% url 'blog:article_detail' article.slug %}"
-            style="color: #1e293b; text-decoration: none"
-          >
-            {{ article.titre }}
-          </a>
-        </h2>
-
-        <p style="color: #64748b; line-height: 1.6; margin-bottom: 15px">
-          {{ article.extrait|truncatewords:20 }}
-        </p>
-
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.9rem;
-            color: #94a3b8;
-          "
-        >
-          <span
-            >👤 {{ article.auteur.get_full_name|default:article.auteur.username
-            }}</span
-          >
-          <span>📅 {{ article.date_publication|date:"d/m/Y" }}</span>
-        </div>
-      </div>
-    </article>
-    {% endfor %}
-  </div>
-
-  <!-- Pagination -->
-  {% if page_obj.has_other_pages %}
-  <div style="margin-top: 40px; text-align: center">
-    <div style="display: inline-flex; gap: 10px">
-      {% if page_obj.has_previous %}
-      <a
-        href="?q={{ query }}&page={{ page_obj.previous_page_number }}"
-        style="
-          padding: 10px 15px;
-          background: #f1f5f9;
-          border-radius: 6px;
-          text-decoration: none;
-          color: #334155;
-        "
-        >← Précédent</a
-      >
-      {% endif %}
-
-      <span
-        style="
-          padding: 10px 20px;
-          background: #2563eb;
-          color: white;
-          border-radius: 6px;
-        "
-      >
-        Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
-      </span>
-
-      {% if page_obj.has_next %}
-      <a
-        href="?q={{ query }}&page={{ page_obj.next_page_number }}"
-        style="
-          padding: 10px 15px;
-          background: #f1f5f9;
-          border-radius: 6px;
-          text-decoration: none;
-          color: #334155;
-        "
-        >Suivant →</a
-      >
-      {% endif %}
+    <div style="margin-bottom: 40px;">
+        <form method="get" style="display: flex; gap: 10px; max-width: 700px; margin: 0 auto;">
+            <input 
+                type="text" 
+                name="q" 
+                placeholder="Rechercher un article..." 
+                value="{{ query|default:'' }}"
+                autofocus
+                style="flex: 1; padding: 15px 20px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1.1rem;"
+            >
+            <button type="submit" style="padding: 15px 40px; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.1rem;">
+                Rechercher
+            </button>
+        </form>
     </div>
-  </div>
-  {% endif %} {% else %}
-  <!-- Aucun résultat -->
-  <div
-    style="
-      text-align: center;
-      padding: 60px 20px;
-      background: #f1f5f9;
-      border-radius: 12px;
-    "
-  >
-    <span style="font-size: 5rem; display: block; margin-bottom: 20px">🔍</span>
-    <p style="font-size: 1.3rem; color: #64748b; margin-bottom: 10px">
-      Aucun résultat trouvé
-    </p>
-    <p style="color: #94a3b8">Essayez avec d'autres mots-clés</p>
-    <a
-      href="{% url 'blog:article_list' %}"
-      style="
-        display: inline-block;
-        margin-top: 20px;
-        padding: 12px 30px;
-        background: #2563eb;
-        color: white;
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: bold;
-      "
-    >
-      Voir tous les articles
-    </a>
-  </div>
-  {% endif %} {% else %}
-  <!-- Pas de recherche effectuée -->
-  <div style="text-align: center; padding: 60px 20px">
-    <span style="font-size: 5rem; display: block; margin-bottom: 20px">🔍</span>
-    <p style="font-size: 1.2rem; color: #64748b">
-      Entrez des mots-clés pour rechercher dans le blog
-    </p>
-  </div>
-  {% endif %}
+
+    {% if query %}
+    <div style="margin-bottom: 30px; text-align: center;">
+        <p style="font-size: 1.1rem; color: #64748b;">
+            {% if nombre_resultats %}
+            <strong>{{ nombre_resultats }}</strong> résultat{% if nombre_resultats > 1 %}s{% endif %} pour "<strong>{{ query }}</strong>"
+            {% else %}
+            Aucun résultat pour "<strong>{{ query }}</strong>"
+            {% endif %}
+        </p>
+    </div>
+
+    {% if articles %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px;">
+        {% for article in articles %}
+        <article style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            {% if article.image %}
+            <img src="{{ article.image.url }}" alt="{{ article.titre }}" style="width: 100%; height: 200px; object-fit: cover;">
+            {% else %}
+            <div style="width: 100%; height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center;">
+                <span style="font-size: 4rem;">📰</span>
+            </div>
+            {% endif %}
+            
+            <div style="padding: 20px;">
+                <a href="{% url 'blog:categorie_detail' article.categorie.slug %}" style="display: inline-block; padding: 4px 12px; background: #dbeafe; color: #1e40af; border-radius: 4px; font-size: 0.85rem; text-decoration: none; margin-bottom: 10px;">
+                    {{ article.categorie.nom }}
+                </a>
+                
+                <h2 style="font-size: 1.4rem; margin-bottom: 10px;">
+                    <a href="{% url 'blog:article_detail' article.slug %}" style="color: #1e293b; text-decoration: none;">
+                        {{ article.titre }}
+                    </a>
+                </h2>
+                
+                <p style="color: #64748b; line-height: 1.6; margin-bottom: 15px;">
+                    {{ article.extrait|truncatewords:20 }}
+                </p>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; color: #94a3b8;">
+                    <span>👤 {% if article.auteur.first_name %}{{ article.auteur.first_name }} {{ article.auteur.last_name }}{% else %}{{ article.auteur.username }}{% endif %}</span>
+                    <span>📅 {{ article.date_publication|date:"d/m/Y" }}</span>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    {% if page_obj.has_other_pages %}
+    <div style="margin-top: 40px; text-align: center;">
+        <div style="display: inline-flex; gap: 10px;">
+            {% if page_obj.has_previous %}
+            <a href="?q={{ query }}&page={{ page_obj.previous_page_number }}" style="padding: 10px 15px; background: #f1f5f9; border-radius: 6px; text-decoration: none; color: #334155;">← Précédent</a>
+            {% endif %}
+            
+            <span style="padding: 10px 20px; background: #2563eb; color: white; border-radius: 6px;">
+                Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+            </span>
+            
+            {% if page_obj.has_next %}
+            <a href="?q={{ query }}&page={{ page_obj.next_page_number }}" style="padding: 10px 15px; background: #f1f5f9; border-radius: 6px; text-decoration: none; color: #334155;">Suivant →</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div style="text-align: center; padding: 60px 20px; background: #f1f5f9; border-radius: 12px;">
+        <span style="font-size: 5rem; display: block; margin-bottom: 20px;">🔍</span>
+        <p style="font-size: 1.3rem; color: #64748b; margin-bottom: 10px;">Aucun résultat trouvé</p>
+        <p style="color: #94a3b8;">Essayez avec d'autres mots-clés</p>
+        <a href="{% url 'blog:article_list' %}" style="display: inline-block; margin-top: 20px; padding: 12px 30px; background: #2563eb; color: white; text-decoration: none; border-radius: 8px; font-weight: bold;">
+            Voir tous les articles
+        </a>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div style="text-align: center; padding: 60px 20px;">
+        <span style="font-size: 5rem; display: block; margin-bottom: 20px;">🔍</span>
+        <p style="font-size: 1.2rem; color: #64748b;">Entrez des mots-clés pour rechercher dans le blog</p>
+    </div>
+    {% endif %}
+
 </div>
 {% endblock %}
