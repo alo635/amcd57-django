@@ -1,0 +1,111 @@
+<!-- Widget Météo -->
+{% if weather.success %}
+<div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl shadow-xl p-6 text-white">
+    <!-- En-tête -->
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h3 class="text-2xl font-bold">Météo à {{ weather.city }}</h3>
+            <p class="text-blue-100 text-sm">Conditions de vol</p>
+        </div>
+        <div class="text-6xl">
+            <img src="https://openweathermap.org/img/wn/{{ weather.icon }}@2x.png" 
+                 alt="{{ weather.description }}"
+                 class="w-20 h-20">
+        </div>
+    </div>
+    
+    <!-- Température actuelle -->
+    <div class="mb-6">
+        <div class="flex items-end gap-2">
+            <span class="text-6xl font-bold">{{ weather.temperature }}°</span>
+            <span class="text-2xl text-blue-100 pb-2">C</span>
+        </div>
+        <p class="text-blue-100 text-lg">{{ weather.description }}</p>
+        <p class="text-blue-200 text-sm">Ressenti {{ weather.feels_like }}°C</p>
+    </div>
+    
+    <!-- Indicateur conditions de vol -->
+    <div class="mb-6 p-4 rounded-lg {% if weather.good_for_flying %}bg-green-500/30 border-2 border-green-300{% else %}bg-red-500/30 border-2 border-red-300{% endif %}">
+        <div class="flex items-center gap-3">
+            {% if weather.good_for_flying %}
+            <svg class="w-8 h-8 text-green-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <div>
+                <p class="font-bold text-lg">Bonnes conditions !</p>
+                <p class="text-sm text-green-100">Idéal pour voler aujourd'hui</p>
+            </div>
+            {% else %}
+            <svg class="w-8 h-8 text-red-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <div>
+                <p class="font-bold text-lg">Conditions difficiles</p>
+                <p class="text-sm text-red-100">Vol déconseillé</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Détails -->
+    <div class="grid grid-cols-2 gap-4 text-sm">
+        <!-- Vent -->
+        <div class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+            <div>
+                <p class="text-blue-100">Vent</p>
+                <p class="font-semibold">{{ weather.wind_speed }} km/h {{ weather.wind_direction_text }}</p>
+            </div>
+        </div>
+        
+        <!-- Humidité -->
+        <div class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+            </svg>
+            <div>
+                <p class="text-blue-100">Humidité</p>
+                <p class="font-semibold">{{ weather.humidity }}%</p>
+            </div>
+        </div>
+        
+        <!-- Visibilité -->
+        <div class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+            </svg>
+            <div>
+                <p class="text-blue-100">Visibilité</p>
+                <p class="font-semibold">{{ weather.visibility|floatformat:1 }} km</p>
+            </div>
+        </div>
+        
+        <!-- Pression -->
+        <div class="flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+            <div>
+                <p class="text-blue-100">Pression</p>
+                <p class="font-semibold">{{ weather.pressure }} hPa</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dernière mise à jour -->
+    <p class="text-xs text-blue-200 mt-4 text-center">
+        Données mises à jour toutes les 30 minutes
+    </p>
+</div>
+{% else %}
+<div class="bg-red-50 border-2 border-red-200 rounded-xl p-6 text-center">
+    <svg class="w-12 h-12 text-red-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+    </svg>
+    <p class="text-red-800 font-semibold">Données météo indisponibles</p>
+    <p class="text-red-600 text-sm">{{ weather.error }}</p>
+</div>
+{% endif %}

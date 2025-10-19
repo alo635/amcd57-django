@@ -138,3 +138,11 @@ LOGOUT_REDIRECT_URL = '/'  # Après déconnexion
 
 # API Keys (à configurer plus tard)
 OPENWEATHER_API_KEY = config('OPENWEATHER_API_KEY', default='')
+
+# Cache (pour stocker temporairement les données météo)
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}

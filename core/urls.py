@@ -12,6 +12,7 @@ app_name = 'core'
 urlpatterns = [
     # Page d'accueil : http://127.0.0.1:8000/
     path('', views.home, name='home'),
+    path('api/weather/', views.weather_widget, name='weather_api'),
     
     # Page contact : http://127.0.0.1:8000/contact/
     # path('contact/', views.contact, name='contact'),

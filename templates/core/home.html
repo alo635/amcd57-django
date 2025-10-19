@@ -134,7 +134,18 @@
         </div>
     </div>
 </section>
-
+<!-- Section Météo -->
+<section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Conditions de vol</h2>
+                <p class="text-xl text-gray-600">Météo en temps réel à Jarny</p>
+            </div>            
+            {% include 'core/widgets/weather_widget.html' %}
+        </div>
+    </div>
+</section>
 <!-- Chiffres clés -->
 <section class="py-16 bg-gradient-to-r from-blue-600 to-indigo-700 text-white">
     <div class="container mx-auto px-4">
