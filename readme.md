@@ -1,18 +1,28 @@
 ## 🔑 Fonctionnalités clés implémentées
 
-### Blog
-
+### Blog (100% ✅)
 - Système de brouillon/publication
 - Auto-génération des slugs
 - Images à la une organisées par date
-- Compteur de vues
+- Compteur de vues avec incrémentation automatique
 - Système de commentaires avec modération
-- Support réponses aux commentaires
+- Support réponses aux commentaires (threading)
 - SEO (meta descriptions)
 - Filtres par catégorie, tag, statut, date
+- **Frontend complet** :
+  - Liste paginée des articles (9 par page)
+  - Page détail avec commentaires fonctionnels
+  - Filtrage par catégorie avec compteurs
+  - Filtrage par tag
+  - Recherche fulltext (titre, contenu, extrait)
+  - Articles similaires (même catégorie)
+  - Sidebar avec articles récents et tags
+  - Formulaire de commentaires (visiteurs et membres)
+  - Messages de confirmation Django
+  - Navigation fil d'Ariane
+  - Design responsive inline CSS (en attente Tailwind)
 
 ### Events
-
 - Types d'événements personnalisables avec couleurs
 - Gestion de lieux avec coordonnées GPS
 - Inscriptions avec places limitées
@@ -25,7 +35,6 @@
 - Événements publics ou membres uniquement
 
 ### Members
-
 - Extension complète du modèle User Django
 - Types de membres avec droits différenciés
 - Fonctions bureau avec email de contact
@@ -42,7 +51,6 @@
 - Notes administratives privées
 
 ### Weblinks
-
 - Catégories personnalisables avec icônes
 - Liens organisés par catégorie
 - Compteur de clics par lien
@@ -55,7 +63,6 @@
 - Notes administratives
 
 ### Core - Contact
-
 - Formulaire de contact avec sujets prédéfinis
 - Workflow complet (Nouveau → En cours → Traité → Archivé)
 - Suivi lu/non lu
@@ -76,7 +83,6 @@ Migration complète d'un site WordPress vers une stack Django moderne pour obten
 ### Phase 1 - Site de base (En cours de développement)
 
 #### ✅ Complété
-
 - **Pages statiques** : Structure de base (Accueil, Contact, À propos)
 - **Blog complet** :
   - ✅ Modèle Article avec statut brouillon/publié
@@ -88,6 +94,7 @@ Migration complète d'un site WordPress vers une stack Django moderne pour obten
   - ✅ Compteur de vues
   - ✅ SEO (meta description)
   - ✅ Interface admin complète
+  
 - **Système d'événements complet** :
   - ✅ Modèle TypeEvenement (Réunion, Sortie, Vol)
   - ✅ Modèle Lieu avec coordonnées GPS
@@ -100,7 +107,6 @@ Migration complète d'un site WordPress vers une stack Django moderne pour obten
   - ✅ Interface admin avec badges colorés
 
 #### 🚧 En développement
-
 - **Espace membre** : Profils, fonctions bureau, types de membres
 - **Widget météo** : Conditions de vol temps réel (Jarny, France)
 - **Liens web** : Annuaire organisé par catégories
@@ -108,7 +114,6 @@ Migration complète d'un site WordPress vers une stack Django moderne pour obten
 - **Design** : Intégration Tailwind CSS
 
 ### Phase 2 - E-commerce (Futur)
-
 - 🔮 Boutique en ligne (pièces, équipements, adhésions)
 - 🔮 Gestion des cotisations
 - 🔮 Paiement en ligne sécurisé (Stripe/PayPal)
@@ -116,7 +121,6 @@ Migration complète d'un site WordPress vers une stack Django moderne pour obten
 ## 🛠️ Stack Technique
 
 ### Backend
-
 - **Django 5.0** - Framework web Python
 - **django-allauth 0.57.0** - Système d'authentification (préparé)
 - **Pillow** - Gestion des images
@@ -124,19 +128,16 @@ Migration complète d'un site WordPress vers une stack Django moderne pour obten
 - **PostgreSQL** (production) / **SQLite** (développement)
 
 ### Frontend (À venir)
-
 - **Templates Django** - Système de templates
 - **Tailwind CSS** - Framework CSS moderne
 - **HTMX/Alpine.js** - Interactivité légère
 
 ### APIs
-
 - **OpenWeatherMap** - Météo en temps réel (à venir)
 
 ## 🗂️ Structure de la Base de Données
 
 ### Application Blog (4 modèles) ✅
-
 ```
 Categorie (Club, Technique, Convention, Divers)
     ↓ (1:N)
@@ -150,7 +151,6 @@ Commentaire (avec réponses)
 **Fonctionnalités** : Brouillon/Publié, Images, SEO, Compteur de vues, Modération commentaires, Auto-génération slugs
 
 ### Application Events (4 modèles) ✅
-
 ```
 TypeEvenement (Réunion, Sortie, Vol) - avec couleurs
     ↓ (1:N)
@@ -165,7 +165,6 @@ Inscription ←─ User (participant)
 **Fonctionnalités** : Places limitées, Dates limites, Statuts multiples, Présences, Accompagnants, Calcul places restantes
 
 ### Application Members (3 modèles) ✅
-
 ```
 TypeMembre (Bureau, Actif) - avec droits
     ↓ (1:N)
@@ -178,7 +177,6 @@ FonctionBureau (Président, Trésorier, etc.)
 **Fonctionnalités** : Licence UFOLEP, Assurance RC, Cotisations, Droits/Permissions, Fonction bureau active, Calculs automatiques (âge, ancienneté), Réseaux sociaux
 
 ### Application Weblinks (2 modèles) ✅
-
 ```
 CategorieLien (Officiels, Clubs, Techniques, Boutiques)
     ↓ (1:N)
@@ -189,7 +187,6 @@ Lien (URL, logo, tags, compteur clics)
 **Fonctionnalités** : Compteur de clics, Tags, Featured links, Extraction domaine, Ouverture nouvel onglet
 
 ### Application Core (1 modèle) ✅
-
 ```
 ContactMessage (formulaire de contact)
     ↓ Sujet (Info, Adhésion, Événement, etc.)
@@ -204,7 +201,6 @@ ContactMessage (formulaire de contact)
 ### 📊 Statistiques de la base de données
 
 **Total : 13 modèles créés**
-
 - Relations ForeignKey (1-N) : 10
 - Relations ManyToManyField (N-N) : 2
 - Relations OneToOneField (1-1) : 1
@@ -215,7 +211,6 @@ ContactMessage (formulaire de contact)
 ## 🚀 Installation & Développement
 
 ### Prérequis
-
 - Python 3.13+
 - pip
 - virtualenv
@@ -275,7 +270,6 @@ OPENWEATHER_API_KEY=your-openweather-api-key-here
 ```
 
 **Générer une SECRET_KEY :**
-
 ```bash
 python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
 ```
@@ -390,7 +384,6 @@ git push origin main
 ## 📊 État d'avancement
 
 ### Setup et Infrastructure
-
 - [x] Setup projet Django
 - [x] Configuration VS Code
 - [x] Structure des 5 applications (core, blog, events, members, weblinks)
@@ -399,51 +392,72 @@ git push origin main
 - [x] Admin Django opérationnel
 
 ### Modèles de données
-
 - [x] **Blog** : Article, Categorie, Tag, Commentaire
 - [x] **Events** : Evenement, Lieu, TypeEvenement, Inscription
 - [x] **Members** : ProfilMembre, FonctionBureau, TypeMembre
 - [ ] **Weblinks** : Lien, CategorieLien
 - [ ] **Core** : ContactMessage
 
-### Templates et Vues (0% - En attente)
+### Templates et Vues (20% - En cours)
 
-- [ ] Liste des articles (Blog)
-- [ ] Détail d'un article
-- [ ] Articles par catégorie
-- [ ] Articles par tag
-- [ ] Système de commentaires (frontend)
+#### ✅ Blog (100% complété)
+- [x] Liste des articles avec pagination (9/page)
+- [x] Détail d'un article avec commentaires
+- [x] Articles par catégorie
+- [x] Articles par tag
+- [x] Recherche fulltext dans les articles
+- [x] Formulaire de commentaires (membres et visiteurs)
+- [x] Articles similaires (même catégorie)
+- [x] Sidebar (articles récents, tags populaires)
+- [x] Compteur de vues automatique
+- [x] 5 vues créées et fonctionnelles
+- [x] 5 templates responsive
+
+#### 🚧 Events (0% - Prochaine étape)
 - [ ] Calendrier des événements
 - [ ] Liste des événements
 - [ ] Détail d'un événement
 - [ ] Formulaire d'inscription événement
+- [ ] Mes inscriptions
+- [ ] Filtres par type d'événement
+
+#### 🚧 Members (0%)
 - [ ] Trombinoscope membres
 - [ ] Profil membre public
 - [ ] Page bureau du club
-- [ ] Annuaire de liens par catégories
-- [ ] Formulaire de contact
 - [ ] Dashboard membre
+- [ ] Modification profil
+
+#### 🚧 Weblinks (0%)
+- [ ] Annuaire de liens par catégories
+- [ ] Redirection avec compteur de clics
+
+#### 🚧 Core (0%)
+- [ ] Formulaire de contact fonctionnel
 - [ ] Pages statiques (À propos, etc.)
+- [ ] Page d'accueil enrichie
 
-### Design et Frontend
-
+### Design et Frontend (10%)
+- [x] Templates de base avec CSS inline
+- [x] Navigation principale
+- [x] Messages Django (success/error)
+- [x] Design responsive basique
 - [ ] Intégration Tailwind CSS
-- [ ] Design responsive
-- [ ] Navigation principale
-- [ ] Footer
 - [ ] Composants réutilisables
+- [ ] Footer complet
+- [ ] Menu mobile hamburger
 
-### Fonctionnalités avancées
-
-- [ ] Widget météo temps réel
-- [ ] Recherche globale
-- [ ] Filtres événements/articles
-- [ ] Pagination
+### Fonctionnalités avancées (0%)
+- [ ] Widget météo temps réel (OpenWeatherMap)
+- [ ] Recherche globale multi-applications
 - [ ] Système de notifications
 - [ ] Export calendrier (iCal)
+- [ ] Partage réseaux sociaux
+- [ ] Newsletter
+- [ ] Sitemap XML
+- [ ] RSS Feed
 
 ### Migration WordPress
-
 - [ ] Export contenu WordPress
 - [ ] Script de migration des articles
 - [ ] Migration des images
@@ -451,7 +465,6 @@ git push origin main
 - [ ] Redirection URLs
 
 ### Tests et Qualité
-
 - [ ] Tests unitaires modèles
 - [ ] Tests vues
 - [ ] Tests admin
@@ -459,7 +472,6 @@ git push origin main
 - [ ] Tests de performance
 
 ### Déploiement
-
 - [ ] Choix hébergement
 - [ ] Configuration PostgreSQL
 - [ ] Configuration serveur web
@@ -470,7 +482,6 @@ git push origin main
 ## 🎓 Technologies et Concepts Django utilisés
 
 ### Modèles
-
 - ✅ ForeignKey (relations 1-N)
 - ✅ ManyToManyField (relations N-N)
 - ✅ OneToOneField (relations 1-1)
@@ -484,8 +495,27 @@ git push origin main
 - ✅ Validators (RegexValidator pour téléphones)
 - ✅ Calculs automatiques (âge, ancienneté, places restantes)
 
-### Admin Django
+### Vues
+- ✅ Function-Based Views (FBV)
+- ✅ get_object_or_404
+- ✅ Pagination (Paginator)
+- ✅ Recherche avec Q objects
+- ✅ Formulaires POST
+- ✅ Messages Django (success/error)
+- ✅ Context data pour templates
+- ✅ Redirections
 
+### Templates
+- ✅ Template inheritance (extends)
+- ✅ Template blocks
+- ✅ Template tags (for, if, with)
+- ✅ Template filters (date, truncatewords, linebreaks)
+- ✅ URL reversing ({% url %})
+- ✅ Static files ({% static %})
+- ✅ CSRF protection ({% csrf_token %})
+- ✅ Conditional rendering
+
+### Admin Django
 - ✅ ModelAdmin personnalisé
 - ✅ Inline admin (TabularInline, StackedInline)
 - ✅ Filtres (list_filter)
@@ -516,7 +546,7 @@ Email : contact@amcd57.fr (à venir)
 
 **🛩️ AMCD57 - La passion de l'aéromodélisme depuis [année de création]**
 
-_Projet en cours de développement - Dernière mise à jour : Octobre 2025_
+*Projet en cours de développement - Dernière mise à jour : Octobre 2025*
 
 **🎉 Étape majeure franchie : 13/13 modèles créés (100%) !**  
 **🚀 Prochaine étape : Création des vues et templates pour afficher le contenu**
