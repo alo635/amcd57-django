@@ -254,17 +254,55 @@ importer.copy_specific_images(image_mapping, optimize=True)
 - `optimize` : Active l'optimisation des images (redimensionnement 1200px, compression JPEG 85%)
 - `recursive` : Cherche dans tous les sous-répertoires (par défaut : True)
 
+### Vérifier l'import des images
+
+Après avoir lancé `import_images.py`, utilisez le script de vérification :
+
+```bash
+python migration_wordpress/scripts/verify_images.py
+```
+
+**Ce script affiche** :
+- ✅ Liste de tous les articles avec leur statut d'image
+- 📊 Statistiques globales (avec/sans image, manquantes, vides)
+- 📁 Vérification du répertoire media/blog/articles/
+- 🔍 Détection des images orphelines (dans media/ mais pas associées)
+- 💡 Recommandations pour corriger les problèmes
+
+**Exemple de sortie** :
+```
+Article                                  Image                Statut
+----------------------------------------------------------------------
+C'est la reprise !                       reprise.jpg          ✅ OK
+Dé-Confinement                           -                    ⚪ Pas d'image
+La page des Fréquences                   frequences.png       ❌ MANQUANT
+
+📊 RÉSUMÉ
+Total articles              : 18
+Articles avec image         : 10
+Images existantes et OK     : 9 ✅
+Images manquantes           : 1 ❌
+```
+
 ## ✅ Checklist de migration
 
-- [ ] Exporter les 15 articles depuis WordPress
-- [ ] Créer le fichier `data/articles.json`
-- [ ] Copier les 62 images dans `images/`
-- [ ] Vérifier le format des données
-- [ ] Exécuter le script d'import
-- [ ] Vérifier dans l'admin Django
-- [ ] Vérifier l'affichage frontend
-- [ ] Copier les images vers `media/`
-- [ ] Tester les articles sur le site
+### Articles
+- [x] Exporter les 15 articles depuis WordPress
+- [x] Convertir l'export avec `convert_wordpress_export.py`
+- [x] Exécuter le script d'import des articles
+- [x] Vérifier dans l'admin Django
+- [x] Vérifier l'affichage frontend
+
+### Images
+- [ ] Copier les 62 images dans `migration_wordpress/images/`
+- [ ] Exécuter le script d'import des images
+- [ ] **Vérifier l'import avec `verify_images.py`**
+- [ ] Corriger les images manquantes si nécessaire
+- [ ] Tester l'affichage des images sur le site
+
+### Final
+- [ ] Vérifier tous les articles avec leurs images
+- [ ] Tester la navigation sur mobile et desktop
 - [ ] Supprimer l'ancien WordPress (après vérification complète)
 
 ## 💡 Conseils
