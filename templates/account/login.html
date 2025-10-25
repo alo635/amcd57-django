@@ -85,12 +85,14 @@
                     Se connecter
                 </button>
 
-                <!-- Mot de passe oublié -->
+                <!-- Mot de passe oublié - Masqué temporairement -->
+                {% comment %}
                 <div class="text-center">
                     <a href="{% url 'account_reset_password' %}" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
                         Mot de passe oublié ?
                     </a>
                 </div>
+                {% endcomment %}
             </form>
         </div>
 
