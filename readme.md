@@ -466,6 +466,7 @@ git push origin main
 ### Design et Frontend ✅ 100% - Complété ! 🎉
 - [x] Template de base avec Tailwind CSS (via CDN)
 - [x] Navigation principale complète (Accueil, Blog, Events, Members, Liens utiles)
+- [x] Menu mobile hamburger responsive avec JavaScript vanilla
 - [x] Système de permissions (menu Admin pour membres bureau)
 - [x] Messages Django (success/error) stylés
 - [x] Design responsive mobile-first
@@ -478,7 +479,6 @@ git push origin main
 - [x] 23 templates créés et cohérents
 
 À faire (optionnel) :
-- [ ] Menu mobile hamburger
 - [ ] Optimisation Tailwind (build custom)
 
 ### Fonctionnalités avancées ✅ 20%
@@ -787,10 +787,9 @@ Localisation : Jarny, Grand Est, France
 - ✅ Application Members complète (100%)
 - ✅ Application Weblinks complète (100%) 🎉
 
-**🚀 Prochaines étapes (optionnel) :**
+**🚀 Prochaines étapes - Phase 2 :**
 - Migration contenu WordPress (15 articles + 62 images)
-- Menu mobile hamburger
-- Optimisations Tailwind CSS
+- Optimisations Tailwind CSS (build custom)
 - Tests unitaires
 - Déploiement en production
 
