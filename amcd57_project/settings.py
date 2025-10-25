@@ -33,12 +33,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',  # Requis pour allauth
-    
+    'django.contrib.sitemaps',  # Pour le SEO (sitemap.xml)
+
     # Applications tierces
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    
+
     # Nos applications
     'core',
     'blog',

@@ -1,0 +1,17 @@
+# robots.txt pour AMCD57
+# Ce fichier indique aux moteurs de recherche quelles pages indexer
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /accounts/
+Disallow: /membres/dashboard/
+Disallow: /membres/mon-profil/
+Disallow: /membres/mes-inscriptions/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://www.amcd57.fr/sitemap.xml
+
+# Délai entre les requêtes (en secondes)
+Crawl-delay: 10

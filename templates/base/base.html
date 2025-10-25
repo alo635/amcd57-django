@@ -4,8 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}AMCD57 - Club d'Aéromodélisme{% endblock %}</title>
-    
+
     {% load static %}
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block meta_description %}AMCD57 - Club d'aéromodélisme à Jarny (Grand Est). Pilotage d'avions RC, événements, sorties et passion du modélisme aérien. Rejoignez notre communauté !{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}aéromodélisme, avion RC, club, Jarny, Grand Est, modélisme, pilotage, drone, planeur, maquette{% endblock %}">
+    <meta name="author" content="AMCD57">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="{% block og_title %}{% block title_og %}AMCD57 - Club d'Aéromodélisme{% endblock %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}AMCD57 - Club d'aéromodélisme à Jarny (Grand Est). Pilotage d'avions RC, événements, sorties et passion du modélisme aérien.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% static 'images/logoamcd.png' %}{% endblock %}">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:site_name" content="AMCD57">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ request.build_absolute_uri }}">
+    <meta name="twitter:title" content="{% block twitter_title %}AMCD57 - Club d'Aéromodélisme{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}AMCD57 - Club d'aéromodélisme à Jarny (Grand Est). Pilotage d'avions RC, événements, sorties et passion du modélisme aérien.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{% static 'images/logoamcd.png' %}{% endblock %}">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
 
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">

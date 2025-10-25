@@ -18,6 +18,16 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap
+from core.sitemaps import StaticViewSitemap, BlogSitemap, EventSitemap, WeblinksSitemap
+
+# Configuration des sitemaps
+sitemaps = {
+    'static': StaticViewSitemap,
+    'blog': BlogSitemap,
+    'events': EventSitemap,
+    'weblinks': WeblinksSitemap,
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,9 +38,12 @@ urlpatterns = [
     path('evenements/', include('events.urls')),
     path('membres/', include('members.urls')),
     path('liens/', include('weblinks.urls')),
-    
+
     # URLs pour l'authentification (django-allauth)
     path('accounts/', include('allauth.urls')),
+
+    # Sitemap SEO
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]
 
 if settings.DEBUG:
