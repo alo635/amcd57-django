@@ -1,0 +1,29 @@
+{
+  "articles": [
+    {
+      "titre": "Exemple d'article WordPress",
+      "contenu": "<p>Contenu complet de l'article en HTML...</p><p>Peut contenir plusieurs paragraphes, images, etc.</p>",
+      "extrait": "Résumé court de l'article (150 caractères max)",
+      "categorie": "Club",
+      "tags": ["aéromodélisme", "débutant", "actualité"],
+      "date_publication": "2024-10-01 10:00:00",
+      "auteur_email": "admin@amcd57.fr",
+      "auteur_username": "admin",
+      "statut": "publie",
+      "image": "article-1.jpg",
+      "meta_description": "Description pour le SEO (160 caractères max)"
+    },
+    {
+      "titre": "Deuxième article exemple",
+      "contenu": "<p>Un autre article...</p>",
+      "extrait": "Résumé du deuxième article",
+      "categorie": "Technique",
+      "tags": ["planeur", "réglages"],
+      "date_publication": "2024-09-15 14:30:00",
+      "auteur_email": "admin@amcd57.fr",
+      "statut": "publie",
+      "image": "article-2.jpg",
+      "meta_description": "Guide technique sur les réglages de planeur"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+titre,contenu,extrait,categorie,tags,date_publication,auteur_email,statut,image,meta_description
+"Exemple d'article WordPress","<p>Contenu complet de l'article en HTML...</p>","Résumé court de l'article","Club","aéromodélisme, débutant, actualité","2024-10-01 10:00:00","admin@amcd57.fr","publie","article-1.jpg","Description pour le SEO"
+"Deuxième article exemple","<p>Un autre article...</p>","Résumé du deuxième article","Technique","planeur, réglages","2024-09-15 14:30:00","admin@amcd57.fr","publie","article-2.jpg","Guide technique sur les réglages de planeur"

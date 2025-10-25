@@ -1,0 +1,12 @@
+# Données de migration (ne pas versionner)
+data/articles.json
+data/articles.csv
+data/*.xml
+
+# Images WordPress (ne pas versionner - trop volumineuses)
+images/*
+!images/.gitkeep
+
+# Fichiers temporaires
+*.pyc
+__pycache__/

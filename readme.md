@@ -303,6 +303,15 @@ amcd57-django/
 │   ├── blog/
 │   ├── events/
 │   └── members/
+├── migration_wordpress/  # 🆕 Outils de migration WordPress
+│   ├── README.md         # Documentation migration
+│   ├── scripts/
+│   │   ├── import_articles.py    # Import articles JSON/CSV
+│   │   └── import_images.py      # Import et optimisation images
+│   ├── data/
+│   │   ├── articles.json.example # Template JSON
+│   │   └── articles.csv.example  # Template CSV
+│   └── images/           # Images WordPress à migrer
 ├── venv/                 # Environnement virtuel Python (non versionné)
 ├── .env                  # Variables d'environnement (non versionné)
 ├── .env.example          # Template des variables
@@ -342,6 +351,39 @@ python manage.py shell
 >>> from django.core.cache import cache
 >>> cache.clear()
 ```
+
+### Migration WordPress → Django
+
+Le projet inclut des outils complets pour migrer le contenu WordPress :
+
+```bash
+# 1. Préparer les données
+# Copier le template et remplir avec vos articles
+cp migration_wordpress/data/articles.json.example migration_wordpress/data/articles.json
+
+# 2. Copier les images WordPress
+cp ~/path/to/wordpress/wp-content/uploads/* migration_wordpress/images/
+
+# 3. Lancer la migration des articles
+python manage.py shell < migration_wordpress/scripts/import_articles.py
+
+# 4. Lancer la migration des images
+python manage.py shell < migration_wordpress/scripts/import_images.py
+
+# 5. Vérifier dans l'admin
+# http://127.0.0.1:8000/admin/blog/article/
+```
+
+**Fonctionnalités** :
+- ✅ Import depuis JSON ou CSV
+- ✅ Création automatique catégories/tags/auteurs
+- ✅ Génération automatique des slugs
+- ✅ Optimisation automatique des images (redimensionnement, compression)
+- ✅ Détection des doublons (mise à jour au lieu de créer)
+- ✅ Statistiques détaillées d'import
+- ✅ Gestion des erreurs complète
+
+**Documentation complète** : Voir `migration_wordpress/README.md`
 
 ### Workflow Git
 ```bash
@@ -491,13 +533,15 @@ git push origin main
 - [ ] Sitemap XML
 - [ ] RSS Feed
 
-### Migration WordPress (0%)
-- [ ] Export contenu WordPress
-- [ ] Script de migration des articles (15 existants)
-- [ ] Migration des images (62 médias)
-- [ ] Migration des événements
-- [ ] Migration des pages (18 pages)
-- [ ] Redirection URLs
+### Migration WordPress ✅ 75% - Outils prêts !
+- [x] Script de migration des articles (JSON/CSV)
+- [x] Script de migration des images avec optimisation
+- [x] Documentation complète du processus
+- [x] Tests validés avec 2 articles exemples
+- [ ] Export et préparation des 15 articles WordPress
+- [ ] Migration des 62 images
+- [ ] Migration des événements (optionnel)
+- [ ] Redirection URLs (optionnel)
 
 ### Tests et Qualité (0%)
 - [ ] Tests unitaires modèles
@@ -778,6 +822,7 @@ Localisation : Jarny, Grand Est, France
 - ✅ 14/14 modèles créés (100%)
 - ✅ 23/23 templates créés (100%) 🎊
 - ✅ Design moderne avec Tailwind CSS (100%)
+- ✅ Menu mobile hamburger responsive (100%)
 - ✅ Système d'inscriptions fonctionnel (100%)
 - ✅ Système de permissions membres (100%)
 - ✅ Widget météo temps réel (100%)
@@ -786,9 +831,11 @@ Localisation : Jarny, Grand Est, France
 - ✅ Footer complet (100%)
 - ✅ Application Members complète (100%)
 - ✅ Application Weblinks complète (100%) 🎉
+- ✅ Outils de migration WordPress (75%) 🆕
 
 **🚀 Prochaines étapes - Phase 2 :**
-- Migration contenu WordPress (15 articles + 62 images)
+- Export et migration des 15 articles WordPress
+- Migration des 62 images WordPress
 - Optimisations Tailwind CSS (build custom)
 - Tests unitaires
 - Déploiement en production

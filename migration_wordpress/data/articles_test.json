@@ -1,0 +1,28 @@
+{
+  "articles": [
+    {
+      "titre": "Bienvenue au club AMCD57",
+      "contenu": "<p>Bonjour à tous et bienvenue sur le nouveau site de l'AMCD57 !</p><p>Nous sommes ravis de vous présenter notre tout nouveau site web, entièrement repensé pour vous offrir une meilleure expérience.</p><h2>Qu'est-ce qui change ?</h2><ul><li>Un design moderne et responsive</li><li>Une navigation simplifiée</li><li>Un système d'inscription aux événements</li><li>Un espace membre personnalisé</li></ul><p>N'hésitez pas à explorer toutes les fonctionnalités et à nous faire vos retours !</p><p>L'équipe du bureau vous souhaite de bons vols !</p>",
+      "extrait": "Découvrez le nouveau site de l'AMCD57 avec toutes ses fonctionnalités : inscription aux événements, espace membre, blog et bien plus !",
+      "categorie": "Club",
+      "tags": ["actualité", "site web", "nouveau"],
+      "date_publication": "2024-10-25 10:00:00",
+      "auteur_email": "admin@amcd57.fr",
+      "statut": "publie",
+      "image": "",
+      "meta_description": "Découvrez le nouveau site de l'AMCD57 : design moderne, inscription aux événements, espace membre personnalisé"
+    },
+    {
+      "titre": "Guide du débutant en aéromodélisme",
+      "contenu": "<p>Vous souhaitez vous lancer dans l'aéromodélisme ? Voici nos conseils pour bien débuter.</p><h2>Choisir son premier modèle</h2><p>Pour commencer, nous recommandons un planeur ou un avion à aile haute, facile à piloter et robuste.</p><h3>Les critères importants :</h3><ul><li>Envergure entre 1m et 1m50</li><li>Construction légère (EPP ou balsa)</li><li>Motorisation électrique (plus simple)</li><li>Système de stabilisation (gyroscope)</li></ul><h2>La formation</h2><p>Au club, nous proposons :</p><ul><li>Cours théoriques tous les mercredis soir</li><li>Séances de pilotage avec moniteur</li><li>Prêt de matériel pour les débutants</li><li>Accompagnement personnalisé</li></ul><p>N'hésitez pas à nous contacter pour plus d'informations !</p>",
+      "extrait": "Vous débutez en aéromodélisme ? Découvrez nos conseils pour choisir votre premier modèle et notre programme de formation pour bien démarrer.",
+      "categorie": "Technique",
+      "tags": ["débutant", "formation", "conseils", "planeur"],
+      "date_publication": "2024-10-20 14:30:00",
+      "auteur_email": "admin@amcd57.fr",
+      "statut": "publie",
+      "image": "",
+      "meta_description": "Guide complet pour débuter en aéromodélisme : choix du premier modèle, critères importants, formation au club AMCD57"
+    }
+  ]
+}
