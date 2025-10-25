@@ -288,14 +288,17 @@ class ImageImporter:
                 self.stats['images_skipped'] += 1
                 continue
 
+            # Extrait juste le nom du fichier (sans le chemin)
+            just_filename = Path(image_filename).name
+
             # Copie et associe
             dest_path = self.get_destination_path(
-                image_filename,
+                just_filename,
                 article.date_publication
             )
 
             if self.copy_image(source_path, dest_path, optimize):
-                self.associate_image_to_article(article, image_filename)
+                self.associate_image_to_article(article, just_filename)
                 self.stats['images_copied'] += 1
             else:
                 self.stats['images_skipped'] += 1
@@ -340,9 +343,24 @@ if __name__ == '__main__':
     # Option 2 : Import avec mapping manuel (recommandé)
     # Exemple de mapping personnalisé
     image_mapping = {
-        # 'nom-image-wordpress.jpg': 'slug-article-django',
-        # 'article-1.jpg': 'premier-article',
-        # 'article-2.jpg': 'deuxieme-article',
+        #inter-ex-2022-vittersbourg-57
+        '2022/09/P1030409.jpg': 'inter-ex-2022-vittersbourg-57',
+        # antennes-de-rechange-24ghz-bis
+        '2020/11/Vue_plandemasse_ant.jpg': 'antennes-de-rechange-24ghz-bis',
+        # antennes-de-rechange-24ghz
+        '2020/11/PC.jpg': 'antennes-de-rechange-24ghz',
+        # cle-de-contact-pour-aeronef-electrique
+        '2020/11/cl_contact.jpg': 'cle-de-contact-pour-aeronef-electrique',
+        # convention-avec-le-cen
+        '2020/11/logo_conservatoire_2013.png': 'convention-avec-le-cen',
+        # convention-avec-la-dgac
+        '2020/11/logo_DGAC.jpg': 'convention-avec-la-dgac',
+        # convention-avec-la-cnil
+        '2020/11/logo_cnil.jpg': 'convention-avec-la-cnil',
+        # ou-volons-nous
+        '2020/01/pente_sud_medium.jpg': 'ou-volons-nous',
+        # la-page-des-frequences
+        '2020/11/panneaux.jpg': 'la-page-des-frequences',
     }
 
     if image_mapping:
