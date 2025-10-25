@@ -1,0 +1,283 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Modifier mon profil | AMCD57{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-purple-600 to-purple-800 text-white py-12">
+    <div class="container mx-auto px-4">
+        <h1 class="text-3xl md:text-4xl font-bold mb-2">⚙️ Modifier mon profil</h1>
+        <p class="text-purple-100">Mettez à jour vos informations personnelles</p>
+    </div>
+</div>
+
+<!-- Formulaire -->
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <form method="POST" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+
+            <!-- Informations personnelles -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">👤 Informations personnelles</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Prénom -->
+                    <div>
+                        <label for="first_name" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Prénom *
+                        </label>
+                        <input type="text" id="first_name" name="first_name"
+                               value="{{ profil.user.first_name }}" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+
+                    <!-- Nom -->
+                    <div>
+                        <label for="last_name" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Nom *
+                        </label>
+                        <input type="text" id="last_name" name="last_name"
+                               value="{{ profil.user.last_name }}" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Email *
+                        </label>
+                        <input type="email" id="email" name="email"
+                               value="{{ profil.user.email }}" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+
+                    <!-- Photo -->
+                    <div>
+                        <label for="photo" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Photo de profil
+                        </label>
+                        <input type="file" id="photo" name="photo" accept="image/*"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        {% if profil.photo %}
+                            <p class="text-sm text-gray-500 mt-1">Photo actuelle : {{ profil.photo.name }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coordonnées -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">📞 Coordonnées</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Téléphone fixe -->
+                    <div>
+                        <label for="telephone" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Téléphone fixe
+                        </label>
+                        <input type="tel" id="telephone" name="telephone"
+                               value="{{ profil.telephone }}"
+                               placeholder="+33123456789"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+
+                    <!-- Téléphone portable -->
+                    <div>
+                        <label for="telephone_portable" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Téléphone portable
+                        </label>
+                        <input type="tel" id="telephone_portable" name="telephone_portable"
+                               value="{{ profil.telephone_portable }}"
+                               placeholder="+33612345678"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+
+                    <!-- Adresse -->
+                    <div class="md:col-span-2">
+                        <label for="adresse" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Adresse
+                        </label>
+                        <input type="text" id="adresse" name="adresse"
+                               value="{{ profil.adresse }}"
+                               placeholder="Rue, numéro"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+
+                    <!-- Code postal -->
+                    <div>
+                        <label for="code_postal" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Code postal
+                        </label>
+                        <input type="text" id="code_postal" name="code_postal"
+                               value="{{ profil.code_postal }}"
+                               placeholder="57000"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+
+                    <!-- Ville -->
+                    <div>
+                        <label for="ville" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Ville
+                        </label>
+                        <input type="text" id="ville" name="ville"
+                               value="{{ profil.ville }}"
+                               placeholder="Jarny"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aéromodélisme -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">✈️ Aéromodélisme</h2>
+
+                <div class="space-y-6">
+                    <!-- Biographie -->
+                    <div>
+                        <label for="bio" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Présentation
+                        </label>
+                        <textarea id="bio" name="bio" rows="4"
+                                  placeholder="Parlez-nous de vous, de votre passion pour l'aéromodélisme..."
+                                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">{{ profil.bio }}</textarea>
+                    </div>
+
+                    <!-- Expérience -->
+                    <div>
+                        <label for="experience_aeromodelisme" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Expérience en aéromodélisme
+                        </label>
+                        <textarea id="experience_aeromodelisme" name="experience_aeromodelisme" rows="4"
+                                  placeholder="Années de pratique, réalisations, compétitions..."
+                                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">{{ profil.experience_aeromodelisme }}</textarea>
+                    </div>
+
+                    <!-- Spécialités -->
+                    <div>
+                        <label for="specialites" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Spécialités
+                        </label>
+                        <input type="text" id="specialites" name="specialites"
+                               value="{{ profil.specialites }}"
+                               placeholder="Planeur, Thermique, Voltige, etc. (séparés par des virgules)"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <p class="text-sm text-gray-500 mt-1">Séparez les spécialités par des virgules</p>
+                    </div>
+
+                    <!-- Avions possédés -->
+                    <div>
+                        <label for="avions_possedes" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Avions possédés
+                        </label>
+                        <textarea id="avions_possedes" name="avions_possedes" rows="4"
+                                  placeholder="Listez les modèles que vous possédez..."
+                                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">{{ profil.avions_possedes }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Réseaux sociaux -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">🌐 Réseaux sociaux</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Site web -->
+                    <div>
+                        <label for="site_web" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Site web personnel
+                        </label>
+                        <input type="url" id="site_web" name="site_web"
+                               value="{{ profil.site_web }}"
+                               placeholder="https://votre-site.com"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+
+                    <!-- YouTube -->
+                    <div>
+                        <label for="youtube" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Chaîne YouTube
+                        </label>
+                        <input type="url" id="youtube" name="youtube"
+                               value="{{ profil.youtube }}"
+                               placeholder="https://youtube.com/@votre-chaine"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+
+                    <!-- Facebook -->
+                    <div>
+                        <label for="facebook" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Profil Facebook
+                        </label>
+                        <input type="url" id="facebook" name="facebook"
+                               value="{{ profil.facebook }}"
+                               placeholder="https://facebook.com/votre-profil"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    </div>
+
+                    <!-- Instagram -->
+                    <div>
+                        <label for="instagram" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Instagram
+                        </label>
+                        <input type="text" id="instagram" name="instagram"
+                               value="{{ profil.instagram }}"
+                               placeholder="votre_pseudo"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <p class="text-sm text-gray-500 mt-1">Votre nom d'utilisateur sans @</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Préférences -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">⚙️ Préférences</h2>
+
+                <div class="space-y-4">
+                    <!-- Newsletter -->
+                    <div class="flex items-center">
+                        <input type="checkbox" id="newsletter" name="newsletter"
+                               {% if profil.newsletter %}checked{% endif %}
+                               class="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-2 focus:ring-purple-500">
+                        <label for="newsletter" class="ml-3 text-gray-700">
+                            Recevoir la newsletter du club
+                        </label>
+                    </div>
+
+                    <!-- Notifications événements -->
+                    <div class="flex items-center">
+                        <input type="checkbox" id="notifications_evenements" name="notifications_evenements"
+                               {% if profil.notifications_evenements %}checked{% endif %}
+                               class="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-2 focus:ring-purple-500">
+                        <label for="notifications_evenements" class="ml-3 text-gray-700">
+                            Recevoir les notifications d'événements
+                        </label>
+                    </div>
+
+                    <!-- Profil public -->
+                    <div class="flex items-center">
+                        <input type="checkbox" id="profil_public" name="profil_public"
+                               {% if profil.profil_public %}checked{% endif %}
+                               class="w-5 h-5 text-purple-600 border-gray-300 rounded focus:ring-2 focus:ring-purple-500">
+                        <label for="profil_public" class="ml-3 text-gray-700">
+                            Rendre mon profil visible publiquement
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boutons -->
+            <div class="flex gap-4 justify-end">
+                <a href="{% url 'members:dashboard' %}"
+                   class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                    Annuler
+                </a>
+                <button type="submit"
+                        class="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition shadow-lg">
+                    💾 Enregistrer les modifications
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,210 @@
+{% extends 'base/base.html' %}
+
+{% block title %}{{ profil.nom_complet }} - Profil Membre | AMCD57{% endblock %}
+
+{% block content %}
+<!-- Hero Section avec photo -->
+<div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center gap-8">
+            <!-- Photo -->
+            <div class="w-48 h-48 rounded-full overflow-hidden border-4 border-white shadow-xl flex-shrink-0">
+                {% if profil.photo %}
+                    <img src="{{ profil.photo.url }}" alt="{{ profil.nom_complet }}"
+                         class="w-full h-full object-cover">
+                {% else %}
+                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-blue-600">
+                        <span class="text-7xl text-white font-bold">
+                            {{ profil.user.first_name|first|default:profil.user.username|first|upper }}
+                        </span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Informations -->
+            <div class="flex-1 text-center md:text-left">
+                <h1 class="text-4xl md:text-5xl font-bold mb-2">{{ profil.nom_complet }}</h1>
+
+                <!-- Badges -->
+                <div class="flex flex-wrap gap-2 justify-center md:justify-start mb-4">
+                    <!-- Badge Bureau -->
+                    {% if profil.est_membre_bureau %}
+                        <span class="px-4 py-2 bg-yellow-400 text-yellow-900 font-semibold rounded-full">
+                            ⭐ {{ profil.fonction_bureau.nom }}
+                        </span>
+                    {% endif %}
+
+                    <!-- Badge Type -->
+                    <span class="px-4 py-2 bg-blue-500 text-white rounded-full">
+                        {{ profil.type_membre.nom }}
+                    </span>
+
+                    <!-- Badge Niveau -->
+                    <span class="px-4 py-2 bg-blue-400 text-white rounded-full capitalize">
+                        {{ profil.get_niveau_display }}
+                    </span>
+                </div>
+
+                <!-- Ancienneté -->
+                {% if profil.anciennete_annees > 0 %}
+                    <p class="text-blue-100 text-lg">
+                        🎂 Membre depuis {{ profil.anciennete_annees }} an{{ profil.anciennete_annees|pluralize }}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contenu principal -->
+<div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Colonne principale -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Biographie -->
+            {% if profil.bio %}
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        📝 À propos
+                    </h2>
+                    <div class="text-gray-700 leading-relaxed">
+                        {{ profil.bio|linebreaks }}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Expérience en aéromodélisme -->
+            {% if profil.experience_aeromodelisme %}
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        ✈️ Expérience en Aéromodélisme
+                    </h2>
+                    <div class="text-gray-700 leading-relaxed">
+                        {{ profil.experience_aeromodelisme|linebreaks }}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Avions possédés -->
+            {% if profil.avions_possedes %}
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        🛩️ Mes Avions
+                    </h2>
+                    <div class="text-gray-700 leading-relaxed">
+                        {{ profil.avions_possedes|linebreaks }}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Événements à venir -->
+            {% if inscriptions_futures %}
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        📅 Événements à venir
+                    </h2>
+                    <div class="space-y-3">
+                        {% for inscription in inscriptions_futures %}
+                            <a href="{% url 'events:evenement_detail' inscription.evenement.slug %}"
+                               class="block p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="font-semibold text-gray-900">{{ inscription.evenement.titre }}</h3>
+                                        <p class="text-sm text-gray-600">
+                                            {{ inscription.evenement.date_debut|date:"d F Y à H:i" }}
+                                        </p>
+                                    </div>
+                                    <span class="px-3 py-1 bg-green-100 text-green-800 text-sm font-semibold rounded-full">
+                                        Inscrit
+                                    </span>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+            <!-- Spécialités -->
+            {% if profil.specialites %}
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">🎯 Spécialités</h3>
+                    <div class="flex flex-wrap gap-2">
+                        {% for specialite in profil.liste_specialites %}
+                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                                {{ specialite }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Réseaux sociaux -->
+            {% if profil.site_web or profil.youtube or profil.facebook or profil.instagram %}
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">🌐 Réseaux sociaux</h3>
+                    <div class="space-y-2">
+                        {% if profil.site_web %}
+                            <a href="{{ profil.site_web }}" target="_blank"
+                               class="flex items-center gap-2 text-blue-600 hover:text-blue-800">
+                                🌐 Site web
+                            </a>
+                        {% endif %}
+                        {% if profil.youtube %}
+                            <a href="{{ profil.youtube }}" target="_blank"
+                               class="flex items-center gap-2 text-red-600 hover:text-red-800">
+                                📺 YouTube
+                            </a>
+                        {% endif %}
+                        {% if profil.facebook %}
+                            <a href="{{ profil.facebook }}" target="_blank"
+                               class="flex items-center gap-2 text-blue-700 hover:text-blue-900">
+                                📘 Facebook
+                            </a>
+                        {% endif %}
+                        {% if profil.instagram %}
+                            <a href="https://instagram.com/{{ profil.instagram }}" target="_blank"
+                               class="flex items-center gap-2 text-pink-600 hover:text-pink-800">
+                                📷 Instagram
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Informations -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">ℹ️ Informations</h3>
+                <div class="space-y-2 text-sm">
+                    {% if profil.ville %}
+                        <p class="text-gray-700">
+                            <span class="font-semibold">📍 Localisation :</span><br>
+                            {{ profil.ville }}
+                        </p>
+                    {% endif %}
+
+                    {% if profil.age %}
+                        <p class="text-gray-700">
+                            <span class="font-semibold">🎂 Âge :</span><br>
+                            {{ profil.age }} ans
+                        </p>
+                    {% endif %}
+
+                    <p class="text-gray-700">
+                        <span class="font-semibold">📅 Membre depuis :</span><br>
+                        {{ profil.date_adhesion|date:"Y" }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bouton retour -->
+            <a href="{% url 'members:trombinoscope' %}"
+               class="block w-full text-center px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                ← Retour au trombinoscope
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

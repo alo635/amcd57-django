@@ -26,7 +26,7 @@ urlpatterns = [
         # URLs des autres applications (à ajouter progressivement)
     path('blog/', include('blog.urls')),
     path('evenements/', include('events.urls')),
-    # path('membres/', include('members.urls')),
+    path('membres/', include('members.urls')),
     # path('liens/', include('weblinks.urls')),
     
     # URLs pour l'authentification (django-allauth)

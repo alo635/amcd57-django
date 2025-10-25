@@ -39,11 +39,13 @@
                     <li><a href="{% url 'core:home' %}" class="hover:text-blue-200 transition font-medium">Accueil</a></li>
                     <li><a href="{% url 'blog:article_list' %}" class="hover:text-blue-200 transition font-medium">Blog</a></li>
                     <li><a href="{% url 'events:evenement_list' %}" class="hover:text-blue-200 transition font-medium">Événements</a></li>
-                    
+                    <li><a href="{% url 'members:trombinoscope' %}" class="hover:text-blue-200 transition font-medium">Membres</a></li>
+                    <li><a href="{% url 'members:bureau' %}" class="hover:text-blue-200 transition font-medium">Le Bureau</a></li>
+
                     {% if user.is_authenticated %}
-                    <li><a href="{% url 'events:mes_inscriptions' %}" class="hover:text-blue-200 transition font-medium">Mes inscriptions</a></li>
+                    <li><a href="{% url 'members:dashboard' %}" class="hover:text-blue-200 transition font-medium">Mon Espace</a></li>
                     {% endif %}
-                    
+
                     {% if user.is_authenticated and user.profil|default:False and user.profil.est_membre_bureau %}
                     <li><a href="{% url 'admin:index' %}" class="hover:text-blue-200 transition font-medium">Admin</a></li>
                     {% endif %}
