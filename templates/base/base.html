@@ -40,7 +40,7 @@
                     <li><a href="{% url 'blog:article_list' %}" class="hover:text-blue-200 transition font-medium">Blog</a></li>
                     <li><a href="{% url 'events:evenement_list' %}" class="hover:text-blue-200 transition font-medium">Événements</a></li>
                     <li><a href="{% url 'members:trombinoscope' %}" class="hover:text-blue-200 transition font-medium">Membres</a></li>
-                    <li><a href="{% url 'members:bureau' %}" class="hover:text-blue-200 transition font-medium">Le Bureau</a></li>
+                    <li><a href="{% url 'weblinks:annuaire' %}" class="hover:text-blue-200 transition font-medium">Liens utiles</a></li>
 
                     {% if user.is_authenticated %}
                     <li><a href="{% url 'members:dashboard' %}" class="hover:text-blue-200 transition font-medium">Mon Espace</a></li>

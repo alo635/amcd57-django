@@ -1,0 +1,60 @@
+<!-- Contenu réutilisable d'un lien -->
+<a href="{% url 'weblinks:lien_redirect' lien.pk %}"
+   {% if lien.ouvrir_nouvel_onglet %}target="_blank" rel="noopener noreferrer"{% endif %}
+   class="block p-6 hover:bg-gray-50 transition">
+
+    <!-- Logo ou icône -->
+    <div class="flex items-start gap-4 mb-4">
+        {% if lien.logo %}
+            <img src="{{ lien.logo.url }}" alt="{{ lien.titre }}"
+                 class="w-16 h-16 object-contain rounded border border-gray-200 flex-shrink-0">
+        {% else %}
+            <div class="w-16 h-16 flex items-center justify-center bg-gradient-to-br from-green-400 to-green-600 rounded flex-shrink-0">
+                <span class="text-3xl text-white">🔗</span>
+            </div>
+        {% endif %}
+
+        <div class="flex-1 min-w-0">
+            <!-- Titre -->
+            <h4 class="text-lg font-bold text-gray-900 mb-1 truncate">
+                {{ lien.titre }}
+            </h4>
+
+            <!-- Domaine -->
+            <p class="text-sm text-green-600 mb-2">
+                🌐 {{ lien.domaine }}
+            </p>
+        </div>
+    </div>
+
+    <!-- Description -->
+    {% if lien.description %}
+        <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+            {{ lien.description }}
+        </p>
+    {% endif %}
+
+    <!-- Tags -->
+    {% if lien.tags %}
+        <div class="flex flex-wrap gap-1 mb-3">
+            {% for tag in lien.liste_tags %}
+                <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">
+                    {{ tag }}
+                </span>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Footer -->
+    <div class="flex items-center justify-between pt-3 border-t border-gray-200">
+        <!-- Catégorie -->
+        <span class="text-xs text-gray-500">
+            📁 {{ lien.categorie.nom }}
+        </span>
+
+        <!-- Nombre de clics -->
+        <span class="text-xs text-gray-500">
+            👁️ {{ lien.nombre_clics }} clic{{ lien.nombre_clics|pluralize }}
+        </span>
+    </div>
+</a>

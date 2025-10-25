@@ -1,0 +1,74 @@
+{% extends 'base/base.html' %}
+
+{% block title %}{{ categorie.nom }} - Liens | AMCD57{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-green-600 to-green-800 text-white py-16">
+    <div class="container mx-auto px-4">
+        <div class="flex items-center gap-4 mb-4">
+            {% if categorie.icone %}
+                <span class="text-6xl">{{ categorie.icone }}</span>
+            {% endif %}
+            <div>
+                <h1 class="text-4xl md:text-5xl font-bold mb-2">{{ categorie.nom }}</h1>
+                {% if categorie.description %}
+                    <p class="text-xl text-green-100">{{ categorie.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+        <p class="text-green-100">{{ liens.count }} lien{{ liens.count|pluralize }} dans cette catégorie</p>
+    </div>
+</div>
+
+<!-- Fil d'Ariane -->
+<div class="bg-white border-b">
+    <div class="container mx-auto px-4 py-4">
+        <nav class="text-sm text-gray-600">
+            <a href="{% url 'core:home' %}" class="hover:text-green-600">Accueil</a>
+            <span class="mx-2">/</span>
+            <a href="{% url 'weblinks:annuaire' %}" class="hover:text-green-600">Annuaire</a>
+            <span class="mx-2">/</span>
+            <span class="text-gray-900 font-semibold">{{ categorie.nom }}</span>
+        </nav>
+    </div>
+</div>
+
+<!-- Contenu -->
+<div class="container mx-auto px-4 py-12">
+    {% if liens %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for lien in liens %}
+                {% include 'weblinks/_lien_card.html' %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- État vide -->
+        <div class="text-center py-16">
+            <div class="text-6xl mb-4">📁</div>
+            <h3 class="text-2xl font-bold text-gray-700 mb-2">Aucun lien dans cette catégorie</h3>
+            <p class="text-gray-600 mb-6">Cette catégorie sera bientôt enrichie</p>
+            <a href="{% url 'weblinks:annuaire' %}"
+               class="inline-block px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                ← Retour à l'annuaire
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Autres catégories -->
+{% if liens %}
+    <div class="bg-green-50 py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Explorer d'autres catégories</h2>
+            <p class="text-lg text-gray-600 mb-6">
+                Découvrez encore plus de ressources utiles
+            </p>
+            <a href="{% url 'weblinks:annuaire' %}"
+               class="inline-block px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-lg">
+                Voir toutes les catégories →
+            </a>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}
