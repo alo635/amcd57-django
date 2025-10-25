@@ -6,23 +6,23 @@
 {% block content %}
 
 <!-- Hero Section -->
-<div class="relative h-screen bg-gradient-to-br from-blue-900 via-blue-700 to-indigo-800 overflow-hidden">
+<div class="relative h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-cyan-500 overflow-hidden">
     <!-- Image de fond (optionnelle) -->
     <div class="absolute inset-0 opacity-20">
         <div class="w-full h-full bg-cover bg-center" style="background-image: url('{% static 'images/hero-bg.jpg' %}');"></div>
     </div>
-    
+
     <!-- Overlay -->
-    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/50 to-blue-900"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-blue-400/30 to-blue-500"></div>
     
     <!-- Contenu -->
     <div class="relative h-full flex items-center">
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto text-center text-white">
                 
-                <!-- Logo/Icône -->
-                <div class="mb-8 animate-bounce">
-                    <span class="text-9xl drop-shadow-2xl">✈️</span>
+                <!-- Logo AMCD57 -->
+                <div class="mb-8">
+                    <img src="{% static 'images/logoamcd.png' %}" alt="Logo AMCD57" class="w-64 h-auto mx-auto drop-shadow-2xl">
                 </div>
                 
                 <!-- Titre principal -->

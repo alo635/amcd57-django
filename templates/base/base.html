@@ -31,8 +31,9 @@
     <header class="bg-blue-700 text-white shadow-lg sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4">
             <nav class="flex items-center justify-between">
-                <a href="{% url 'core:home' %}" class="text-2xl font-bold flex items-center gap-2 hover:text-blue-100 transition">
-                    🛩️ <span>AMCD57</span>
+                <a href="{% url 'core:home' %}" class="flex items-center gap-3 hover:opacity-90 transition">
+                    <img src="{% static 'images/logoamcd.png' %}" alt="Logo AMCD57" class="h-12 w-auto">
+                    <span class="text-2xl font-bold">AMCD57</span>
                 </a>
 
                 <!-- Menu Desktop -->
