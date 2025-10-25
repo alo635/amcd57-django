@@ -57,13 +57,20 @@ class WordPressImporter:
             user = User.objects.get(email=email)
             return user
         except User.DoesNotExist:
+            # Vérifie si le username existe déjà
+            base_username = username
+            counter = 1
+            while User.objects.filter(username=username).exists():
+                username = f"{base_username}{counter}"
+                counter += 1
+
             # Crée un utilisateur si inexistant
             user = User.objects.create_user(
                 email=email,
                 username=username,
                 is_active=True
             )
-            print(f"✅ Utilisateur créé : {email}")
+            print(f"✅ Utilisateur créé : {email} (username: {username})")
             return user
 
     def get_or_create_categorie(self, nom, slug=None, description=''):
@@ -293,13 +300,26 @@ if __name__ == '__main__':
     importer = WordPressImporter(default_author_email='admin@amcd57.fr')
 
     # Chemins des fichiers
-    base_path = Path(__file__).parent.parent / 'data'
-    json_file = base_path / 'articles.json'
-    csv_file = base_path / 'articles.csv'
+    # Détecte si on est appelé depuis le shell Django ou directement
+    if __file__:
+        base_path = Path(__file__).parent.parent / 'data'
+    else:
+        # Appelé depuis exec() dans le shell Django
+        base_path = Path('migration_wordpress/data')
+
+    json_file_django = base_path / 'articles_django.json'  # Priorité 1 : fichier converti
+    json_file = base_path / 'articles.json'                # Priorité 2 : fichier manuel
+    csv_file = base_path / 'articles.csv'                   # Priorité 3 : CSV
 
     # Détermine quel fichier utiliser
-    if json_file.exists():
-        print(f"✅ Fichier JSON trouvé : {json_file}")
+    if json_file_django.exists():
+        print(f"✅ Fichier Django JSON trouvé : {json_file_django}")
+        importer.import_from_json(str(json_file_django))
+    elif json_file.exists():
+        print(f"⚠️  Fichier articles.json trouvé (format WordPress?)")
+        print(f"   Si c'est un export WordPress, lancez d'abord:")
+        print(f"   python migration_wordpress/scripts/convert_wordpress_export.py\n")
+        # Essaie quand même au cas où c'est le bon format
         importer.import_from_json(str(json_file))
     elif csv_file.exists():
         print(f"✅ Fichier CSV trouvé : {csv_file}")
@@ -309,7 +329,8 @@ if __name__ == '__main__':
 ❌ Aucun fichier de données trouvé !
 
 Veuillez créer un fichier :
-  - {json_file}
+  - {json_file_django} (après conversion WordPress)
+  - {json_file} (format manuel)
   - ou {csv_file}
 
 Consultez la documentation du script pour le format attendu.
