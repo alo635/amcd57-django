@@ -1,0 +1,47 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Déconnexion - AMCD57{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-12 px-4 sm:px-6 lg:px-8 flex items-center">
+    <div class="max-w-md mx-auto w-full">
+
+        <!-- Card de confirmation -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 text-center">
+            <!-- Icône de confirmation -->
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                Déconnexion réussie
+            </h2>
+
+            <p class="text-gray-600 mb-8">
+                Vous avez été déconnecté avec succès. À bientôt sur AMCD57 !
+            </p>
+
+            <!-- Boutons d'action -->
+            <div class="space-y-3">
+                <a href="{% url 'core:home' %}"
+                   class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+                    Retour à l'accueil
+                </a>
+
+                <a href="{% url 'account_login' %}"
+                   class="block w-full bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-bold py-3 px-4 rounded-lg transition duration-200">
+                    Se reconnecter
+                </a>
+            </div>
+        </div>
+
+        <!-- Logo en bas -->
+        <div class="mt-8 text-center">
+            <img src="{% static 'images/logoamcd.png' %}" alt="Logo AMCD57" class="h-16 mx-auto opacity-50">
+        </div>
+    </div>
+</div>
+{% endblock %}
