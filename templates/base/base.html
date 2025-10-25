@@ -6,23 +6,10 @@
     <title>{% block title %}AMCD57 - Club d'Aéromodélisme{% endblock %}</title>
     
     {% load static %}
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Configuration Tailwind personnalisée -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'amcd-blue': '#1e40af',
-                    }
-                }
-            }
-        }
-    </script>
-    
+
+    <!-- Tailwind CSS (optimisé) -->
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
     {% block extra_css %}{% endblock %}
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
