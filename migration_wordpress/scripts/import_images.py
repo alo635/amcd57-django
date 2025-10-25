@@ -147,14 +147,17 @@ class ImageImporter:
         print(f"  ✅ Image associée à l'article : {article.titre}")
         self.stats['articles_updated'] += 1
 
-    def import_all_images(self, optimize=True):
+    def import_all_images(self, optimize=True, recursive=True):
         """
         Importe toutes les images depuis le répertoire source
 
         Args:
             optimize: Si True, optimise les images pendant l'import
+            recursive: Si True, cherche aussi dans les sous-répertoires
         """
         print(f"\n📥 Import des images depuis : {self.source_dir}")
+        if recursive:
+            print(f"   Mode récursif : recherche dans les sous-répertoires activée")
 
         if not self.source_dir.exists():
             print(f"❌ Répertoire source introuvable : {self.source_dir}")
@@ -162,10 +165,19 @@ class ImageImporter:
 
         # Liste toutes les images
         image_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
-        images = [
-            f for f in self.source_dir.iterdir()
-            if f.is_file() and f.suffix.lower() in image_extensions
-        ]
+
+        if recursive:
+            # Recherche récursive dans tous les sous-répertoires
+            images = [
+                f for f in self.source_dir.rglob('*')
+                if f.is_file() and f.suffix.lower() in image_extensions
+            ]
+        else:
+            # Recherche uniquement dans le répertoire racine
+            images = [
+                f for f in self.source_dir.iterdir()
+                if f.is_file() and f.suffix.lower() in image_extensions
+            ]
 
         if not images:
             print(f"❌ Aucune image trouvée dans {self.source_dir}")
@@ -323,7 +335,7 @@ if __name__ == '__main__':
     importer = ImageImporter(source_dir='migration_wordpress/images')
 
     # Option 1 : Import automatique (cherche les correspondances)
-    # importer.import_all_images(optimize=True)
+    # importer.import_all_images(optimize=True, recursive=True)
 
     # Option 2 : Import avec mapping manuel (recommandé)
     # Exemple de mapping personnalisé
@@ -338,7 +350,10 @@ if __name__ == '__main__':
         importer.copy_specific_images(image_mapping, optimize=True)
     else:
         print("✅ Import automatique des images")
-        importer.import_all_images(optimize=True)
+        print("   Options :")
+        print("   - recursive=True : cherche dans tous les sous-répertoires")
+        print("   - recursive=False : cherche uniquement à la racine")
+        importer.import_all_images(optimize=True, recursive=True)
 
     print("""
     ✅ Import terminé !

@@ -81,6 +81,34 @@ Placer toutes les images dans :
 migration_wordpress/images/
 ```
 
+**Organisation des images** :
+
+Le script supporte deux structures :
+
+1. **À plat** (toutes les images à la racine) :
+```
+migration_wordpress/images/
+├── image1.jpg
+├── image2.png
+└── image3.jpg
+```
+
+2. **Avec sous-répertoires** (comme WordPress : année/mois) :
+```
+migration_wordpress/images/
+├── 2020/
+│   ├── 01/
+│   │   ├── image1.jpg
+│   │   └── image2.png
+│   └── 05/
+│       └── image3.jpg
+└── 2022/
+    └── 09/
+        └── image4.jpg
+```
+
+Le script cherche **récursivement** dans tous les sous-répertoires par défaut.
+
 ### 4. Exécuter l'import
 
 Depuis la racine du projet Django :
@@ -142,9 +170,15 @@ Créer `data/articles.json` avec vos 15 articles WordPress.
 ### Étape 2 : Copier les images
 
 ```bash
-# Copier les 62 images depuis WordPress
+# Option 1 : Copier à plat (toutes les images à la racine)
 cp ~/Downloads/wordpress-images/* migration_wordpress/images/
+
+# Option 2 : Copier avec la structure WordPress (année/mois)
+cp -r ~/Downloads/wordpress-images/* migration_wordpress/images/
+# Exemple : migration_wordpress/images/2020/01/image.jpg
 ```
+
+**Le script cherche automatiquement dans tous les sous-répertoires.**
 
 ### Étape 3 : Exécuter l'import
 
@@ -190,10 +224,35 @@ Vérifier que :
 
 ## 📦 Script de migration des images
 
-Un script séparé `import_images.py` sera créé pour :
+Le script `import_images.py` permet de :
 - Copier les images depuis `migration_wordpress/images/` vers `media/blog/articles/`
-- Associer les images aux articles
-- Redimensionner/optimiser les images si nécessaire
+- Chercher **récursivement** dans tous les sous-répertoires
+- Associer automatiquement les images aux articles
+- Redimensionner/optimiser les images automatiquement
+
+### Options du script
+
+```python
+# Dans migration_wordpress/scripts/import_images.py
+
+# Option 1 : Import automatique avec recherche récursive (par défaut)
+importer.import_all_images(optimize=True, recursive=True)
+
+# Option 2 : Import sans recherche dans les sous-répertoires
+importer.import_all_images(optimize=True, recursive=False)
+
+# Option 3 : Import avec mapping manuel (recommandé pour précision)
+image_mapping = {
+    'image1.jpg': 'slug-article-1',
+    'image2.png': 'slug-article-2',
+}
+importer.copy_specific_images(image_mapping, optimize=True)
+```
+
+### Paramètres
+
+- `optimize` : Active l'optimisation des images (redimensionnement 1200px, compression JPEG 85%)
+- `recursive` : Cherche dans tous les sous-répertoires (par défaut : True)
 
 ## ✅ Checklist de migration
 
