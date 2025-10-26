@@ -36,6 +36,12 @@ Thumbs.db
 *.bak
 *.backup
 
+# Data exports (migration/backup)
+data_export.json
+data_export_clean.json
+data_production.json
+data_production_clean.json
+
 # Coverage
 htmlcov/
 .coverage
