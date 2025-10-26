@@ -223,19 +223,47 @@ GRANT ALL PRIVILEGES ON DATABASE amcd57_db TO amcd57_user;
 \q
 ```
 
-### 2. Tester la connexion
+### 2. ⚠️ IMPORTANT : Configurer les permissions sur le schéma public (PostgreSQL 15+)
+
+**Depuis PostgreSQL 15, les permissions par défaut ont changé.** Il faut explicitement accorder les droits sur le schéma `public` :
 
 ```bash
-# Installer psycopg2 (driver PostgreSQL pour Python)
-# On le fera dans l'environnement virtuel plus tard
+# Se connecter à PostgreSQL
+sudo -u postgres psql
 
+# Se connecter à la base de données
+\c amcd57_db
+
+# Accorder tous les privilèges sur le schéma public
+GRANT ALL ON SCHEMA public TO amcd57_user;
+GRANT CREATE ON SCHEMA public TO amcd57_user;
+
+-- Faire de amcd57_user le propriétaire du schéma (recommandé)
+ALTER SCHEMA public OWNER TO amcd57_user;
+
+-- Définir les privilèges par défaut pour les futures tables
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO amcd57_user;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO amcd57_user;
+
+-- Vérifier les permissions
+\dn+
+
+-- Quitter
+\q
+```
+
+**Note** : Sans cette étape, vous obtiendrez l'erreur `permission denied for schema public` lors de `python manage.py migrate`.
+
+### 3. Tester la connexion
+
+```bash
 # Tester la connexion à la base
 psql -U amcd57_user -d amcd57_db -h localhost
 # Entrer le mot de passe
 # Si ça fonctionne, taper \q pour quitter
 ```
 
-### 3. Configuration PostgreSQL pour connexions locales
+### 4. Configuration PostgreSQL pour connexions locales
 
 ```bash
 # Éditer pg_hba.conf
@@ -306,7 +334,25 @@ pip install psycopg2-binary
 pip install gunicorn
 ```
 
-### 5. Créer le fichier .env de production
+### 5. Créer les répertoires media et staticfiles
+
+```bash
+# Créer les répertoires nécessaires
+mkdir -p /var/www/amcd57/media/blog/articles
+mkdir -p /var/www/amcd57/media/blog/categories
+mkdir -p /var/www/amcd57/media/events/evenements
+mkdir -p /var/www/amcd57/media/members/profils
+mkdir -p /var/www/amcd57/media/weblinks/liens
+mkdir -p /var/www/amcd57/staticfiles
+mkdir -p /var/www/amcd57/logs
+
+# Définir les permissions
+chmod -R 755 /var/www/amcd57/media
+chmod -R 755 /var/www/amcd57/staticfiles
+chmod -R 755 /var/www/amcd57/logs
+```
+
+### 6. Créer le fichier .env de production
 
 ```bash
 # Créer le fichier .env
@@ -319,10 +365,11 @@ Contenu du fichier `.env` :
 # Django Core
 SECRET_KEY=GENERER_UNE_NOUVELLE_CLE_SECRETE_LONGUE_ET_COMPLEXE
 DEBUG=False
-ALLOWED_HOSTS=amcd.alodev.ovh,www.amcd.alodev.ovh,<IP_VPS>
+ALLOWED_HOSTS=amcd.alodev.ovh,www.amcd.alodev.ovh,localhost,127.0.0.1,<IP_VPS>
 
 # Database
 DATABASE_URL=postgresql://amcd57_user:VOTRE_MOT_DE_PASSE_SECURISE@localhost:5432/amcd57_db
+DB_PASSWORD=VOTRE_MOT_DE_PASSE_SECURISE
 
 # Email Configuration (exemple avec Gmail)
 EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
@@ -335,14 +382,16 @@ EMAIL_HOST_PASSWORD=votre_mot_de_passe_application
 # OpenWeatherMap API
 OPENWEATHER_API_KEY=votre_cle_api_openweathermap
 
-# Sécurité
-SECURE_SSL_REDIRECT=True
-SESSION_COOKIE_SECURE=True
-CSRF_COOKIE_SECURE=True
-SECURE_HSTS_SECONDS=31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS=True
-SECURE_HSTS_PRELOAD=True
+# Sécurité (⚠️ DÉSACTIVÉ INITIALEMENT - Réactiver après SSL)
+SECURE_SSL_REDIRECT=False
+SESSION_COOKIE_SECURE=False
+CSRF_COOKIE_SECURE=False
+SECURE_HSTS_SECONDS=0
+SECURE_HSTS_INCLUDE_SUBDOMAINS=False
+SECURE_HSTS_PRELOAD=False
 ```
+
+**⚠️ IMPORTANT** : Les paramètres de sécurité HTTPS sont désactivés (`False`) initialement. Vous les réactiverez (`True`) **APRÈS** l'installation du certificat SSL avec Certbot. Si vous les activez avant, le site ne sera pas accessible en HTTP.
 
 **Important** : Pour générer une SECRET_KEY sécurisée :
 
@@ -397,15 +446,15 @@ if not DEBUG:
 ### 7. Effectuer les migrations
 
 ```bash
-# Collecter les fichiers statiques
-python manage.py collectstatic --noinput
-
-# Effectuer les migrations
+# Effectuer les migrations (⚠️ AVANT collectstatic)
 python manage.py migrate
 
 # Créer un superutilisateur
 python manage.py createsuperuser
 # Suivre les instructions (email + mot de passe)
+
+# Collecter les fichiers statiques
+python manage.py collectstatic --noinput
 ```
 
 ### 8. Vérifier que tout fonctionne
@@ -416,6 +465,8 @@ python manage.py runserver 0.0.0.0:8000
 
 # Depuis votre navigateur, tester :
 # http://<IP_VPS>:8000
+
+# Si vous obtenez "DisallowedHost", vérifiez que l'IP est dans ALLOWED_HOSTS du .env
 
 # Si ça fonctionne, arrêter avec Ctrl+C
 ```
@@ -474,8 +525,9 @@ proc_name = "amcd57_gunicorn"
 # Server mechanics
 daemon = False
 pidfile = "/var/www/amcd57/gunicorn.pid"
-user = "amcd"
-group = "amcd"
+# ⚠️ NE PAS DÉFINIR user/group ici car géré par systemd
+# user = "amcd"
+# group = "amcd"
 
 # Security
 limit_request_line = 4096
@@ -483,10 +535,13 @@ limit_request_fields = 100
 limit_request_field_size = 8190
 ```
 
+**⚠️ NOTE IMPORTANTE** : Les lignes `user` et `group` sont commentées car l'utilisateur est déjà défini dans le fichier service systemd. Si Gunicorn essaie de changer d'utilisateur alors qu'il tourne déjà sous cet utilisateur via systemd, cela causera une erreur.
+
 ### 3. Créer le répertoire des logs
 
 ```bash
 mkdir -p /var/www/amcd57/logs
+chmod -R 775 /var/www/amcd57/logs
 ```
 
 ### 4. Créer le service systemd pour Gunicorn
@@ -509,6 +564,7 @@ User=amcd
 Group=www-data
 WorkingDirectory=/var/www/amcd57
 Environment="PATH=/var/www/amcd57/venv/bin"
+EnvironmentFile=/var/www/amcd57/.env
 ExecStart=/var/www/amcd57/venv/bin/gunicorn \
           --config /var/www/amcd57/gunicorn_config.py \
           amcd57_project.wsgi:application
@@ -521,6 +577,8 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 ```
+
+**⚠️ NOTE** : La ligne `EnvironmentFile=/var/www/amcd57/.env` est **essentielle** pour charger les variables d'environnement (SECRET_KEY, DATABASE_URL, etc.) depuis le fichier `.env`.
 
 ### 5. Activer et démarrer Gunicorn
 
@@ -539,6 +597,24 @@ sudo systemctl status gunicorn-amcd57
 
 # Voir les logs en temps réel
 sudo journalctl -u gunicorn-amcd57 -f
+```
+
+**⚠️ DÉPANNAGE** : Si Gunicorn ne démarre pas, vérifiez :
+
+```bash
+# Voir les erreurs détaillées
+sudo journalctl -u gunicorn-amcd57 -n 100 --no-pager
+
+# Problème fréquent : erreur "Can't switch to 'amcd' user"
+# → Vérifiez que les lignes user/group sont bien commentées dans gunicorn_config.py
+
+# Problème fréquent : variables d'environnement non chargées
+# → Vérifiez que EnvironmentFile=/var/www/amcd57/.env est bien dans le fichier service
+
+# Tester Gunicorn manuellement
+cd /var/www/amcd57
+source venv/bin/activate
+gunicorn --bind 127.0.0.1:8000 amcd57_project.wsgi:application
 ```
 
 ### 6. Commandes utiles pour Gunicorn
@@ -608,7 +684,7 @@ server {
     }
 
     location /media/ {
-        alias /var/www/amcd57/mediafiles/;
+        alias /var/www/amcd57/media/;
         expires 30d;
         add_header Cache-Control "public";
     }
@@ -690,7 +766,7 @@ server {
 # Créer le lien symbolique
 sudo ln -s /etc/nginx/sites-available/amcd57 /etc/nginx/sites-enabled/
 
-# Supprimer le site par défaut
+# ⚠️ IMPORTANT : Supprimer le site par défaut de Nginx
 sudo rm /etc/nginx/sites-enabled/default
 
 # Tester la configuration Nginx
@@ -700,13 +776,44 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
+**⚠️ IMPORTANT** : La suppression du site par défaut (`default`) est **essentielle**. Si vous ne le faites pas, Nginx servira la page "Welcome to nginx!" au lieu de votre site Django.
+
 ### 3. Vérifier le fonctionnement
 
 ```bash
+# Tester depuis le VPS lui-même
+curl http://localhost
+# Vous devriez voir le HTML de votre site Django
+
+# Tester avec le domaine
+curl http://amcd.alodev.ovh
+
 # Ouvrir dans le navigateur :
 # http://amcd.alodev.ovh
 
 # Le site devrait s'afficher !
+```
+
+**⚠️ DÉPANNAGE** : Si le site ne s'affiche pas :
+
+```bash
+# Vérifier que Nginx tourne
+sudo systemctl status nginx
+
+# Vérifier que Gunicorn tourne
+sudo systemctl status gunicorn-amcd57
+
+# Voir les logs Nginx
+sudo tail -f /var/log/nginx/amcd57-error.log
+
+# Voir les logs Gunicorn
+sudo tail -f /var/www/amcd57/logs/gunicorn-error.log
+
+# Vérifier que le port 80 est ouvert dans le firewall
+sudo ufw status
+# Si le port 80 n'est pas ouvert :
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
 ```
 
 ---
@@ -751,7 +858,31 @@ sudo certbot certificates
 # https://amcd.alodev.ovh
 ```
 
-### 5. Renouvellement automatique
+### 5. ⚠️ IMPORTANT : Réactiver les paramètres de sécurité HTTPS
+
+**Une fois le certificat SSL installé**, il faut réactiver les paramètres de sécurité dans le fichier `.env` :
+
+```bash
+# Éditer le fichier .env
+nano /var/www/amcd57/.env
+
+# Modifier les paramètres de sécurité (passer de False à True) :
+SECURE_SSL_REDIRECT=True
+SESSION_COOKIE_SECURE=True
+CSRF_COOKIE_SECURE=True
+SECURE_HSTS_SECONDS=31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS=True
+SECURE_HSTS_PRELOAD=True
+
+# Sauvegarder et quitter (Ctrl+O, Entrée, Ctrl+X)
+
+# Redémarrer Gunicorn pour prendre en compte les changements
+sudo systemctl restart gunicorn-amcd57
+```
+
+**Note** : Certbot aura automatiquement modifié la configuration Nginx pour rediriger HTTP vers HTTPS. Chrome mettra en cache le HSTS - si vous aviez activé HSTS avant SSL, videz le cache HSTS Chrome : `chrome://net-internals/#hsts`
+
+### 6. Renouvellement automatique
 
 Certbot configure automatiquement un cron job ou un timer systemd pour renouveler les certificats. Vérifier :
 
@@ -783,13 +914,13 @@ ls -la mediafiles/
 ```bash
 # Donner les bonnes permissions
 sudo chown -R amcd:www-data /var/www/amcd57/staticfiles
-sudo chown -R amcd:www-data /var/www/amcd57/mediafiles
+sudo chown -R amcd:www-data /var/www/amcd57/media
 
 sudo chmod -R 755 /var/www/amcd57/staticfiles
-sudo chmod -R 755 /var/www/amcd57/mediafiles
+sudo chmod -R 755 /var/www/amcd57/media
 ```
 
-### 3. Recollect des fichiers statiques après modifications
+### 3. Collecter les fichiers statiques
 
 ```bash
 cd /var/www/amcd57
@@ -801,6 +932,92 @@ python manage.py collectstatic --noinput
 # Redémarrer Gunicorn
 sudo systemctl restart gunicorn-amcd57
 ```
+
+---
+
+## 📦 Migration des données depuis le développement
+
+Si vous avez des données (articles, événements, etc.) dans votre environnement de développement local et que vous souhaitez les migrer vers la production :
+
+### 1. Sur votre machine locale : Exporter les données
+
+```bash
+# Activer l'environnement virtuel local
+source venv/bin/activate
+
+# Exporter toutes les données sauf les utilisateurs et profils
+python manage.py dumpdata \
+  --exclude contenttypes \
+  --exclude auth.Permission \
+  --exclude sessions \
+  --exclude auth.User \
+  --exclude members.ProfilMembre \
+  --exclude account.emailaddress \
+  --exclude admin.logentry \
+  --indent 2 > data_export.json
+
+# Vérifier le fichier
+ls -lh data_export.json
+```
+
+### 2. Réassigner les références utilisateur
+
+Les articles et événements ont des références à des utilisateurs (auteur, organisateur) qui n'existent pas en production. Utilisez le script de migration :
+
+```bash
+# Le script migrate_data.py est dans le dépôt Git (scripts/migrate_data.py)
+# Il réassigne tous les contenus à l'utilisateur ID=1 (le superutilisateur en production)
+
+python scripts/migrate_data.py data_export.json data_production.json 1
+
+# Cela crée data_production.json avec toutes les références utilisateur pointant vers l'utilisateur ID=1
+```
+
+### 3. Transférer les données vers le VPS
+
+```bash
+# Transférer le fichier JSON
+scp data_production.json amcd@<IP_VPS>:/var/www/amcd57/
+
+# Si vous avez des images/médias dans votre dossier media/ local
+scp -r media/* amcd@<IP_VPS>:/var/www/amcd57/media/
+```
+
+### 4. Sur le VPS : Importer les données
+
+```bash
+# Se connecter au VPS
+ssh amcd@<IP_VPS>
+
+# Aller dans le répertoire du projet
+cd /var/www/amcd57
+source venv/bin/activate
+
+# Importer les données
+python manage.py loaddata data_production.json
+
+# Si vous avez transféré des médias, corriger les permissions
+sudo chown -R amcd:amcd media/
+sudo chmod -R 755 media/
+
+# Redémarrer Gunicorn
+sudo systemctl restart gunicorn-amcd57
+```
+
+### 5. Vérifier l'import
+
+```bash
+# Vérifier dans l'admin Django
+# https://amcd.alodev.ovh/admin/
+
+# Ou lister les objets en shell
+python manage.py shell
+>>> from blog.models import Article
+>>> Article.objects.count()
+>>> exit()
+```
+
+**⚠️ IMPORTANT** : Cette méthode crée les données en production. Si vous avez déjà des données en production et que vous voulez les écraser, videz d'abord la base avec `python manage.py flush` (⚠️ destructif !).
 
 ---
 
