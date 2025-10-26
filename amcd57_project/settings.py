@@ -19,7 +19,7 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-CHANGE-THIS-IN-PRODUC
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
 # Application definition
 # IMPORTANT : L'ordre est crucial !
@@ -147,3 +147,31 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+
+# =============================================================================
+# PARAMÈTRES DE SÉCURITÉ
+# =============================================================================
+
+# Limites d'upload de fichiers
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB
+
+# Sécurité HTTPS (activée uniquement en production avec SSL)
+# Ces paramètres sont activés automatiquement quand DEBUG=False
+if not DEBUG:
+    # Forcer HTTPS
+    SECURE_SSL_REDIRECT = True
+
+    # Cookies sécurisés (HTTPS uniquement)
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+    # HTTP Strict Transport Security
+    SECURE_HSTS_SECONDS = 31536000  # 1 an
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    # Autres headers de sécurité
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
