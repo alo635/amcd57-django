@@ -115,8 +115,8 @@ STATICFILES_DIRS = [BASE_DIR / 'static']  # Fichiers statiques globaux
 STATIC_ROOT = BASE_DIR / 'staticfiles'  # Pour la production
 
 # Media files (uploads utilisateurs)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = config('MEDIA_URL', default='/media/')
+MEDIA_ROOT = config('MEDIA_ROOT', default=str(BASE_DIR / 'media'))
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
