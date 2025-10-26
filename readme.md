@@ -14,6 +14,17 @@ Migration complète d'un site WordPress vers une stack Django moderne pour obten
 - **Hébergement** : VPS OVH Ubuntu 25.04
 - **Mise en production** : Octobre 2025
 
+### 🔒 Scores de Sécurité
+
+| Test | Score | Statut |
+|------|-------|--------|
+| **SSL Labs** | A+ | ✅ Excellent |
+| **Mozilla Observatory** | B (75/100) | ✅ Bon |
+| **Security Headers** | A- (estimé) | ✅ Bon |
+
+**Sécurisations appliquées** : HTTPS/HSTS, CSP, Cookies sécurisés, Firewall UFW, Headers de sécurité
+→ Voir [SECURITY_RESULTS.md](SECURITY_RESULTS.md) pour les détails complets
+
 ## 📋 Fonctionnalités
 
 ### Phase 1 - Site de base ✅ 100% Complété !
