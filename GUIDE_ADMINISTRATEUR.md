@@ -220,7 +220,7 @@ L'article apparaît immédiatement sur le site dans la section Blog.
 
 1. **"Events" → "Lieux"**
 2. **Ajouter un nouveau lieu** :
-   - Nom : Nom du lieu (ex: "Terrain AMCD Jarny")
+   - Nom : Nom du lieu (ex: "Terrain AMCD Delme")
    - Adresse, ville, code postal
    - Coordonnées GPS (latitude, longitude)
    - Capacité : Nombre maximum de personnes (optionnel)

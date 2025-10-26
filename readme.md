@@ -1,6 +1,6 @@
 # 🛩️ AMCD57 - Site Web du Club d'Aéromodélisme
 
-Site web moderne du club d'aéromodélisme AMCD57 de Jarny (Grand Est, France).
+Site web moderne du club d'aéromodélisme AMCD57 de Delme (Grand Est, France).
 
 Migration complète d'un site WordPress vers une stack Django moderne pour obtenir un contrôle total, de meilleures performances et une meilleure évolutivité.
 
@@ -63,7 +63,7 @@ Migration complète d'un site WordPress vers une stack Django moderne pour obten
 
 - **Widget météo** :
   - ✅ API OpenWeatherMap intégrée
-  - ✅ Météo temps réel pour Jarny
+  - ✅ Météo temps réel pour Delme
   - ✅ Indicateur conditions de vol
   - ✅ Prévisions affichées
   - ✅ Cache 30 minutes
@@ -136,7 +136,7 @@ Migration complète d'un site WordPress vers une stack Django moderne pour obten
 - **npm** - Gestion dépendances frontend
 
 ### APIs
-- **OpenWeatherMap** - Météo en temps réel pour Jarny
+- **OpenWeatherMap** - Météo en temps réel pour Delme
 
 ## 🗂️ Structure de la Base de Données
 
@@ -834,7 +834,7 @@ git push origin main
 
 ### Core - Widget météo ✅ 100%
 - **API OpenWeatherMap** :
-  - Météo temps réel pour Jarny
+  - Météo temps réel pour Delme
   - Température, ressenti, description
   - Vent (vitesse et direction cardinale)
   - Humidité, pression, visibilité, nébulosité
@@ -947,7 +947,7 @@ Projet privé - Tous droits réservés - AMCD57
 
 Site actuel : [À venir]  
 Email : contact@amcd57.fr (à venir)  
-Localisation : Jarny, Grand Est, France
+Localisation : Delme, Grand Est, France
 
 ---
 

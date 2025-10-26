@@ -17,7 +17,7 @@ class WeatherService:
     
     BASE_URL = "https://api.openweathermap.org/data/2.5"
     
-    # Coordonnées de Jarny, France
+    # Coordonnées de Delme, France
     JARNY_LAT = 49.1586
     JARNY_LON = 5.8808
     
@@ -28,7 +28,7 @@ class WeatherService:
         
     def get_current_weather(self):
         """
-        Récupère la météo actuelle pour Jarny
+        Récupère la météo actuelle pour Delme
         Mise en cache pendant 30 minutes
         """
         cache_key = 'weather_current_jarny'
@@ -71,7 +71,7 @@ class WeatherService:
                 'wind_direction': data['wind']['deg'],
                 'clouds': data['clouds']['all'],
                 'visibility': data.get('visibility', 0) / 1000,  # mètres vers km
-                'city': 'Jarny',
+                'city': 'Delme',
                 'success': True
             }
 

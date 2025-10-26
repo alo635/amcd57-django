@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-AMCD57 is an aeromodeling club website built with Django 5.0. This is a complete migration from WordPress to a modern Django stack, providing better performance, full control, and scalability. The project is French-language focused and serves the AMCD57 aeromodeling club in Jarny, Grand Est, France.
+AMCD57 is an aeromodeling club website built with Django 5.0. This is a complete migration from WordPress to a modern Django stack, providing better performance, full control, and scalability. The project is French-language focused and serves the AMCD57 aeromodeling club in Delme, Grand Est, France.
 
 **Current Status**: 98% complete - core functionality fully implemented, ready for WordPress content migration.
 
@@ -73,7 +73,7 @@ The project follows Django's app-based architecture with 5 main applications:
 - Service class in `core/services/weather.py`
 - 30-minute cache for current weather
 - 1-hour cache for forecasts
-- OpenWeatherMap API for Jarny coordinates (49.1586, 5.8808)
+- OpenWeatherMap API for Delme coordinates (49.1586, 5.8808)
 
 ## Common Development Commands
 
