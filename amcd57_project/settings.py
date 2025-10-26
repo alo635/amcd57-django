@@ -165,13 +165,19 @@ if not DEBUG:
     # Cookies sécurisés (HTTPS uniquement)
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_HTTPONLY = True  # Protection XSS pour le cookie CSRF
+    SESSION_COOKIE_HTTPONLY = True  # Protection XSS pour la session
 
-    # HTTP Strict Transport Security
-    SECURE_HSTS_SECONDS = 31536000  # 1 an
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
+    # SameSite pour CSRF protection
+    CSRF_COOKIE_SAMESITE = 'Strict'
+    SESSION_COOKIE_SAMESITE = 'Strict'
 
-    # Autres headers de sécurité
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_BROWSER_XSS_FILTER = True
-    X_FRAME_OPTIONS = 'DENY'
+    # HTTP Strict Transport Security (géré par Nginx, désactivé ici pour éviter doublon)
+    # SECURE_HSTS_SECONDS = 0
+    # SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    # SECURE_HSTS_PRELOAD = False
+
+    # Autres headers de sécurité (gérés par Nginx pour éviter doublon)
+    # SECURE_CONTENT_TYPE_NOSNIFF = False
+    # SECURE_BROWSER_XSS_FILTER = False
+    # X_FRAME_OPTIONS = None
