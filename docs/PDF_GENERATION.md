@@ -12,7 +12,28 @@ Les PDFs suivants peuvent être générés :
 
 ## 🔧 Prérequis
 
-### Option 1 : Pandoc + LaTeX (Recommandé)
+### ⭐ Option 1 : md-to-pdf (Recommandé - Supporte les emojis)
+
+**La méthode la plus simple** pour générer des PDFs avec emojis :
+
+```bash
+# Installer via npm
+sudo npm install -g md-to-pdf
+
+# Utiliser le script simple
+./scripts/generate_pdfs_simple.sh
+```
+
+**Avantages** :
+- ✅ Support natif des emojis
+- ✅ Installation simple (juste npm)
+- ✅ Pas besoin de LaTeX
+- ✅ Style moderne et propre
+
+**Inconvénient** :
+- Moins de contrôle sur le style que Pandoc
+
+### Option 2 : Pandoc + LaTeX (Plus de contrôle, pas d'emojis)
 
 **Sur macOS** :
 ```bash
@@ -47,20 +68,19 @@ choco install pandoc miktex
 # - MiKTeX : https://miktex.org/download
 ```
 
-### Option 2 : md-to-pdf (Node.js - Plus simple mais moins de contrôle)
-
-```bash
-# Installer via npm
-npm install -g md-to-pdf
-
-# Utilisation simple
-md-to-pdf readme.md
-md-to-pdf GUIDE_ADMINISTRATEUR.md
-```
-
 ## 🚀 Génération avec le script automatique
 
-Le script `scripts/generate_pdfs.sh` génère automatiquement tous les PDFs :
+### Script simple (md-to-pdf - Recommandé)
+
+Le script `scripts/generate_pdfs_simple.sh` génère tous les PDFs **avec support des emojis** :
+
+```bash
+./scripts/generate_pdfs_simple.sh
+```
+
+### Script Pandoc (sans emojis)
+
+Le script `scripts/generate_pdfs.sh` utilise Pandoc/LaTeX :
 
 ```bash
 # Exécuter le script
