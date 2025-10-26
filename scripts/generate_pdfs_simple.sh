@@ -10,7 +10,7 @@ if ! command -v md-to-pdf &> /dev/null; then
     echo "❌ md-to-pdf n'est pas installé."
     echo ""
     echo "Pour l'installer :"
-    echo "  npm install -g md-to-pdf"
+    echo "  sudo npm install -g md-to-pdf"
     echo ""
     exit 1
 fi
@@ -19,41 +19,43 @@ fi
 OUTPUT_DIR="docs/pdf"
 mkdir -p "$OUTPUT_DIR"
 
+# Fonction pour générer un PDF
+generate_pdf() {
+    local input_file=$1
+    local output_name=$2
+
+    echo "📄 Génération de ${output_name}..."
+
+    # md-to-pdf crée le PDF dans le même répertoire que le fichier source
+    # On le génère puis on le déplace
+    if md-to-pdf "$input_file" --launch-options '{"args": ["--no-sandbox"]}' 2>/dev/null; then
+        # Récupérer le nom du PDF généré (même nom que .md mais avec .pdf)
+        local generated_pdf="${input_file%.md}.pdf"
+
+        # Déplacer vers le répertoire de sortie
+        if [ -f "$generated_pdf" ]; then
+            mv "$generated_pdf" "$OUTPUT_DIR/$output_name"
+            echo "✅ $output_name créé"
+        else
+            echo "❌ Fichier PDF non trouvé: $generated_pdf"
+        fi
+    else
+        echo "❌ Erreur lors de la création de $output_name"
+    fi
+    echo ""
+}
+
 # 1. Générer README.pdf
-echo "📄 Génération de README.pdf..."
-if md-to-pdf readme.md --dest "$OUTPUT_DIR/README.pdf" --launch-options '{"args": ["--no-sandbox"]}'; then
-  echo "✅ README.pdf créé"
-else
-  echo "❌ Erreur lors de la création de README.pdf"
-fi
-echo ""
+generate_pdf "readme.md" "README.pdf"
 
 # 2. Générer GUIDE_ADMINISTRATEUR.pdf
-echo "📄 Génération de GUIDE_ADMINISTRATEUR.pdf..."
-if md-to-pdf GUIDE_ADMINISTRATEUR.md --dest "$OUTPUT_DIR/GUIDE_ADMINISTRATEUR.pdf" --launch-options '{"args": ["--no-sandbox"]}'; then
-  echo "✅ GUIDE_ADMINISTRATEUR.pdf créé"
-else
-  echo "❌ Erreur lors de la création de GUIDE_ADMINISTRATEUR.pdf"
-fi
-echo ""
+generate_pdf "GUIDE_ADMINISTRATEUR.md" "GUIDE_ADMINISTRATEUR.pdf"
 
 # 3. Générer PRODUCTION_CONFIG.pdf
-echo "📄 Génération de PRODUCTION_CONFIG.pdf..."
-if md-to-pdf PRODUCTION_CONFIG.md --dest "$OUTPUT_DIR/PRODUCTION_CONFIG.pdf" --launch-options '{"args": ["--no-sandbox"]}'; then
-  echo "✅ PRODUCTION_CONFIG.pdf créé"
-else
-  echo "❌ Erreur lors de la création de PRODUCTION_CONFIG.pdf"
-fi
-echo ""
+generate_pdf "PRODUCTION_CONFIG.md" "PRODUCTION_CONFIG.pdf"
 
 # 4. Générer DEPLOIEMENT.pdf
-echo "📄 Génération de DEPLOIEMENT.pdf..."
-if md-to-pdf DEPLOIEMENT.md --dest "$OUTPUT_DIR/DEPLOIEMENT.pdf" --launch-options '{"args": ["--no-sandbox"]}'; then
-  echo "✅ DEPLOIEMENT.pdf créé"
-else
-  echo "❌ Erreur lors de la création de DEPLOIEMENT.pdf"
-fi
-echo ""
+generate_pdf "DEPLOIEMENT.md" "DEPLOIEMENT.pdf"
 
 # Résumé
 echo "=========================================="
