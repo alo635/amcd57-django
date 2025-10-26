@@ -4,7 +4,15 @@ Site web moderne du club d'aéromodélisme AMCD57 de Jarny (Grand Est, France).
 
 Migration complète d'un site WordPress vers une stack Django moderne pour obtenir un contrôle total, de meilleures performances et une meilleure évolutivité.
 
-**🎊 PROJET TERMINÉ À 100% - Phase 1 & 2 complétées ! 🎊**
+**🎊 PROJET TERMINÉ ET DÉPLOYÉ EN PRODUCTION ! 🎊**
+
+## 🌐 Site en ligne
+
+- **URL de démo** : https://amcd.alodev.ovh
+- **Admin Django** : https://amcd.alodev.ovh/admin/
+- **Statut** : ✅ **Opérationnel en production**
+- **Hébergement** : VPS OVH Ubuntu 25.04
+- **Mise en production** : Octobre 2025
 
 ## 📋 Fonctionnalités
 
@@ -209,12 +217,13 @@ ContactMessage (formulaire de contact)
 - Python 3.13+
 - pip
 - virtualenv
-- Node.js & npm (pour Tailwind CSS)
+- Node.js & npm (pour Tailwind CSS en développement)
 
-### Installation
+### Installation locale (développement)
+
 ```bash
 # Cloner le repo
-git clone https://github.com/TON-USERNAME/amcd57-django.git
+git clone https://github.com/alo635/amcd57-django.git
 cd amcd57-django
 
 # Créer l'environnement virtuel
@@ -226,17 +235,14 @@ venv\Scripts\activate  # Windows
 # Installer les dépendances Python
 pip install -r requirements.txt
 
-# Installer les dépendances npm (Tailwind CSS)
-npm install
-
 # Créer le fichier .env
 cp .env.example .env
-# Éditer .env avec tes variables (voir section Variables d'environnement)
+# Éditer .env avec vos variables (voir section Variables d'environnement)
 
 # Appliquer les migrations
 python manage.py migrate
 
-# Créer un superuser
+# Créer un superutilisateur
 python manage.py createsuperuser
 
 # Build Tailwind CSS
@@ -291,6 +297,47 @@ OPENWEATHER_API_KEY=your-openweather-api-key-here
 python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
 ```
 
+## 📦 Déploiement en production
+
+Le site est déployé sur un **VPS OVH Ubuntu 25.04** avec la stack suivante :
+
+### Infrastructure
+- **Serveur web** : Nginx (reverse proxy)
+- **WSGI** : Gunicorn (9 workers)
+- **Base de données** : PostgreSQL 16
+- **SSL/HTTPS** : Let's Encrypt (Certbot)
+- **Sécurité** : UFW Firewall, HSTS, cookies sécurisés
+
+### Backups automatiques
+- **Base de données** : Quotidien à 2h00 (rétention 30 jours)
+- **Fichiers média** : Quotidien à 3h00 (rétention 60 jours)
+- **Scripts** : Disponibles dans `scripts/`
+
+### Documentation déploiement
+- **Guide complet** : [DEPLOIEMENT.md](DEPLOIEMENT.md) (~1000 lignes)
+- **Guide rapide** : [DEPLOIEMENT-RAPIDE.md](DEPLOIEMENT-RAPIDE.md) (30 min)
+- **Scripts** : `scripts/` (backups, restauration, migration données)
+
+### Migration locale → production
+
+```bash
+# 1. Exporter les données locales
+python manage.py dumpdata [options] > data_export.json
+
+# 2. Réassigner les utilisateurs
+python scripts/migrate_data.py data_export.json data_production.json 1
+
+# 3. Transférer vers le VPS
+scp data_production.json amcd@VPS_IP:/var/www/amcd57/
+
+# 4. Importer en production
+python manage.py loaddata data_production.json
+```
+
+Voir [DEPLOIEMENT.md](DEPLOIEMENT.md) section "Migration des données" pour les détails.
+
+---
+
 ## 📁 Structure du Projet
 ```
 amcd57-django/
@@ -303,18 +350,21 @@ amcd57-django/
 │   ├── models.py         # ContactMessage
 │   ├── views.py          # home, contact, about, météo, etc.
 │   ├── urls.py
+│   ├── sitemaps.py       # SEO - Sitemap dynamique
 │   └── services/
 │       └── weather.py    # Service météo OpenWeatherMap
 ├── blog/                 # Application Blog
 │   ├── models.py         # Article, Categorie, Tag, Commentaire
 │   ├── admin.py          # Configuration admin
 │   ├── views.py          # 5 vues (liste, détail, recherche, etc.)
+│   ├── tests.py          # 25 tests unitaires
 │   └── migrations/
 ├── events/               # Application Events
 │   ├── models.py         # Evenement, Lieu, TypeEvenement, Inscription
 │   ├── admin.py          # Configuration admin
 │   ├── views.py          # 6 vues (liste, détail, calendrier, etc.)
 │   ├── templatetags/     # Template filters personnalisés
+│   ├── tests.py          # 23 tests unitaires
 │   └── migrations/
 ├── members/              # Application Members
 │   ├── models.py         # ProfilMembre, FonctionBureau, TypeMembre
@@ -356,19 +406,20 @@ amcd57-django/
 │   ├── blog/
 │   ├── events/
 │   └── members/
-├── migration_wordpress/  # 🆕 Outils de migration WordPress
-│   ├── README.md         # Documentation migration
-│   ├── scripts/
-│   │   ├── convert_wordpress_export.py  # Conversion XML→JSON
-│   │   ├── import_articles.py           # Import articles JSON/CSV
-│   │   ├── import_images.py             # Import et optimisation images
-│   │   ├── fix_content_images.py        # Détection images dans HTML
-│   │   ├── verify_images.py             # Vérification import images
-│   │   └── create_image_mapping.py      # Helper mapping manuel
-│   ├── data/
-│   │   ├── articles.json.example # Template JSON
-│   │   └── articles.csv.example  # Template CSV
-│   └── images/           # Images WordPress à migrer
+├── scripts/              # Scripts de production et migration
+│   ├── README.md         # Documentation scripts
+│   ├── backup_db.sh      # Backup automatique PostgreSQL
+│   ├── backup_media.sh   # Backup automatique médias
+│   ├── restore_db.sh     # Restauration base de données
+│   ├── setup_backups.sh  # Installation backups automatiques
+│   └── migrate_data.py   # Migration données local→production
+├── DEPLOIEMENT.md        # Guide complet déploiement VPS (~1000 lignes)
+├── DEPLOIEMENT-RAPIDE.md # Guide rapide 30 minutes
+├── CLAUDE.md             # Documentation projet pour Claude Code
+├── TAILWIND.md           # Documentation Tailwind CSS
+├── gunicorn_config.py    # Configuration production Gunicorn
+├── .env.production.example # Template variables environnement production
+├── deploy.sh             # Script déploiement automatisé
 ├── venv/                 # Environnement virtuel Python (non versionné)
 ├── .env                  # Variables d'environnement (non versionné)
 ├── .env.example          # Template des variables
