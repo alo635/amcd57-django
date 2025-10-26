@@ -112,6 +112,14 @@ Migration complète d'un site WordPress vers une stack Django moderne pour obten
   - ✅ Fond hero section éclairci pour meilleure visibilité
   - ✅ Design cohérent et professionnel
 
+- **Configuration production et debugging** :
+  - ✅ **Upload de photos membres** résolu (MEDIA_ROOT configurable via .env)
+  - ✅ Configuration Gunicorn optimisée (worker_tmp_dir, permissions)
+  - ✅ Variables d'environnement via python-decouple
+  - ✅ Documentation production complète (PRODUCTION_CONFIG.md)
+  - ✅ Scripts de diagnostic automatique
+  - ✅ Guides de dépannage détaillés
+
 ### Phase 3 - E-commerce (Futur)
 - 🔮 Boutique en ligne (pièces, équipements, adhésions)
 - 🔮 Gestion des cotisations
@@ -316,7 +324,9 @@ Le site est déployé sur un **VPS OVH Ubuntu 25.04** avec la stack suivante :
 ### Documentation déploiement
 - **Guide complet** : [DEPLOIEMENT.md](DEPLOIEMENT.md) (~1000 lignes)
 - **Guide rapide** : [DEPLOIEMENT-RAPIDE.md](DEPLOIEMENT-RAPIDE.md) (30 min)
-- **Scripts** : `scripts/` (backups, restauration, migration données)
+- **Configuration production** : [PRODUCTION_CONFIG.md](PRODUCTION_CONFIG.md) (référence complète)
+- **Debug upload photos** : [DEBUG_PHOTO_UPLOAD.md](DEBUG_PHOTO_UPLOAD.md) + [GUIDE_DEBUG_PHOTO_PRODUCTION.md](GUIDE_DEBUG_PHOTO_PRODUCTION.md)
+- **Scripts** : `scripts/` (backups, restauration, migration données, diagnostic)
 
 ### Migration locale → production
 
