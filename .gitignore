@@ -55,3 +55,6 @@ npm-debug.log*
 # Generated PDFs
 docs/pdf/
 *.pdf
+
+# Deployment scripts (one-time use)
+deploy_fix_ckeditor.sh
