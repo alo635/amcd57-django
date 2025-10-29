@@ -16,6 +16,7 @@ AMCD57 is an aeromodeling club website built with Django 5.0. This is a complete
 - **Authentication**: django-allauth 0.57.0 (email-based)
 - **APIs**: OpenWeatherMap (weather widget)
 - **Media**: Pillow for image handling
+- **Editor**: django-ckeditor 6.7.1 (WYSIWYG HTML editor with image upload)
 
 ## Architecture
 
@@ -186,10 +187,14 @@ python manage.py check --deploy
 
 ### Blog App
 - Articles have STATUT_CHOICES: 'brouillon' or 'publie'
+- **Article.contenu uses RichTextUploadingField** (CKEditor WYSIWYG editor)
+- CKEditor allows rich text formatting, links, tables, and image uploads directly in the editor
+- Image uploads in CKEditor saved to `media/blog/articles/%Y/%m/`
+- CKEditor configuration in settings.py with custom toolbar (formatting, lists, links, images, tables)
 - Auto-generate extrait from content if blank (first 150 chars)
 - Set date_publication when publishing (statut changes to 'publie')
 - Comments require approval (approuve=False by default)
-- Images stored in `media/blog/articles/%Y/%m/` for organization
+- Featured images stored separately in `media/blog/articles/%Y/%m/` for organization
 
 ### Events App
 - TypeEvenement has couleur (hex) and icone (emoji) for visual categorization
@@ -259,12 +264,13 @@ All major models have indexes on frequently queried fields:
 
 ## Known Limitations & TODOs
 
-1. **Members & Weblinks Templates**: Models complete but frontend templates not implemented
-2. **WordPress Migration**: 15 articles + 62 images need migration script
-3. **Mobile Menu**: Hamburger menu not yet implemented
-4. **Testing**: No test suite yet - write tests before production
-5. **Tailwind**: Currently via CDN - should build custom for production
+1. ~~**Members & Weblinks Templates**: Models complete but frontend templates not implemented~~ ✅ Completed
+2. ~~**WordPress Migration**: 15 articles + 62 images need migration script~~ ✅ Completed (15 articles + 33 images migrated)
+3. ~~**Mobile Menu**: Hamburger menu not yet implemented~~ ✅ Completed
+4. **Testing**: No test suite yet - write tests before production (blog has 25 tests, events has 23 tests)
+5. ~~**Tailwind**: Currently via CDN - should build custom for production~~ ✅ Completed (custom build, 98.8% size reduction)
 6. **Email**: Email backend not configured (needed for allauth verification)
+7. ~~**Rich text editor**: Need WYSIWYG editor for blog articles~~ ✅ Completed (CKEditor 6.7.1 integrated)
 
 ## Troubleshooting
 
@@ -287,6 +293,13 @@ All major models have indexes on frequently queried fields:
 - Verify OPENWEATHER_API_KEY in .env
 - Check cache: `cache.delete('weather_current_jarny')`
 - API has rate limits - cache helps avoid hitting them
+
+**CKEditor Issues**:
+- **Editor not showing**: Ensure 'ckeditor' and 'ckeditor_uploader' in INSTALLED_APPS
+- **Images not uploading**: Check CKEDITOR_UPLOAD_PATH and MEDIA_ROOT/MEDIA_URL configured
+- **Static files missing**: Run `python manage.py collectstatic` to collect CKEditor JS/CSS files
+- **Permissions errors**: Ensure web server has write access to MEDIA_ROOT
+- **After deployment**: Always run collectstatic and restart application server (Gunicorn)
 
 ## File Organization
 

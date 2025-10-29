@@ -48,6 +48,7 @@ Migration complète d'un site WordPress vers une stack Django moderne pour obten
   - ✅ Compteur de vues
   - ✅ SEO (meta description)
   - ✅ Interface admin complète
+  - ✅ **Éditeur WYSIWYG CKEditor** avec upload d'images
   - ✅ **5 templates frontend avec Tailwind CSS**
   - ✅ Recherche fulltext, filtres par catégorie/tag
   
@@ -141,6 +142,7 @@ Migration complète d'un site WordPress vers une stack Django moderne pour obten
 ### Backend
 - **Django 5.0** - Framework web Python
 - **django-allauth 0.57.0** - Système d'authentification
+- **django-ckeditor 6.7.1** - Éditeur WYSIWYG pour articles
 - **Pillow** - Gestion des images
 - **python-decouple** - Variables d'environnement
 - **requests** - Appels API (météo)
@@ -1002,3 +1004,29 @@ Localisation : Delme, Grand Est, France
 - SEO avancé (sitemap, robots.txt, meta tags)
 - Déploiement en production
 - E-commerce (boutique, cotisations en ligne)
+
+---
+
+## 📝 Changelog
+
+### [29 octobre 2025] - Éditeur WYSIWYG CKEditor
+
+**✨ Nouvelle fonctionnalité : Éditeur HTML avec upload d'images**
+
+- ✅ **django-ckeditor 6.7.1** intégré dans l'admin Django
+- ✅ Éditeur WYSIWYG complet pour les articles de blog
+- ✅ Upload d'images directement dans l'éditeur
+- ✅ Toolbar personnalisée (formatage, listes, liens, images, tableaux)
+- ✅ Images organisées par date (`media/blog/articles/YYYY/MM/`)
+- ✅ Configuration adaptée au français
+- ✅ Déployé en production avec succès
+
+**Fichiers modifiés :**
+- `blog/models.py` - Article.contenu converti en RichTextUploadingField
+- `amcd57_project/settings.py` - Configuration CKEditor complète
+- `amcd57_project/urls.py` - Routes upload CKEditor
+- `requirements.txt` - Dépendance django-ckeditor ajoutée
+- Migration : `blog/migrations/0002_alter_article_contenu.py`
+
+**Pull Request :** #10 (feature/editeur-html → develop → main)
+**Issue fermée :** #3
