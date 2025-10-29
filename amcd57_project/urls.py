@@ -42,6 +42,9 @@ urlpatterns = [
     # URLs pour l'authentification (django-allauth)
     path('accounts/', include('allauth.urls')),
 
+    # URLs pour CKEditor (upload d'images)
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+
     # Sitemap SEO
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]

@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'ckeditor',  # Éditeur WYSIWYG
+    'ckeditor_uploader',  # Upload d'images pour CKEditor
 
     # Nos applications
     'core',
@@ -181,3 +183,52 @@ if not DEBUG:
     # SECURE_CONTENT_TYPE_NOSNIFF = False
     # SECURE_BROWSER_XSS_FILTER = False
     # X_FRAME_OPTIONS = None
+
+# ===== CONFIGURATION CKEDITOR =====
+
+# Répertoire d'upload pour CKEditor
+CKEDITOR_UPLOAD_PATH = 'blog/articles/%Y/%m/'
+
+# Backend pour traitement d'images
+CKEDITOR_IMAGE_BACKEND = 'pillow'
+
+# Autoriser seulement les images (pas d'autres fichiers)
+CKEDITOR_ALLOW_NONIMAGE_FILES = False
+
+# Restreindre les formats d'images autorisés
+CKEDITOR_RESTRICT_BY_USER = True  # Seulement utilisateurs connectés
+CKEDITOR_BROWSE_SHOW_DIRS = True  # Montrer les dossiers dans le browser
+
+# Configuration de la toolbar
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Format', 'Bold', 'Italic', 'Underline', 'Strike', 'RemoveFormat'],
+            ['NumberedList', 'BulletedList', 'Blockquote', 'Indent', 'Outdent'],
+            ['Link', 'Unlink', 'Anchor'],
+            ['Image', 'Table', 'HorizontalRule', 'SpecialChar'],
+            ['Undo', 'Redo'],
+            ['Maximize'],
+            ['Source'],
+        ],
+        'height': 500,
+        'width': '100%',
+        'language': 'fr',
+        'removePlugins': 'stylesheetparser',
+        'allowedContent': True,  # Permet tout le HTML
+        'extraAllowedContent': 'img[*]{*}(*);figure[*]{*}(*);figcaption[*]{*}(*)',
+    },
+    # Configuration plus simple pour les commentaires (si besoin futur)
+    'simple': {
+        'toolbar': 'Simple',
+        'toolbar_Simple': [
+            ['Bold', 'Italic'],
+            ['Link', 'Unlink'],
+            ['NumberedList', 'BulletedList'],
+        ],
+        'height': 200,
+        'width': '100%',
+        'language': 'fr',
+    },
+}

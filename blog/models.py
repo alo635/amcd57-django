@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.text import slugify
 from django.urls import reverse
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 # ============================================
@@ -140,9 +141,10 @@ class Article(models.Model):
         verbose_name="Slug (URL)"
     )
     
-    contenu = models.TextField(
+    contenu = RichTextUploadingField(
         verbose_name="Contenu",
-        help_text="Contenu de l'article (supporte le HTML)"
+        help_text="Contenu de l'article avec éditeur WYSIWYG et upload d'images",
+        config_name='default'
     )
     
     extrait = models.TextField(

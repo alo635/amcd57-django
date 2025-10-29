@@ -4,6 +4,7 @@ Configuration de l'interface admin pour le Blog
 
 from django.contrib import admin
 from .models import Categorie, Tag, Article, Commentaire
+# Note: CKEditor est automatiquement utilisé pour les champs RichTextUploadingField
 
 
 # ============================================
