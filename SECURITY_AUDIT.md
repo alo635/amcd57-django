@@ -34,6 +34,7 @@
 | XSS Protection | ✅ Protégé | Templates auto-escape + headers |
 | File Upload | ✅ Limité | 10 MB max |
 | Firewall (UFW) | ✅ Configuré | Seulement SSH + Nginx |
+| **Fail2ban** | ✅ **Actif** | **5 jails (SSH, Nginx, Django)** |
 
 ---
 
@@ -141,6 +142,72 @@ Nginx Full                 ALLOW       Anywhere
 OpenSSH (v6)               ALLOW       Anywhere (v6)
 Nginx Full (v6)            ALLOW       Anywhere (v6)
 ```
+
+### Phase 4 : Protection Fail2ban (29 oct 2025)
+
+#### ✅ 13. Installation et configuration Fail2ban
+- **Objectif** : Protéger contre les attaques brute force
+- **Version** : fail2ban 1.0.2
+- **Date d'installation** : 29 octobre 2025
+
+#### ✅ 14. Jails configurés (5 au total)
+
+**a) SSH (sshd)**
+- **Protection** : Tentatives de connexion SSH
+- **Seuil** : 3 échecs en 10 minutes
+- **Durée ban** : 1 heure
+- **Résultat initial** : 3 IPs déjà bannies (193.46.255.103, 193.46.255.33, 2.57.121.25)
+
+**b) Nginx 403 Forbidden**
+- **Protection** : Tentatives d'accès à des ressources interdites
+- **Seuil** : 5 échecs en 10 minutes
+- **Durée ban** : 1 heure
+- **Filtre** : `/etc/fail2ban/filter.d/nginx-403.conf`
+
+**c) Nginx 404 Not Found**
+- **Protection** : Scan de vulnérabilités (génération de 404)
+- **Seuil** : 10 échecs en 10 minutes
+- **Durée ban** : 1 heure
+- **Filtre** : `/etc/fail2ban/filter.d/nginx-404.conf`
+- **Exceptions** : favicon.ico, robots.txt, fichiers statiques
+
+**d) Nginx Limit Request (DoS)**
+- **Protection** : Attaques par déni de service
+- **Seuil** : 10 requêtes en 1 minute
+- **Durée ban** : 10 minutes
+- **Log source** : `/var/log/nginx/error.log`
+
+**e) Django Admin**
+- **Protection** : Tentatives de connexion admin Django
+- **Seuil** : 3 échecs en 10 minutes
+- **Durée ban** : 1 heure
+- **Filtre** : `/etc/fail2ban/filter.d/django-admin.conf`
+- **Détection** : POST sur `/admin/login/` avec code 200 ou 302
+
+#### ✅ 15. Configuration globale
+```ini
+[DEFAULT]
+ignoreip = 127.0.0.1/8 ::1 90.53.181.233  # IP propriétaire en whitelist
+bantime  = 3600  # 1 heure
+findtime  = 600  # 10 minutes
+maxretry = 3     # Nombre max de tentatives
+```
+
+#### ✅ 16. Surveillance et monitoring
+```bash
+# Commandes utiles
+sudo fail2ban-client status              # Liste des jails
+sudo fail2ban-client status sshd         # Détails d'un jail
+sudo fail2ban-client banned              # IPs bannies
+sudo tail -f /var/log/fail2ban.log       # Logs en temps réel
+```
+
+#### ✅ 17. Documentation
+- **Guide complet** : `FAIL2BAN_INSTALLATION.md` (guide détaillé d'installation et configuration)
+- **Configuration** : `/etc/fail2ban/jail.local` (overrides personnalisés)
+- **Filtres** : `/etc/fail2ban/filter.d/nginx-*.conf` et `django-admin.conf`
+
+**Impact** : Protection active contre les attaques automatisées. 3 tentatives d'intrusion SSH bloquées dès l'installation.
 
 ---
 
