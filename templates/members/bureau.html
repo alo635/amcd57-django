@@ -56,13 +56,22 @@
                             {{ item.profil.nom_complet }}
                         </h2>
 
-                        <!-- Email de contact de la fonction -->
+                        <!-- Email de contact de la fonction (visible uniquement pour les membres authentifiés) -->
                         {% if item.fonction.email_contact %}
                             <div class="text-center mb-4">
-                                <a href="mailto:{{ item.fonction.email_contact }}"
-                                   class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800">
-                                    📧 {{ item.fonction.email_contact }}
-                                </a>
+                                {% if user.is_authenticated %}
+                                    <a href="mailto:{{ item.fonction.email_contact }}"
+                                       class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800">
+                                        📧 {{ item.fonction.email_contact }}
+                                    </a>
+                                {% else %}
+                                    <div class="inline-flex items-center gap-2 text-gray-500">
+                                        📧 <span class="italic">Email visible pour les membres</span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        <a href="{% url 'account_login' %}" class="text-blue-600 hover:underline">Connectez-vous</a> pour voir l'email
+                                    </p>
+                                {% endif %}
                             </div>
                         {% endif %}
 
