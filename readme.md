@@ -1,4 +1,4 @@
-# 🛩️ AMCD57 - Site Web du Club d'Aéromodélisme
+# 🛩️ AMCD57 - Site Web du Club d'Aéromodélisme de Delme
 
 Site web moderne du club d'aéromodélisme AMCD57 de Delme (Grand Est, France).
 
