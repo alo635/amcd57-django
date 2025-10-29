@@ -187,6 +187,7 @@ if not DEBUG:
 # ===== CONFIGURATION CKEDITOR =====
 
 # Répertoire d'upload pour CKEditor
+# Utilise strftime pour formater la date automatiquement
 CKEDITOR_UPLOAD_PATH = 'blog/articles/%Y/%m/'
 
 # Backend pour traitement d'images
@@ -195,8 +196,8 @@ CKEDITOR_IMAGE_BACKEND = 'pillow'
 # Autoriser seulement les images (pas d'autres fichiers)
 CKEDITOR_ALLOW_NONIMAGE_FILES = False
 
-# Restreindre les formats d'images autorisés
-CKEDITOR_RESTRICT_BY_USER = True  # Seulement utilisateurs connectés
+# Ne pas restreindre par utilisateur (tous les membres du club peuvent voir toutes les images)
+CKEDITOR_RESTRICT_BY_USER = False  # Si True, ajoute username au path
 CKEDITOR_BROWSE_SHOW_DIRS = True  # Montrer les dossiers dans le browser
 
 # Configuration de la toolbar
