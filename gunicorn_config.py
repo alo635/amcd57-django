@@ -58,8 +58,10 @@ daemon = False
 pidfile = "/var/www/amcd57/gunicorn.pid"
 
 # Utilisateur et groupe (pour la sécurité)
-user = "amcd"
-group = "amcd"
+# Note: Commenté car systemd définit déjà User/Group dans le service
+# Garder ces lignes actives cause un conflit et empêche Gunicorn de démarrer
+# user = "amcd"
+# group = "amcd"
 
 # ========================================
 # Security
