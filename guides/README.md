@@ -16,8 +16,41 @@ Ce répertoire contient tous les guides pratiques et la documentation technique 
 | Fichier | Description |
 |---------|-------------|
 | [GUIDE_ADMINISTRATEUR.md](GUIDE_ADMINISTRATEUR.md) | Guide complet pour les administrateurs du site (gestion des membres, articles, événements) |
-| [GUIDE_DEBUG_PHOTO_PRODUCTION.md](GUIDE_DEBUG_PHOTO_PRODUCTION.md) | Guide de dépannage pour les problèmes d'affichage des photos en production |
 | [DASHBOARD_MONITORING_PLAN.md](DASHBOARD_MONITORING_PLAN.md) | Plan complet pour implémenter un dashboard de monitoring et analytics (MVP → Phases avancées) |
+
+### 🚀 Déploiement et Production
+
+| Fichier | Description |
+|---------|-------------|
+| [DEPLOIEMENT.md](DEPLOIEMENT.md) | Guide complet de déploiement du site en production |
+| [DEPLOIEMENT-RAPIDE.md](DEPLOIEMENT-RAPIDE.md) | Procédure de déploiement rapide (checklist condensée) |
+| [DEPLOIEMENT_FIX_CKEDITOR.md](DEPLOIEMENT_FIX_CKEDITOR.md) | Guide de déploiement spécifique pour le fix CKEditor |
+| [PRODUCTION_CONFIG.md](PRODUCTION_CONFIG.md) | Configuration complète pour l'environnement de production |
+
+### 🐛 Dépannage et Debug
+
+| Fichier | Description |
+|---------|-------------|
+| [DEBUG_GUNICORN.md](DEBUG_GUNICORN.md) | Guide de dépannage pour les problèmes Gunicorn |
+| [DEBUG_PHOTO_UPLOAD.md](DEBUG_PHOTO_UPLOAD.md) | Résolution des problèmes d'upload de photos |
+| [GUIDE_DEBUG_PHOTO_PRODUCTION.md](GUIDE_DEBUG_PHOTO_PRODUCTION.md) | Guide de dépannage pour les problèmes d'affichage des photos en production |
+| [FIX_POSTGRES_PERMISSIONS.md](FIX_POSTGRES_PERMISSIONS.md) | Correction des permissions PostgreSQL |
+
+### 🔒 Sécurité
+
+| Fichier | Description |
+|---------|-------------|
+| [SECURITY_AUDIT.md](SECURITY_AUDIT.md) | Audit de sécurité complet en 4 phases avec résultats et actions |
+| [SECURITY_QUICK_FIXES.md](SECURITY_QUICK_FIXES.md) | Correctifs de sécurité rapides à appliquer |
+| [SECURITY_RESULTS.md](SECURITY_RESULTS.md) | Résultats détaillés de l'audit de sécurité |
+| [FAIL2BAN_INSTALLATION.md](FAIL2BAN_INSTALLATION.md) | Installation et configuration complète de Fail2ban (5 jails) |
+
+### 💻 Technologies et Outils
+
+| Fichier | Description |
+|---------|-------------|
+| [CKEDITOR.md](CKEDITOR.md) | Documentation complète de l'éditeur WYSIWYG CKEditor |
+| [TAILWIND.md](TAILWIND.md) | Documentation et configuration Tailwind CSS |
 
 ---
 
@@ -42,16 +75,12 @@ Ce répertoire contient tous les guides pratiques et la documentation technique 
 
 ## 📖 Documentation principale (répertoire racine)
 
-Ces fichiers restent à la racine du projet car ils sont essentiels au développement :
+Ces fichiers restent à la racine du projet car ils sont essentiels :
 
 | Fichier | Description |
 |---------|-------------|
-| `readme.md` | Documentation principale du projet |
-| `CLAUDE.md` | Guide pour Claude Code avec architecture complète |
-| `CKEDITOR.md` | Documentation complète de l'éditeur WYSIWYG |
-| `SECURITY_AUDIT.md` | Audit de sécurité du site (4 phases) |
-| `FAIL2BAN_INSTALLATION.md` | Installation et configuration Fail2ban |
-| `DEPLOIEMENT_FIX_CKEDITOR.md` | Guide de déploiement spécifique CKEditor |
+| `readme.md` | Documentation principale du projet (vue d'ensemble, installation, stack technique) |
+| `CLAUDE.md` | Guide pour Claude Code avec architecture complète du projet |
 
 ---
 
