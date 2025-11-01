@@ -17,6 +17,7 @@ Ce répertoire contient tous les guides pratiques et la documentation technique 
 |---------|-------------|
 | [GUIDE_ADMINISTRATEUR.md](GUIDE_ADMINISTRATEUR.md) | Guide complet pour les administrateurs du site (gestion des membres, articles, événements) |
 | [GUIDE_DEBUG_PHOTO_PRODUCTION.md](GUIDE_DEBUG_PHOTO_PRODUCTION.md) | Guide de dépannage pour les problèmes d'affichage des photos en production |
+| [DASHBOARD_MONITORING_PLAN.md](DASHBOARD_MONITORING_PLAN.md) | Plan complet pour implémenter un dashboard de monitoring et analytics (MVP → Phases avancées) |
 
 ---
 
