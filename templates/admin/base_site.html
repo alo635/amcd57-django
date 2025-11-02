@@ -1,0 +1,38 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('AMCD57 Administration') }}{% endblock %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/custom_admin.css' %}">
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">AMCD57 Administration</a>
+</h1>
+{% endblock %}
+
+{% block nav-global %}
+<div style="background: rgba(255,255,255,0.1); padding: 10px 20px; display: flex; gap: 20px; flex-wrap: wrap;">
+    <a href="{% url 'core:home' %}"
+       style="color: white; text-decoration: none; font-weight: 500; transition: all 0.3s ease;"
+       onmouseover="this.style.color='#fbbf24'"
+       onmouseout="this.style.color='white'">
+        🏠 Retour au site
+    </a>
+    <a href="{% url 'analytics:dashboard' %}"
+       style="color: white; text-decoration: none; font-weight: 500; transition: all 0.3s ease;"
+       onmouseover="this.style.color='#fbbf24'"
+       onmouseout="this.style.color='white'">
+        📊 Dashboard Analytics
+    </a>
+    <a href="{% url 'admin:logout' %}"
+       style="color: white; text-decoration: none; font-weight: 500; transition: all 0.3s ease;"
+       onmouseover="this.style.color='#fbbf24'"
+       onmouseout="this.style.color='white'">
+        🚪 Déconnexion
+    </a>
+</div>
+{% endblock %}
