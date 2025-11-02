@@ -55,6 +55,14 @@
 {% block extrahead %}
 {{ block.super }}
 <script>
+// Appliquer le thème IMMÉDIATEMENT (avant DOMContentLoaded) pour éviter le flash
+(function() {
+    const savedTheme = localStorage.getItem('amcd-admin-theme');
+    const theme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+    console.log('PRE-load theme applied:', theme);
+})();
+
 // Gestion du toggle de thème
 document.addEventListener('DOMContentLoaded', function() {
     const themeToggle = document.getElementById('theme-toggle');
