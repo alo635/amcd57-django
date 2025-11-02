@@ -898,7 +898,7 @@ input[type="radio"] {
     background: transparent !important;
 }
 
-/* === CKEditor dark mode (si utilisé) === */
+/* === CKEditor styling === */
 .cke_chrome {
     background: var(--bg-secondary) !important;
     border-color: var(--border-color) !important;
@@ -907,6 +907,101 @@ input[type="radio"] {
 .cke_top {
     background: var(--bg-tertiary) !important;
     border-bottom-color: var(--border-color) !important;
+}
+
+/* Boutons de la toolbar CKEditor */
+.cke_button,
+.cke_combo_button {
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+.cke_button:hover,
+.cke_combo_button:hover {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--amcd-blue) !important;
+}
+
+.cke_button_on,
+.cke_combo_on .cke_combo_button {
+    background: var(--amcd-blue) !important;
+    border-color: var(--amcd-blue-dark) !important;
+    color: white !important;
+}
+
+/* Icônes CKEditor */
+.cke_button_icon {
+    filter: brightness(1.2) contrast(1.1);
+}
+
+:root[data-theme="dark"] .cke_button_icon {
+    filter: brightness(1.5) contrast(1.2) !important;
+}
+
+/* Labels et texte dans CKEditor */
+.cke_combo_text,
+.cke_button_label {
+    color: var(--text-primary) !important;
+}
+
+/* Dropdowns CKEditor */
+.cke_panel {
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.cke_panel_listItem a {
+    color: var(--text-primary) !important;
+}
+
+.cke_panel_listItem a:hover {
+    background: var(--bg-tertiary) !important;
+}
+
+/* Zone de contenu CKEditor */
+.cke_contents {
+    background: var(--bg-secondary) !important;
+}
+
+/* Path bar en bas */
+.cke_path {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+.cke_path_item,
+.cke_path_empty {
+    color: var(--text-primary) !important;
+}
+
+.cke_path_item:hover {
+    background: var(--bg-secondary) !important;
+    color: var(--amcd-blue) !important;
+}
+
+/* Séparateurs */
+.cke_toolbar_separator {
+    background: var(--border-color) !important;
+}
+
+/* Mode sombre spécifique pour meilleur contraste */
+:root[data-theme="dark"] .cke_button,
+:root[data-theme="dark"] .cke_combo_button {
+    background: #374151 !important;
+    border-color: #4b5563 !important;
+}
+
+:root[data-theme="dark"] .cke_button:hover,
+:root[data-theme="dark"] .cke_combo_button:hover {
+    background: #4b5563 !important;
+    border-color: #60a5fa !important;
+}
+
+:root[data-theme="dark"] .cke_combo_text,
+:root[data-theme="dark"] .cke_button_label {
+    color: #e5e7eb !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* === Suppression des backgrounds blancs résiduels === */
