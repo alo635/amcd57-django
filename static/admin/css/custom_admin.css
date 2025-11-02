@@ -409,9 +409,381 @@ select:focus {
     }
 }
 
-/* === Dark mode pour les inputs === */
-@media (prefers-color-scheme: dark) {
-    /* On garde le style light pour l'admin pour meilleure lisibilité */
+/* ============================================
+   DARK MODE - Mode sombre pour l'admin
+   ============================================ */
+
+/* Variables dark mode */
+:root {
+    --dark-bg: #1a202c;
+    --dark-bg-secondary: #2d3748;
+    --dark-bg-tertiary: #4a5568;
+    --dark-text: #e2e8f0;
+    --dark-text-secondary: #a0aec0;
+    --dark-border: #4a5568;
+}
+
+/* === Background principal === */
+body {
+    background: var(--dark-bg) !important;
+    color: var(--dark-text) !important;
+}
+
+/* === Content area === */
+#content {
+    background: var(--dark-bg) !important;
+}
+
+/* === Modules/cartes en dark === */
+.module {
+    background: var(--dark-bg-secondary) !important;
+    border: 1px solid var(--dark-border) !important;
+}
+
+/* === Tables === */
+#changelist {
+    background: var(--dark-bg-secondary) !important;
+}
+
+#result_list {
+    background: var(--dark-bg-secondary) !important;
+}
+
+#result_list tbody tr {
+    background: var(--dark-bg-secondary) !important;
+    border-bottom: 1px solid var(--dark-border) !important;
+}
+
+#result_list tbody tr:hover {
+    background: var(--dark-bg-tertiary) !important;
+}
+
+#result_list tbody tr.selected {
+    background: #2c5282 !important;
+}
+
+#result_list td,
+#result_list th {
+    color: var(--dark-text) !important;
+    border-left: 1px solid var(--dark-border) !important;
+}
+
+/* === Formulaires === */
+.form-row {
+    border-bottom: 1px solid var(--dark-border) !important;
+}
+
+.form-row label {
+    color: var(--dark-text) !important;
+}
+
+.form-row .help,
+.form-row .helptext {
+    color: var(--dark-text-secondary) !important;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+textarea,
+select {
+    background: var(--dark-bg-tertiary) !important;
+    color: var(--dark-text) !important;
+    border: 2px solid var(--dark-border) !important;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="datetime-local"]:focus,
+textarea:focus,
+select:focus {
+    background: var(--dark-bg-secondary) !important;
+    border-color: var(--amcd-blue-light) !important;
+}
+
+/* === Filtres === */
+#changelist-filter {
+    background: var(--dark-bg-secondary) !important;
+}
+
+#changelist-filter li {
+    border-bottom: 1px solid var(--dark-border) !important;
+}
+
+#changelist-filter a {
+    color: var(--dark-text) !important;
+}
+
+#changelist-filter a:hover {
+    color: var(--amcd-purple-light) !important;
+}
+
+#changelist-filter li.selected a {
+    color: var(--amcd-blue-light) !important;
+}
+
+/* === Recherche === */
+#changelist-search {
+    background: var(--dark-bg-secondary) !important;
+}
+
+#searchbar {
+    background: var(--dark-bg-tertiary) !important;
+    color: var(--dark-text) !important;
+    border: 2px solid var(--dark-border) !important;
+}
+
+/* === Actions === */
+.actions {
+    background: var(--dark-bg-secondary) !important;
+}
+
+.actions label {
+    color: var(--dark-text) !important;
+}
+
+.actions select {
+    background: var(--dark-bg-tertiary) !important;
+    color: var(--dark-text) !important;
+    border: 2px solid var(--dark-border) !important;
+}
+
+/* === Liens === */
+a {
+    color: var(--amcd-blue-light) !important;
+}
+
+a:hover {
+    color: var(--amcd-purple-light) !important;
+}
+
+/* === Textes divers === */
+.quiet,
+.help,
+.helptext {
+    color: var(--dark-text-secondary) !important;
+}
+
+/* === Fieldsets === */
+.aligned label {
+    color: var(--dark-text) !important;
+}
+
+fieldset {
+    background: var(--dark-bg-secondary) !important;
+    border: 1px solid var(--dark-border) !important;
+}
+
+/* === Inlines === */
+.inline-group {
+    background: var(--dark-bg-secondary) !important;
+}
+
+.inline-related {
+    background: var(--dark-bg-tertiary) !important;
+}
+
+.inline-related h3 {
+    background: var(--dark-bg-secondary) !important;
+    color: var(--dark-text) !important;
+}
+
+/* === Pagination === */
+.paginator a,
+.paginator span {
+    color: var(--dark-text) !important;
+    background: var(--dark-bg-secondary) !important;
+    border: 1px solid var(--dark-border) !important;
+}
+
+.paginator a:hover {
+    background: var(--amcd-blue) !important;
+    color: white !important;
+}
+
+.paginator .this-page {
+    background: var(--amcd-blue) !important;
+    color: white !important;
+}
+
+/* === Calendrier (date picker) === */
+.calendar,
+.calendarbox {
+    background: var(--dark-bg-secondary) !important;
+    color: var(--dark-text) !important;
+    border: 1px solid var(--dark-border) !important;
+}
+
+.calendar caption,
+.calendarbox h2 {
+    background: var(--amcd-gradient) !important;
+    color: white !important;
+}
+
+.calendar td,
+.calendar th {
+    background: var(--dark-bg-tertiary) !important;
+    color: var(--dark-text) !important;
+}
+
+.calendar td a:hover {
+    background: var(--amcd-blue) !important;
+    color: white !important;
+}
+
+/* === Erreurs === */
+.errorlist {
+    background: #7f1d1d !important;
+    color: #fca5a5 !important;
+    border: 1px solid #991b1b !important;
+}
+
+.errornote {
+    background: #7f1d1d !important;
+    color: #fca5a5 !important;
+}
+
+/* === Dashboard d'index === */
+#content-main {
+    background: transparent !important;
+}
+
+.app-label {
+    color: var(--dark-text) !important;
+}
+
+.model-label {
+    color: var(--dark-text-secondary) !important;
+}
+
+/* === Objets liés (related objects) === */
+.related-widget-wrapper {
+    background: transparent !important;
+}
+
+.related-widget-wrapper-link {
+    background: var(--dark-bg-tertiary) !important;
+    border: 1px solid var(--dark-border) !important;
+}
+
+/* === Checkboxes et radios === */
+input[type="checkbox"],
+input[type="radio"] {
+    filter: brightness(0.8) !important;
+}
+
+/* === Colonne de gauche dans les forms === */
+.aligned label + p,
+.aligned label + div.help,
+.aligned label + div.readonly {
+    color: var(--dark-text) !important;
+}
+
+/* === Readonly fields === */
+.readonly {
+    color: var(--dark-text-secondary) !important;
+}
+
+/* === Breadcrumbs en dark === */
+.breadcrumbs {
+    background: var(--dark-bg-secondary) !important;
+}
+
+.breadcrumbs a {
+    color: var(--amcd-blue-light) !important;
+}
+
+/* === Object tools (boutons en haut à droite) === */
+.object-tools {
+    background: transparent !important;
+}
+
+.object-tools li {
+    background: transparent !important;
+}
+
+/* === CKEditor dark mode (si utilisé) === */
+.cke_chrome {
+    background: var(--dark-bg-secondary) !important;
+    border-color: var(--dark-border) !important;
+}
+
+.cke_top {
+    background: var(--dark-bg-tertiary) !important;
+    border-bottom-color: var(--dark-border) !important;
+}
+
+/* === Suppression des backgrounds blancs résiduels === */
+.submit-row,
+.deletelink-box {
+    background: var(--dark-bg-secondary) !important;
+}
+
+div.submit-row {
+    background: var(--dark-bg-secondary) !important;
+    border-top: 1px solid var(--dark-border) !important;
+}
+
+/* === Select2 dark mode (si utilisé) === */
+.select2-container--admin-autocomplete .select2-selection {
+    background: var(--dark-bg-tertiary) !important;
+    border-color: var(--dark-border) !important;
+}
+
+.select2-container--admin-autocomplete .select2-results__option {
+    background: var(--dark-bg-secondary) !important;
+    color: var(--dark-text) !important;
+}
+
+.select2-container--admin-autocomplete .select2-results__option--highlighted {
+    background: var(--amcd-blue) !important;
+    color: white !important;
+}
+
+/* === Système de grille (si utilisé) === */
+.flex-container {
+    background: transparent !important;
+}
+
+/* === Correction des backgrounds blancs dans les tables === */
+table {
+    background: var(--dark-bg-secondary) !important;
+}
+
+thead th {
+    background: var(--amcd-gradient) !important;
+}
+
+tbody th {
+    background: var(--dark-bg-tertiary) !important;
+    color: var(--dark-text) !important;
+}
+
+/* === Login page === */
+#content-related {
+    background: var(--dark-bg-secondary) !important;
+}
+
+.login {
+    background: var(--dark-bg-secondary) !important;
+}
+
+.login #header {
+    background: var(--amcd-gradient) !important;
+}
+
+.login .submit-row {
+    background: var(--dark-bg-secondary) !important;
 }
 
 /* === Animations === */
