@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'events',
     'members',
     'weblinks',
+    'analytics',  # Dashboard de monitoring et analytics
 ]
 
 MIDDLEWARE = [
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',  # Pour allauth
+    'analytics.middleware.AnalyticsMiddleware',  # Tracking des pages vues (doit être en dernier)
 ]
 
 ROOT_URLCONF = 'amcd57_project.urls'
