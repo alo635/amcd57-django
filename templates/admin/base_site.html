@@ -55,12 +55,40 @@
 {% block extrahead %}
 {{ block.super }}
 <script>
-// Appliquer le thème IMMÉDIATEMENT (avant DOMContentLoaded) pour éviter le flash
+// Appliquer le thème IMMÉDIATEMENT et le protéger contre les changements
 (function() {
-    const savedTheme = localStorage.getItem('amcd-admin-theme');
-    const theme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', theme);
-    console.log('PRE-load theme applied:', theme);
+    function getOurTheme() {
+        const savedTheme = localStorage.getItem('amcd-admin-theme');
+        return savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    }
+
+    function forceApplyTheme() {
+        const theme = getOurTheme();
+        const current = document.documentElement.getAttribute('data-theme');
+        if (current !== theme) {
+            console.log('Forcing theme from', current, 'to', theme);
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+    }
+
+    // Appliquer immédiatement
+    forceApplyTheme();
+
+    // Observer les changements et les corriger si Django essaie de changer
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+                forceApplyTheme();
+            }
+        });
+    });
+
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['data-theme']
+    });
+
+    console.log('Theme protection activated:', getOurTheme());
 })();
 
 // Gestion du toggle de thème
