@@ -23,7 +23,7 @@
 
 /* === Variables de couleurs - MODE SOMBRE === */
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme]) {
         --bg-primary: #1a202c;
         --bg-secondary: #2d3748;
         --bg-tertiary: #4a5568;
@@ -31,6 +31,16 @@
         --text-secondary: #a0aec0;
         --border-color: #4a5568;
     }
+}
+
+/* Mode sombre forcé via toggle */
+:root[data-theme="dark"] {
+    --bg-primary: #1a202c;
+    --bg-secondary: #2d3748;
+    --bg-tertiary: #4a5568;
+    --text-primary: #e2e8f0;
+    --text-secondary: #a0aec0;
+    --border-color: #4a5568;
 }
 
 /* === Header personnalisé === */
@@ -476,9 +486,13 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-    #result_list tbody tr.selected {
+    :root:not([data-theme]) #result_list tbody tr.selected {
         background: #2c5282 !important;
     }
+}
+
+:root[data-theme="dark"] #result_list tbody tr.selected {
+    background: #2c5282 !important;
 }
 
 #result_list td,
@@ -554,17 +568,29 @@ select:focus {
 }
 
 @media (prefers-color-scheme: dark) {
-    #changelist-filter a {
+    :root:not([data-theme]) #changelist-filter a {
         color: #d1d5db !important;
     }
 
-    #changelist-filter a:hover {
+    :root:not([data-theme]) #changelist-filter a:hover {
         color: #fbbf24 !important;
     }
 
-    #changelist-filter li.selected a {
+    :root:not([data-theme]) #changelist-filter li.selected a {
         color: #60a5fa !important;
     }
+}
+
+:root[data-theme="dark"] #changelist-filter a {
+    color: #d1d5db !important;
+}
+
+:root[data-theme="dark"] #changelist-filter a:hover {
+    color: #fbbf24 !important;
+}
+
+:root[data-theme="dark"] #changelist-filter li.selected a {
+    color: #60a5fa !important;
 }
 
 /* === Recherche === */
@@ -614,21 +640,37 @@ a:hover {
 
 /* === Liens - MODE SOMBRE === */
 @media (prefers-color-scheme: dark) {
-    a {
+    :root:not([data-theme]) a {
         color: #60a5fa !important;
     }
 
-    a:hover {
+    :root:not([data-theme]) a:hover {
         color: #c084fc !important;
     }
 
-    #result_list a {
+    :root:not([data-theme]) #result_list a {
         color: #93c5fd !important;
     }
 
-    #result_list a:hover {
+    :root:not([data-theme]) #result_list a:hover {
         color: #fbbf24 !important;
     }
+}
+
+:root[data-theme="dark"] a {
+    color: #60a5fa !important;
+}
+
+:root[data-theme="dark"] a:hover {
+    color: #c084fc !important;
+}
+
+:root[data-theme="dark"] #result_list a {
+    color: #93c5fd !important;
+}
+
+:root[data-theme="dark"] #result_list a:hover {
+    color: #fbbf24 !important;
 }
 
 /* === Textes divers === */
@@ -774,13 +816,21 @@ input[type="radio"] {
 }
 
 @media (prefers-color-scheme: dark) {
-    .breadcrumbs a {
+    :root:not([data-theme]) .breadcrumbs a {
         color: #60a5fa !important;
     }
 
-    .breadcrumbs a:hover {
+    :root:not([data-theme]) .breadcrumbs a:hover {
         color: #fbbf24 !important;
     }
+}
+
+:root[data-theme="dark"] .breadcrumbs a {
+    color: #60a5fa !important;
+}
+
+:root[data-theme="dark"] .breadcrumbs a:hover {
+    color: #fbbf24 !important;
 }
 
 /* === Object tools (boutons en haut à droite) === */

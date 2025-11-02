@@ -15,24 +15,89 @@
 {% endblock %}
 
 {% block nav-global %}
-<div style="background: rgba(255,255,255,0.1); padding: 10px 20px; display: flex; gap: 20px; flex-wrap: wrap;">
-    <a href="{% url 'core:home' %}"
-       style="color: white; text-decoration: none; font-weight: 500; transition: all 0.3s ease;"
-       onmouseover="this.style.color='#fbbf24'"
-       onmouseout="this.style.color='white'">
-        🏠 Retour au site
-    </a>
-    <a href="{% url 'analytics:dashboard' %}"
-       style="color: white; text-decoration: none; font-weight: 500; transition: all 0.3s ease;"
-       onmouseover="this.style.color='#fbbf24'"
-       onmouseout="this.style.color='white'">
-        📊 Dashboard Analytics
-    </a>
-    <a href="{% url 'admin:logout' %}"
-       style="color: white; text-decoration: none; font-weight: 500; transition: all 0.3s ease;"
-       onmouseover="this.style.color='#fbbf24'"
-       onmouseout="this.style.color='white'">
-        🚪 Déconnexion
-    </a>
+<div style="background: rgba(255,255,255,0.1); padding: 10px 20px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+        <a href="{% url 'core:home' %}"
+           style="color: white; text-decoration: none; font-weight: 500; transition: all 0.3s ease;"
+           onmouseover="this.style.color='#fbbf24'"
+           onmouseout="this.style.color='white'">
+            🏠 Retour au site
+        </a>
+        <a href="{% url 'analytics:dashboard' %}"
+           style="color: white; text-decoration: none; font-weight: 500; transition: all 0.3s ease;"
+           onmouseover="this.style.color='#fbbf24'"
+           onmouseout="this.style.color='white'">
+            📊 Dashboard Analytics
+        </a>
+        <a href="{% url 'admin:logout' %}"
+           style="color: white; text-decoration: none; font-weight: 500; transition: all 0.3s ease;"
+           onmouseover="this.style.color='#fbbf24'"
+           onmouseout="this.style.color='white'">
+            🚪 Déconnexion
+        </a>
+    </div>
+
+    <!-- Bouton toggle thème -->
+    <button id="theme-toggle"
+            style="background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;"
+            onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+            onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text">Mode Sombre</span>
+    </button>
 </div>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script>
+// Gestion du toggle de thème
+(function() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeText = document.getElementById('theme-text');
+    const html = document.documentElement;
+
+    // Récupérer le thème sauvegardé ou utiliser les préférences système
+    function getInitialTheme() {
+        const savedTheme = localStorage.getItem('amcd-admin-theme');
+        if (savedTheme) {
+            return savedTheme;
+        }
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    // Appliquer le thème
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            html.setAttribute('data-theme', 'dark');
+            themeIcon.textContent = '☀️';
+            themeText.textContent = 'Mode Clair';
+        } else {
+            html.setAttribute('data-theme', 'light');
+            themeIcon.textContent = '🌙';
+            themeText.textContent = 'Mode Sombre';
+        }
+    }
+
+    // Initialiser le thème au chargement
+    const currentTheme = getInitialTheme();
+    applyTheme(currentTheme);
+
+    // Toggle au clic
+    themeToggle.addEventListener('click', function() {
+        const currentTheme = html.getAttribute('data-theme') || 'light';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+        applyTheme(newTheme);
+        localStorage.setItem('amcd-admin-theme', newTheme);
+
+        // Animation de feedback
+        themeToggle.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            themeToggle.style.transform = 'scale(1)';
+        }, 100);
+    });
+})();
+</script>
 {% endblock %}
