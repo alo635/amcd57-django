@@ -3,7 +3,7 @@
    Style personnalisé pour l'interface admin Django
    ============================================ */
 
-/* === Variables de couleurs === */
+/* === Variables de couleurs - MODE CLAIR === */
 :root {
     --amcd-blue: #1d4ed8;
     --amcd-blue-dark: #1e40af;
@@ -11,6 +11,26 @@
     --amcd-purple: #764ba2;
     --amcd-purple-light: #9f7aea;
     --amcd-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    /* Couleurs mode clair */
+    --bg-primary: #f9fafb;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f3f4f6;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --border-color: #e5e7eb;
+}
+
+/* === Variables de couleurs - MODE SOMBRE === */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-primary: #1a202c;
+        --bg-secondary: #2d3748;
+        --bg-tertiary: #4a5568;
+        --text-primary: #e2e8f0;
+        --text-secondary: #a0aec0;
+        --border-color: #4a5568;
+    }
 }
 
 /* === Header personnalisé === */
@@ -413,76 +433,72 @@ select:focus {
 }
 
 /* ============================================
-   DARK MODE - Mode sombre pour l'admin
+   STYLES ADAPTATIFS - Mode clair ET sombre
    ============================================ */
-
-/* Variables dark mode */
-:root {
-    --dark-bg: #1a202c;
-    --dark-bg-secondary: #2d3748;
-    --dark-bg-tertiary: #4a5568;
-    --dark-text: #e2e8f0;
-    --dark-text-secondary: #a0aec0;
-    --dark-border: #4a5568;
-}
 
 /* === Background principal === */
 body {
-    background: var(--dark-bg) !important;
-    color: var(--dark-text) !important;
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
 }
 
 /* === Content area === */
 #content {
-    background: var(--dark-bg) !important;
+    background: var(--bg-primary) !important;
 }
 
-/* === Modules/cartes en dark === */
+/* === Modules/cartes === */
 .module {
-    background: var(--dark-bg-secondary) !important;
-    border: 1px solid var(--dark-border) !important;
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color) !important;
 }
 
 /* === Tables === */
 #changelist {
-    background: var(--dark-bg-secondary) !important;
+    background: var(--bg-secondary) !important;
 }
 
 #result_list {
-    background: var(--dark-bg-secondary) !important;
+    background: var(--bg-secondary) !important;
 }
 
 #result_list tbody tr {
-    background: var(--dark-bg-secondary) !important;
-    border-bottom: 1px solid var(--dark-border) !important;
+    background: var(--bg-secondary) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 
 #result_list tbody tr:hover {
-    background: var(--dark-bg-tertiary) !important;
+    background: var(--bg-tertiary) !important;
 }
 
 #result_list tbody tr.selected {
-    background: #2c5282 !important;
+    background: #dbeafe !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    #result_list tbody tr.selected {
+        background: #2c5282 !important;
+    }
 }
 
 #result_list td,
 #result_list th {
-    color: var(--dark-text) !important;
-    border-left: 1px solid var(--dark-border) !important;
+    color: var(--text-primary) !important;
+    border-left: 1px solid var(--border-color) !important;
 }
 
 /* === Formulaires === */
 .form-row {
-    border-bottom: 1px solid var(--dark-border) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 
 .form-row label {
-    color: var(--dark-text) !important;
+    color: var(--text-primary) !important;
 }
 
 .form-row .help,
 .form-row .helptext {
-    color: var(--dark-text-secondary) !important;
+    color: var(--text-secondary) !important;
 }
 
 input[type="text"],
@@ -495,9 +511,9 @@ input[type="time"],
 input[type="datetime-local"],
 textarea,
 select {
-    background: var(--dark-bg-tertiary) !important;
-    color: var(--dark-text) !important;
-    border: 2px solid var(--dark-border) !important;
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border: 2px solid var(--border-color) !important;
 }
 
 input[type="text"]:focus,
@@ -510,116 +526,148 @@ input[type="time"]:focus,
 input[type="datetime-local"]:focus,
 textarea:focus,
 select:focus {
-    background: var(--dark-bg-secondary) !important;
+    background: var(--bg-secondary) !important;
     border-color: var(--amcd-blue-light) !important;
 }
 
 /* === Filtres === */
 #changelist-filter {
-    background: var(--dark-bg-secondary) !important;
+    background: var(--bg-secondary) !important;
 }
 
 #changelist-filter li {
-    border-bottom: 1px solid var(--dark-border) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 
 #changelist-filter a {
-    color: #d1d5db !important; /* Gris clair pour bon contraste */
+    color: var(--text-primary) !important;
     transition: color 0.2s ease;
 }
 
 #changelist-filter a:hover {
-    color: #fbbf24 !important; /* Jaune au hover */
+    color: var(--amcd-purple) !important;
 }
 
 #changelist-filter li.selected a {
-    color: #60a5fa !important; /* Bleu clair */
+    color: var(--amcd-blue) !important;
     font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+    #changelist-filter a {
+        color: #d1d5db !important;
+    }
+
+    #changelist-filter a:hover {
+        color: #fbbf24 !important;
+    }
+
+    #changelist-filter li.selected a {
+        color: #60a5fa !important;
+    }
 }
 
 /* === Recherche === */
 #changelist-search {
-    background: var(--dark-bg-secondary) !important;
+    background: var(--bg-secondary) !important;
 }
 
 #searchbar {
-    background: var(--dark-bg-tertiary) !important;
-    color: var(--dark-text) !important;
-    border: 2px solid var(--dark-border) !important;
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border: 2px solid var(--border-color) !important;
 }
 
 /* === Actions === */
 .actions {
-    background: var(--dark-bg-secondary) !important;
+    background: var(--bg-secondary) !important;
 }
 
 .actions label {
-    color: var(--dark-text) !important;
+    color: var(--text-primary) !important;
 }
 
 .actions select {
-    background: var(--dark-bg-tertiary) !important;
-    color: var(--dark-text) !important;
-    border: 2px solid var(--dark-border) !important;
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border: 2px solid var(--border-color) !important;
 }
 
-/* === Liens === */
+/* === Liens - MODE CLAIR === */
 a {
-    color: #60a5fa !important; /* Bleu plus clair pour meilleur contraste */
+    color: var(--amcd-blue) !important;
 }
 
 a:hover {
-    color: #c084fc !important; /* Violet plus clair */
+    color: var(--amcd-purple) !important;
 }
 
-/* Liens dans les tables pour meilleur contraste */
 #result_list a {
-    color: #93c5fd !important; /* Bleu très clair */
+    color: var(--amcd-blue-dark) !important;
     font-weight: 500;
 }
 
 #result_list a:hover {
-    color: #fbbf24 !important; /* Jaune au hover pour visibilité */
+    color: var(--amcd-purple) !important;
     text-decoration: underline;
+}
+
+/* === Liens - MODE SOMBRE === */
+@media (prefers-color-scheme: dark) {
+    a {
+        color: #60a5fa !important;
+    }
+
+    a:hover {
+        color: #c084fc !important;
+    }
+
+    #result_list a {
+        color: #93c5fd !important;
+    }
+
+    #result_list a:hover {
+        color: #fbbf24 !important;
+    }
 }
 
 /* === Textes divers === */
 .quiet,
 .help,
 .helptext {
-    color: var(--dark-text-secondary) !important;
+    color: var(--text-secondary) !important;
 }
 
 /* === Fieldsets === */
 .aligned label {
-    color: var(--dark-text) !important;
+    color: var(--text-primary) !important;
 }
 
 fieldset {
-    background: var(--dark-bg-secondary) !important;
-    border: 1px solid var(--dark-border) !important;
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color) !important;
 }
 
 /* === Inlines === */
 .inline-group {
-    background: var(--dark-bg-secondary) !important;
+    background: var(--bg-secondary) !important;
 }
 
 .inline-related {
-    background: var(--dark-bg-tertiary) !important;
+    background: var(--bg-tertiary) !important;
 }
 
 .inline-related h3 {
-    background: var(--dark-bg-secondary) !important;
-    color: var(--dark-text) !important;
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
 }
 
 /* === Pagination === */
 .paginator a,
 .paginator span {
-    color: var(--dark-text) !important;
-    background: var(--dark-bg-secondary) !important;
-    border: 1px solid var(--dark-border) !important;
+    color: var(--text-primary) !important;
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color) !important;
 }
 
 .paginator a:hover {
@@ -635,9 +683,9 @@ fieldset {
 /* === Calendrier (date picker) === */
 .calendar,
 .calendarbox {
-    background: var(--dark-bg-secondary) !important;
-    color: var(--dark-text) !important;
-    border: 1px solid var(--dark-border) !important;
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
 }
 
 .calendar caption,
@@ -648,8 +696,8 @@ fieldset {
 
 .calendar td,
 .calendar th {
-    background: var(--dark-bg-tertiary) !important;
-    color: var(--dark-text) !important;
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
 }
 
 .calendar td a:hover {
@@ -675,11 +723,11 @@ fieldset {
 }
 
 .app-label {
-    color: var(--dark-text) !important;
+    color: var(--text-primary) !important;
 }
 
 .model-label {
-    color: var(--dark-text-secondary) !important;
+    color: var(--text-secondary) !important;
 }
 
 /* === Objets liés (related objects) === */
@@ -688,8 +736,8 @@ fieldset {
 }
 
 .related-widget-wrapper-link {
-    background: var(--dark-bg-tertiary) !important;
-    border: 1px solid var(--dark-border) !important;
+    background: var(--bg-tertiary) !important;
+    border: 1px solid var(--border-color) !important;
 }
 
 /* === Checkboxes et radios === */
@@ -702,27 +750,37 @@ input[type="radio"] {
 .aligned label + p,
 .aligned label + div.help,
 .aligned label + div.readonly {
-    color: var(--dark-text) !important;
+    color: var(--text-primary) !important;
 }
 
 /* === Readonly fields === */
 .readonly {
-    color: var(--dark-text-secondary) !important;
+    color: var(--text-secondary) !important;
 }
 
-/* === Breadcrumbs en dark === */
+/* === Breadcrumbs === */
 .breadcrumbs {
-    background: var(--dark-bg-secondary) !important;
-    color: var(--dark-text) !important;
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
 }
 
 .breadcrumbs a {
-    color: #60a5fa !important; /* Bleu clair pour contraste */
+    color: var(--amcd-blue) !important;
     font-weight: 500;
 }
 
 .breadcrumbs a:hover {
-    color: #fbbf24 !important; /* Jaune au hover */
+    color: var(--amcd-purple) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    .breadcrumbs a {
+        color: #60a5fa !important;
+    }
+
+    .breadcrumbs a:hover {
+        color: #fbbf24 !important;
+    }
 }
 
 /* === Object tools (boutons en haut à droite) === */
@@ -736,35 +794,35 @@ input[type="radio"] {
 
 /* === CKEditor dark mode (si utilisé) === */
 .cke_chrome {
-    background: var(--dark-bg-secondary) !important;
-    border-color: var(--dark-border) !important;
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
 }
 
 .cke_top {
-    background: var(--dark-bg-tertiary) !important;
-    border-bottom-color: var(--dark-border) !important;
+    background: var(--bg-tertiary) !important;
+    border-bottom-color: var(--border-color) !important;
 }
 
 /* === Suppression des backgrounds blancs résiduels === */
 .submit-row,
 .deletelink-box {
-    background: var(--dark-bg-secondary) !important;
+    background: var(--bg-secondary) !important;
 }
 
 div.submit-row {
-    background: var(--dark-bg-secondary) !important;
-    border-top: 1px solid var(--dark-border) !important;
+    background: var(--bg-secondary) !important;
+    border-top: 1px solid var(--border-color) !important;
 }
 
 /* === Select2 dark mode (si utilisé) === */
 .select2-container--admin-autocomplete .select2-selection {
-    background: var(--dark-bg-tertiary) !important;
-    border-color: var(--dark-border) !important;
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-color) !important;
 }
 
 .select2-container--admin-autocomplete .select2-results__option {
-    background: var(--dark-bg-secondary) !important;
-    color: var(--dark-text) !important;
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
 }
 
 .select2-container--admin-autocomplete .select2-results__option--highlighted {
@@ -779,7 +837,7 @@ div.submit-row {
 
 /* === Correction des backgrounds blancs dans les tables === */
 table {
-    background: var(--dark-bg-secondary) !important;
+    background: var(--bg-secondary) !important;
 }
 
 thead th {
@@ -789,17 +847,17 @@ thead th {
 }
 
 tbody th {
-    background: var(--dark-bg-tertiary) !important;
-    color: var(--dark-text) !important;
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
 }
 
 /* === Login page === */
 #content-related {
-    background: var(--dark-bg-secondary) !important;
+    background: var(--bg-secondary) !important;
 }
 
 .login {
-    background: var(--dark-bg-secondary) !important;
+    background: var(--bg-secondary) !important;
 }
 
 .login #header {
@@ -807,7 +865,7 @@ tbody th {
 }
 
 .login .submit-row {
-    background: var(--dark-bg-secondary) !important;
+    background: var(--bg-secondary) !important;
 }
 
 /* === Animations === */
