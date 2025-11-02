@@ -70,15 +70,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Récupérer le thème sauvegardé ou utiliser les préférences système
     function getInitialTheme() {
+        // D'abord vérifier localStorage (priorité absolue)
         const savedTheme = localStorage.getItem('amcd-admin-theme');
-        if (savedTheme) {
+        if (savedTheme === 'light' || savedTheme === 'dark') {
+            console.log('Using saved theme:', savedTheme);
             return savedTheme;
         }
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+
+        // Sinon utiliser les préférences système
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const systemTheme = systemPrefersDark ? 'dark' : 'light';
+        console.log('Using system theme:', systemTheme);
+        return systemTheme;
     }
 
     // Appliquer le thème
     function applyTheme(theme) {
+        console.log('Applying theme:', theme);
+
         if (theme === 'dark') {
             html.setAttribute('data-theme', 'dark');
             themeIcon.textContent = '☀️';
@@ -88,6 +97,9 @@ document.addEventListener('DOMContentLoaded', function() {
             themeIcon.textContent = '🌙';
             themeText.textContent = 'Mode Sombre';
         }
+
+        // S'assurer que le thème est bien sauvegardé
+        localStorage.setItem('amcd-admin-theme', theme);
     }
 
     // Initialiser le thème au chargement
