@@ -93,6 +93,13 @@
     text-decoration: none;
 }
 
+/* Masquer le bouton theme-toggle par défaut de Django (on a le nôtre) */
+#user-tools .theme-toggle,
+#user-tools a[href*="theme"],
+button.theme-toggle {
+    display: none !important;
+}
+
 /* === Breadcrumbs === */
 .breadcrumbs {
     background: linear-gradient(to right, #f3f4f6, #e5e7eb) !important;
