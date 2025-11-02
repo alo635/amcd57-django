@@ -12,13 +12,23 @@
     --amcd-purple-light: #9f7aea;
     --amcd-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 
-    /* Couleurs mode clair */
+    /* Couleurs mode clair par défaut */
     --bg-primary: #f9fafb;
     --bg-secondary: #ffffff;
     --bg-tertiary: #f3f4f6;
     --text-primary: #111827;
     --text-secondary: #6b7280;
     --border-color: #e5e7eb;
+}
+
+/* Mode clair forcé via toggle (priorité absolue) */
+:root[data-theme="light"] {
+    --bg-primary: #f9fafb !important;
+    --bg-secondary: #ffffff !important;
+    --bg-tertiary: #f3f4f6 !important;
+    --text-primary: #111827 !important;
+    --text-secondary: #6b7280 !important;
+    --border-color: #e5e7eb !important;
 }
 
 /* === Variables de couleurs - MODE SOMBRE === */
@@ -33,14 +43,14 @@
     }
 }
 
-/* Mode sombre forcé via toggle */
+/* Mode sombre forcé via toggle (priorité absolue) */
 :root[data-theme="dark"] {
-    --bg-primary: #1a202c;
-    --bg-secondary: #2d3748;
-    --bg-tertiary: #4a5568;
-    --text-primary: #e2e8f0;
-    --text-secondary: #a0aec0;
-    --border-color: #4a5568;
+    --bg-primary: #1a202c !important;
+    --bg-secondary: #2d3748 !important;
+    --bg-tertiary: #4a5568 !important;
+    --text-primary: #e2e8f0 !important;
+    --text-secondary: #a0aec0 !important;
+    --border-color: #4a5568 !important;
 }
 
 /* === Header personnalisé === */
@@ -574,6 +584,19 @@ select:focus {
     font-weight: 600;
 }
 
+/* Force mode clair pour filtres */
+:root[data-theme="light"] #changelist-filter a {
+    color: var(--text-primary) !important;
+}
+
+:root[data-theme="light"] #changelist-filter a:hover {
+    color: var(--amcd-purple) !important;
+}
+
+:root[data-theme="light"] #changelist-filter li.selected a {
+    color: var(--amcd-blue) !important;
+}
+
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme]) #changelist-filter a {
         color: #d1d5db !important;
@@ -643,6 +666,23 @@ a:hover {
 #result_list a:hover {
     color: var(--amcd-purple) !important;
     text-decoration: underline;
+}
+
+/* Force mode clair pour les liens */
+:root[data-theme="light"] a {
+    color: var(--amcd-blue) !important;
+}
+
+:root[data-theme="light"] a:hover {
+    color: var(--amcd-purple) !important;
+}
+
+:root[data-theme="light"] #result_list a {
+    color: var(--amcd-blue-dark) !important;
+}
+
+:root[data-theme="light"] #result_list a:hover {
+    color: var(--amcd-purple) !important;
 }
 
 /* === Liens - MODE SOMBRE === */
@@ -819,6 +859,15 @@ input[type="radio"] {
 }
 
 .breadcrumbs a:hover {
+    color: var(--amcd-purple) !important;
+}
+
+/* Force mode clair pour breadcrumbs */
+:root[data-theme="light"] .breadcrumbs a {
+    color: var(--amcd-blue) !important;
+}
+
+:root[data-theme="light"] .breadcrumbs a:hover {
     color: var(--amcd-purple) !important;
 }
 
