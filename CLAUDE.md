@@ -17,18 +17,20 @@ AMCD57 is an aeromodeling club website built with Django 5.0. This is a complete
 - **APIs**: OpenWeatherMap (weather widget)
 - **Media**: Pillow for image handling
 - **Editor**: django-ckeditor 6.7.1 (WYSIWYG HTML editor with image upload)
+- **Monitoring**: psutil 5.9.6 (system health metrics for analytics dashboard)
 
 ## Architecture
 
 ### Application Structure
 
-The project follows Django's app-based architecture with 5 main applications:
+The project follows Django's app-based architecture with 6 main applications:
 
 1. **core** - Static pages, homepage, contact form, weather widget
 2. **blog** - Articles, categories, tags, comments with moderation
 3. **events** - Events management with registration system, calendar, venues
 4. **members** - Extended user profiles, club membership, bureau functions
 5. **weblinks** - Links directory (models complete, templates pending)
+6. **analytics** - Dashboard de monitoring et analytics (en développement - MVP 60% complet)
 
 ### Key Design Patterns
 
@@ -219,6 +221,49 @@ python manage.py check --deploy
 - Static pages (about, legal, privacy, terms) in dedicated templates
 - Homepage pulls latest articles and upcoming events dynamically
 
+### Analytics App (✅ MVP 100% complet)
+- **Objectif** : Dashboard de monitoring et analytics dans l'admin Django
+- **État actuel** : MVP complet et testé
+- **Branche** : `feature/dashboard-monitoring`
+- **Issue** : #12 sur GitHub
+
+**Architecture MVP (complète) :**
+- **Modèle PageView** : Track automatique des visites (URL, user, IP, response_time)
+- **Middleware AnalyticsMiddleware** : Enregistre chaque requête GET (sauf admin/static/media)
+- **Services** :
+  - `AnalyticsService` : Statistiques visiteurs, pages populaires, contenu
+  - `SystemHealthService` : Métriques système (disque, RAM, CPU, uptime, services actifs)
+  - `Fail2banService` : Détection IPs suspectes (basique pour MVP)
+- **Vue dashboard_view** : Accessible via `/analytics/dashboard/` (staff uniquement)
+- **Admin PageViewAdmin** : Interface admin pour consulter les pages vues (lecture seule)
+- **Template dashboard.html** : Interface responsive avec cartes et barres de progression CSS
+- **Tests** : 21 tests couvrant modèles, services, middleware et vues
+
+**Middleware de tracking** :
+- Ajouté en dernier dans MIDDLEWARE settings.py
+- Calcule le temps de réponse de chaque page
+- Récupère l'IP réelle même derrière proxy (X-Forwarded-For)
+- Fail-safe : n'interrompt jamais la requête en cas d'erreur
+
+**Fonctionnalités MVP** :
+- Statistiques visiteurs 7j/30j (pages vues, visiteurs uniques, moyenne)
+- Top 10 pages les plus consultées avec barres de progression
+- Stats contenu (articles, événements, membres) avec cartes colorées
+- Santé système (utilisation disque, RAM, CPU, uptime) avec code couleur
+- Statut services (Gunicorn, Nginx, Fail2ban ON/OFF)
+- IPs suspectes (+ de 50 requêtes) avec liste détaillée
+
+**Accès au dashboard** :
+- URL : `/analytics/dashboard/` (réservé staff)
+- Visible depuis admin via lien "Dashboard de Monitoring"
+- Design Tailwind CSS cohérent avec le reste du site
+
+**Phases futures** (après MVP) :
+- Phase 2 : Graphiques Chart.js, modèle DailyStats, design amélioré
+- Phase 3 : Analytics avancées, Fail2ban parser logs, export PDF/CSV
+
+**Documentation** : Voir `guides/DASHBOARD_MONITORING_PLAN.md` pour le plan complet
+
 ## Environment Variables
 
 Required in `.env` file:
@@ -254,6 +299,7 @@ python -c 'from django.core.management.utils import get_random_secret_key; print
 - Inscription unique_together on (evenement, participant) - prevents duplicate signups
 - ProfilMembre → User (OneToOne with CASCADE)
 - ProfilMembre → TypeMembre (ForeignKey with PROTECT)
+- PageView → User (ForeignKey with SET_NULL - analytics survives if user deleted)
 
 **Indexes for Performance**:
 All major models have indexes on frequently queried fields:
@@ -261,16 +307,18 @@ All major models have indexes on frequently queried fields:
 - Evenement: date_debut, statut, type_evenement
 - Commentaire: (article, approuve) composite index
 - Inscription: (evenement, statut) composite index
+- PageView: (timestamp, url) composite index, (ip_address, timestamp) composite index
 
 ## Known Limitations & TODOs
 
 1. ~~**Members & Weblinks Templates**: Models complete but frontend templates not implemented~~ ✅ Completed
 2. ~~**WordPress Migration**: 15 articles + 62 images need migration script~~ ✅ Completed (15 articles + 33 images migrated)
 3. ~~**Mobile Menu**: Hamburger menu not yet implemented~~ ✅ Completed
-4. **Testing**: No test suite yet - write tests before production (blog has 25 tests, events has 23 tests)
+4. **Testing**: Test suite en progression (blog: 25 tests, events: 23 tests, analytics: 21 tests)
 5. ~~**Tailwind**: Currently via CDN - should build custom for production~~ ✅ Completed (custom build, 98.8% size reduction)
 6. **Email**: Email backend not configured (needed for allauth verification)
 7. ~~**Rich text editor**: Need WYSIWYG editor for blog articles~~ ✅ Completed (CKEditor 6.7.1 integrated)
+8. ~~**Analytics Dashboard**: Dashboard de monitoring MVP~~ ✅ Completed (template, admin, tests, 21 tests passant)
 
 ## Troubleshooting
 

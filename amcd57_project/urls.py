@@ -45,6 +45,9 @@ urlpatterns = [
     # URLs pour CKEditor (upload d'images)
     path('ckeditor/', include('ckeditor_uploader.urls')),
 
+    # URLs pour Analytics (dashboard de monitoring)
+    path('analytics/', include('analytics.urls')),
+
     # Sitemap SEO
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]
