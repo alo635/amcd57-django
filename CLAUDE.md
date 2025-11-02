@@ -17,18 +17,20 @@ AMCD57 is an aeromodeling club website built with Django 5.0. This is a complete
 - **APIs**: OpenWeatherMap (weather widget)
 - **Media**: Pillow for image handling
 - **Editor**: django-ckeditor 6.7.1 (WYSIWYG HTML editor with image upload)
+- **Monitoring**: psutil 5.9.6 (system health metrics for analytics dashboard)
 
 ## Architecture
 
 ### Application Structure
 
-The project follows Django's app-based architecture with 5 main applications:
+The project follows Django's app-based architecture with 6 main applications:
 
 1. **core** - Static pages, homepage, contact form, weather widget
 2. **blog** - Articles, categories, tags, comments with moderation
 3. **events** - Events management with registration system, calendar, venues
 4. **members** - Extended user profiles, club membership, bureau functions
 5. **weblinks** - Links directory (models complete, templates pending)
+6. **analytics** - Dashboard de monitoring et analytics (en développement - MVP 60% complet)
 
 ### Key Design Patterns
 
@@ -219,6 +221,46 @@ python manage.py check --deploy
 - Static pages (about, legal, privacy, terms) in dedicated templates
 - Homepage pulls latest articles and upcoming events dynamically
 
+### Analytics App (🚧 En développement - MVP 60% complet)
+- **Objectif** : Dashboard de monitoring et analytics dans l'admin Django
+- **État actuel** : Backend complet, frontend en cours
+- **Branche** : `feature/dashboard-monitoring`
+- **Issue** : #12 sur GitHub
+
+**Architecture MVP (implémentée) :**
+- **Modèle PageView** : Track automatique des visites (URL, user, IP, response_time)
+- **Middleware AnalyticsMiddleware** : Enregistre chaque requête GET (sauf admin/static/media)
+- **Services** :
+  - `AnalyticsService` : Statistiques visiteurs, pages populaires, contenu
+  - `SystemHealthService` : Métriques système (disque, RAM, CPU, uptime, services actifs)
+  - `Fail2banService` : Détection IPs suspectes (basique pour MVP)
+- **Vue dashboard_view** : Accessible via `/analytics/dashboard/` (staff uniquement)
+
+**Middleware de tracking** :
+- Ajouté en dernier dans MIDDLEWARE settings.py
+- Calcule le temps de réponse de chaque page
+- Récupère l'IP réelle même derrière proxy (X-Forwarded-For)
+- Fail-safe : n'interrompt jamais la requête en cas d'erreur
+
+**Fonctionnalités MVP** :
+- Statistiques visiteurs 7j/30j (pages vues, visiteurs uniques, moyenne)
+- Top 10 pages les plus consultées
+- Stats contenu (articles, événements, membres)
+- Santé système (utilisation disque, RAM, CPU, uptime)
+- Statut services (Gunicorn, Nginx, Fail2ban ON/OFF)
+- IPs suspectes (+ de 50 requêtes)
+
+**À faire (40% restant)** :
+- Template HTML simple avec cartes et barres CSS (pas de Chart.js dans MVP)
+- Configuration admin (PageViewAdmin + lien dashboard)
+- Tests
+
+**Phases futures** (après MVP) :
+- Phase 2 : Graphiques Chart.js, modèle DailyStats, design amélioré
+- Phase 3 : Analytics avancées, Fail2ban parser logs, export PDF/CSV
+
+**Documentation** : Voir `guides/DASHBOARD_MONITORING_PLAN.md` pour le plan complet
+
 ## Environment Variables
 
 Required in `.env` file:
@@ -254,6 +296,7 @@ python -c 'from django.core.management.utils import get_random_secret_key; print
 - Inscription unique_together on (evenement, participant) - prevents duplicate signups
 - ProfilMembre → User (OneToOne with CASCADE)
 - ProfilMembre → TypeMembre (ForeignKey with PROTECT)
+- PageView → User (ForeignKey with SET_NULL - analytics survives if user deleted)
 
 **Indexes for Performance**:
 All major models have indexes on frequently queried fields:
@@ -261,6 +304,7 @@ All major models have indexes on frequently queried fields:
 - Evenement: date_debut, statut, type_evenement
 - Commentaire: (article, approuve) composite index
 - Inscription: (evenement, statut) composite index
+- PageView: (timestamp, url) composite index, (ip_address, timestamp) composite index
 
 ## Known Limitations & TODOs
 
@@ -271,6 +315,7 @@ All major models have indexes on frequently queried fields:
 5. ~~**Tailwind**: Currently via CDN - should build custom for production~~ ✅ Completed (custom build, 98.8% size reduction)
 6. **Email**: Email backend not configured (needed for allauth verification)
 7. ~~**Rich text editor**: Need WYSIWYG editor for blog articles~~ ✅ Completed (CKEditor 6.7.1 integrated)
+8. **Analytics Dashboard**: 🚧 En cours (MVP 60% - backend complet, reste template + admin config + tests)
 
 ## Troubleshooting
 
