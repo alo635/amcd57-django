@@ -221,13 +221,13 @@ python manage.py check --deploy
 - Static pages (about, legal, privacy, terms) in dedicated templates
 - Homepage pulls latest articles and upcoming events dynamically
 
-### Analytics App (🚧 En développement - MVP 60% complet)
+### Analytics App (✅ MVP 100% complet)
 - **Objectif** : Dashboard de monitoring et analytics dans l'admin Django
-- **État actuel** : Backend complet, frontend en cours
+- **État actuel** : MVP complet et testé
 - **Branche** : `feature/dashboard-monitoring`
 - **Issue** : #12 sur GitHub
 
-**Architecture MVP (implémentée) :**
+**Architecture MVP (complète) :**
 - **Modèle PageView** : Track automatique des visites (URL, user, IP, response_time)
 - **Middleware AnalyticsMiddleware** : Enregistre chaque requête GET (sauf admin/static/media)
 - **Services** :
@@ -235,6 +235,9 @@ python manage.py check --deploy
   - `SystemHealthService` : Métriques système (disque, RAM, CPU, uptime, services actifs)
   - `Fail2banService` : Détection IPs suspectes (basique pour MVP)
 - **Vue dashboard_view** : Accessible via `/analytics/dashboard/` (staff uniquement)
+- **Admin PageViewAdmin** : Interface admin pour consulter les pages vues (lecture seule)
+- **Template dashboard.html** : Interface responsive avec cartes et barres de progression CSS
+- **Tests** : 21 tests couvrant modèles, services, middleware et vues
 
 **Middleware de tracking** :
 - Ajouté en dernier dans MIDDLEWARE settings.py
@@ -244,16 +247,16 @@ python manage.py check --deploy
 
 **Fonctionnalités MVP** :
 - Statistiques visiteurs 7j/30j (pages vues, visiteurs uniques, moyenne)
-- Top 10 pages les plus consultées
-- Stats contenu (articles, événements, membres)
-- Santé système (utilisation disque, RAM, CPU, uptime)
+- Top 10 pages les plus consultées avec barres de progression
+- Stats contenu (articles, événements, membres) avec cartes colorées
+- Santé système (utilisation disque, RAM, CPU, uptime) avec code couleur
 - Statut services (Gunicorn, Nginx, Fail2ban ON/OFF)
-- IPs suspectes (+ de 50 requêtes)
+- IPs suspectes (+ de 50 requêtes) avec liste détaillée
 
-**À faire (40% restant)** :
-- Template HTML simple avec cartes et barres CSS (pas de Chart.js dans MVP)
-- Configuration admin (PageViewAdmin + lien dashboard)
-- Tests
+**Accès au dashboard** :
+- URL : `/analytics/dashboard/` (réservé staff)
+- Visible depuis admin via lien "Dashboard de Monitoring"
+- Design Tailwind CSS cohérent avec le reste du site
 
 **Phases futures** (après MVP) :
 - Phase 2 : Graphiques Chart.js, modèle DailyStats, design amélioré
@@ -311,11 +314,11 @@ All major models have indexes on frequently queried fields:
 1. ~~**Members & Weblinks Templates**: Models complete but frontend templates not implemented~~ ✅ Completed
 2. ~~**WordPress Migration**: 15 articles + 62 images need migration script~~ ✅ Completed (15 articles + 33 images migrated)
 3. ~~**Mobile Menu**: Hamburger menu not yet implemented~~ ✅ Completed
-4. **Testing**: No test suite yet - write tests before production (blog has 25 tests, events has 23 tests)
+4. **Testing**: Test suite en progression (blog: 25 tests, events: 23 tests, analytics: 21 tests)
 5. ~~**Tailwind**: Currently via CDN - should build custom for production~~ ✅ Completed (custom build, 98.8% size reduction)
 6. **Email**: Email backend not configured (needed for allauth verification)
 7. ~~**Rich text editor**: Need WYSIWYG editor for blog articles~~ ✅ Completed (CKEditor 6.7.1 integrated)
-8. **Analytics Dashboard**: 🚧 En cours (MVP 60% - backend complet, reste template + admin config + tests)
+8. ~~**Analytics Dashboard**: Dashboard de monitoring MVP~~ ✅ Completed (template, admin, tests, 21 tests passant)
 
 ## Troubleshooting
 
