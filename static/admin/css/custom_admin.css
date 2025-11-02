@@ -102,6 +102,8 @@
     font-weight: bold;
     padding: 15px 20px !important;
     border-radius: 0 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+    font-size: 16px !important;
 }
 
 /* === Liens des actions récentes === */
@@ -175,6 +177,7 @@ input[type="submit"].default:hover {
     font-weight: bold;
     padding: 12px !important;
     border: none !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
 }
 
 #changelist tbody tr {
@@ -521,15 +524,17 @@ select:focus {
 }
 
 #changelist-filter a {
-    color: var(--dark-text) !important;
+    color: #d1d5db !important; /* Gris clair pour bon contraste */
+    transition: color 0.2s ease;
 }
 
 #changelist-filter a:hover {
-    color: var(--amcd-purple-light) !important;
+    color: #fbbf24 !important; /* Jaune au hover */
 }
 
 #changelist-filter li.selected a {
-    color: var(--amcd-blue-light) !important;
+    color: #60a5fa !important; /* Bleu clair */
+    font-weight: 600;
 }
 
 /* === Recherche === */
@@ -560,11 +565,22 @@ select:focus {
 
 /* === Liens === */
 a {
-    color: var(--amcd-blue-light) !important;
+    color: #60a5fa !important; /* Bleu plus clair pour meilleur contraste */
 }
 
 a:hover {
-    color: var(--amcd-purple-light) !important;
+    color: #c084fc !important; /* Violet plus clair */
+}
+
+/* Liens dans les tables pour meilleur contraste */
+#result_list a {
+    color: #93c5fd !important; /* Bleu très clair */
+    font-weight: 500;
+}
+
+#result_list a:hover {
+    color: #fbbf24 !important; /* Jaune au hover pour visibilité */
+    text-decoration: underline;
 }
 
 /* === Textes divers === */
@@ -697,10 +713,16 @@ input[type="radio"] {
 /* === Breadcrumbs en dark === */
 .breadcrumbs {
     background: var(--dark-bg-secondary) !important;
+    color: var(--dark-text) !important;
 }
 
 .breadcrumbs a {
-    color: var(--amcd-blue-light) !important;
+    color: #60a5fa !important; /* Bleu clair pour contraste */
+    font-weight: 500;
+}
+
+.breadcrumbs a:hover {
+    color: #fbbf24 !important; /* Jaune au hover */
 }
 
 /* === Object tools (boutons en haut à droite) === */
@@ -762,6 +784,8 @@ table {
 
 thead th {
     background: var(--amcd-gradient) !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
 }
 
 tbody th {
