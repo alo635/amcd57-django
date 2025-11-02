@@ -52,11 +52,17 @@
 {{ block.super }}
 <script>
 // Gestion du toggle de thème
-(function() {
+document.addEventListener('DOMContentLoaded', function() {
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     const themeText = document.getElementById('theme-text');
     const html = document.documentElement;
+
+    // Vérifier que les éléments existent
+    if (!themeToggle || !themeIcon || !themeText) {
+        console.warn('Theme toggle elements not found');
+        return;
+    }
 
     // Récupérer le thème sauvegardé ou utiliser les préférences système
     function getInitialTheme() {
@@ -98,6 +104,6 @@
             themeToggle.style.transform = 'scale(1)';
         }, 100);
     });
-})();
+});
 </script>
 {% endblock %}
